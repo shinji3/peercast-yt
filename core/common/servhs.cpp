@@ -283,6 +283,9 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
                 http.writeLine("");
                 http.writeString(response.c_str());
             }
+        }else if (strncmp(fn, "/yp/", 4)==0)
+        {
+            handshakeLocalFile(fn + 1);
         }else
         {
             while (http.nextHeader());
@@ -1655,6 +1658,83 @@ void Servent::handshakeICY(Channel::SRC_TYPE type, bool isHTTP)
     c->startICY(sock, type);
 }
 
+// -----------------------------------
+#include <unistd.h>
+void Servent::handshakePHP(HTML& html, const char* path, const char* args)
+{
+    using json = nlohmann::json;
+
+    JrpcApi api;
+
+    json channels = api.getChannelsFound(json::array_t());
+    json context;
+
+    context["channels"] = channels;
+    //context["results"]
+
+    // 親プロセスの環境変数を利用して通信するので、一度に１つのサブプ
+    // ロセスしか起動しないようにする。
+    static WLock lock;
+
+    lock.on();
+
+    LOG_DEBUG("handshakePHP(\"%s\", \"%s\")", path, args);
+
+    String cmd = "php "; cmd.append(path); cmd.append(" 2>&1");
+
+    setenv("PEERCAST_CONTEXT", context.dump().c_str(), true);
+    FILE *fp = popen(cmd.cstr(), "r");
+
+    if (fp == NULL)
+    {
+        lock.off();
+        throw HTTPException("HTTP/1.0 500 Internal Server Error", 500);
+    }
+
+    std::string body;
+    char buf[1024];
+
+    size_t bytesRead;
+    while ((bytesRead = fread(buf, 1, 1024, fp)) > 0)
+    {
+        body += std::string(buf, bytesRead);
+    }
+
+    int status;
+    status = pclose(fp);
+
+    if (!WIFEXITED(status))
+    {
+        sock->writeLine(HTTP_SC_OK);
+        sock->writeLineF("%s %s", HTTP_HS_SERVER, PCX_AGENT);
+        sock->writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
+        sock->writeLineF("%s %s", HTTP_HS_CONTENT, "text/plain");
+        sock->writeLine("");
+
+        sock->writeString(strerror(errno));
+    }else if (WEXITSTATUS(status) != 0)
+    {
+        sock->writeLine(HTTP_SC_OK);
+        sock->writeLineF("%s %s", HTTP_HS_SERVER, PCX_AGENT);
+        sock->writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
+        sock->writeLineF("%s %s", HTTP_HS_CONTENT, "text/plain");
+        sock->writeLine("");
+
+        sock->writeStringF("\"%s\" exited abnormally. (status = %d)\n",
+                          cmd.cstr(), WEXITSTATUS(status));
+    }else
+    {
+        sock->writeLine(HTTP_SC_OK);
+        sock->writeLineF("%s %s", HTTP_HS_SERVER, PCX_AGENT);
+        sock->writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
+        sock->writeLineF("%s %s", HTTP_HS_CONTENT, "text/html; charset=utf-8");
+        sock->writeLine("");
+
+        sock->write(body.c_str(), body.size());
+    }
+
+    lock.off();
+}
 
 // -----------------------------------
 void Servent::handshakeLocalFile(const char *fn)
@@ -1695,6 +1775,9 @@ void Servent::handshakeLocalFile(const char *fn)
     {
         html.writeOK(MIME_PNG);
         html.writeRawFile(fileName.cstr());
+    }else if (fileName.contains(".php"))
+    {
+        handshakePHP(html, fileName.cstr(), args);
     }
 }
 
