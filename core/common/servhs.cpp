@@ -291,7 +291,9 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
                 http.writeLine("");
             }else
             {
-                handshakeLocalFile(fn + 1);
+                String tmp = fn + 1;
+                while (http.nextHeader());
+                handshakeLocalFile(tmp.cstr());
             }
         }else
         {
