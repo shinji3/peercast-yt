@@ -1746,14 +1746,32 @@ void Servent::handshakePHP(HTML& html, const char* path, const char* args)
 }
 
 // -----------------------------------
+#include <sys/types.h>
+#include <dirent.h>
 void Servent::handshakeLocalFile(const char *fn)
 {
     HTTP http(*sock);
     String fileName;
 
     fileName = peercastApp->getPath();
-
     fileName.append(fn);
+
+    if (access(fileName.cstr(), F_OK) == -1)
+    {
+        throw HTTPException(HTTP_SC_NOTFOUND, 404);
+    }else if (access(fileName.cstr(), R_OK) == -1)
+    {
+        throw HTTPException(HTTP_SC_FORBIDDEN, 403);
+    }else
+    {
+        DIR *dir;
+        dir = opendir(fileName.cstr());
+        if (dir)
+        {
+            closedir(dir);
+            throw HTTPException(HTTP_SC_FORBIDDEN, 403); // directory listing is forbidden
+        }
+    }
 
     LOG_DEBUG("Writing HTML file: %s", fileName.cstr());
 
