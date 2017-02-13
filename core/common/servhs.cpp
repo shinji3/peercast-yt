@@ -285,7 +285,16 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
             }
         }else if (strncmp(fn, "/yp/", 4)==0)
         {
-            handshakeLocalFile(fn + 1);
+            if (strcmp(fn, "/yp/")==0)
+            {
+                while (http.nextHeader());
+                http.writeLine(HTTP_SC_FOUND);
+                http.writeLine("Location: index.php");
+                http.writeLine("");
+            }else
+            {
+                handshakeLocalFile(fn + 1);
+            }
         }else
         {
             while (http.nextHeader());
