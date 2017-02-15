@@ -39,6 +39,7 @@ static const char *HTTP_SC_FOUND        = "HTTP/1.0 302 Found";
 static const char *HTTP_SC_BADREQUEST   = "HTTP/1.0 400 Bad Request";
 static const char *HTTP_SC_FORBIDDEN    = "HTTP/1.0 403 Forbidden";
 static const char *HTTP_SC_SWITCH       = "HTTP/1.0 101 Switch protocols";
+static const char *HTTP_SC_BADGATEWAY   = "HTTP/1.0 502 Bad Gateway";
 
 static const char *RTSP_SC_OK           = "RTSP/1.0 200 OK";
 
