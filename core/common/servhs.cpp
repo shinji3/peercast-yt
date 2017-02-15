@@ -1823,6 +1823,11 @@ void Servent::handshakeRemoteFile(const char *dirName)
     Host host;
     host.fromStrName(hostName, 80);
 
+    if (host.ip == 0)
+    {
+        LOG_ERROR("handshakeRemoteFile: lookup failed for %s", hostName);
+        throw HTTPException(HTTP_SC_BADGATEWAY, 502);
+    }
 
     rsock->open(host);
     rsock->connect();
