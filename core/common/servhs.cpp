@@ -1752,11 +1752,15 @@ void Servent::handshakePHP(HTML& html, const char* path, const char* args)
 #include <dirent.h>
 void Servent::handshakeLocalFile(const char *fn)
 {
-    HTTP http(*sock);
+    HTML html("", *sock);
     String fileName;
 
     fileName = peercastApp->getPath();
     fileName.append(fn);
+
+    char *args = strstr(fileName.cstr(), "?");
+    if (args)
+        *args++=0;
 
     if (access(fileName.cstr(), F_OK) == -1)
     {
@@ -1776,12 +1780,6 @@ void Servent::handshakeLocalFile(const char *fn)
     }
 
     LOG_DEBUG("Writing HTML file: %s", fileName.cstr());
-
-    HTML html("", *sock);
-
-    char *args = strstr(fileName.cstr(), "?");
-    if (args)
-        *args++=0;
 
     if (fileName.contains(".htm"))
     {
