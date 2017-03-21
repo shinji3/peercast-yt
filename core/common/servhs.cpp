@@ -1695,6 +1695,14 @@ void Servent::handshakeLocalFile(const char *fn)
     {
         html.writeOK(MIME_PNG);
         html.writeRawFile(fileName.cstr());
+    }else if (fileName.contains(".js"))
+    {
+        html.writeOK(MIME_JS);
+        html.writeRawFile(fileName.cstr());
+    }else
+    {
+        html.writeOK(MIME_UNKNOWN);
+        html.writeRawFile(fileName.cstr());
     }
 }
 

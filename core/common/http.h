@@ -42,6 +42,7 @@ static const char *HTTP_SC_FOUND        = "HTTP/1.0 302 Found";
 static const char *HTTP_SC_BADREQUEST   = "HTTP/1.0 400 Bad Request";
 static const char *HTTP_SC_FORBIDDEN    = "HTTP/1.0 403 Forbidden";
 static const char *HTTP_SC_SWITCH       = "HTTP/1.0 101 Switch protocols";
+static const char *HTTP_SC_ERROR        = "HTTP/1.0 500 Internal Server Error";
 
 static const char *RTSP_SC_OK           = "RTSP/1.0 200 OK";
 
@@ -95,6 +96,8 @@ static const char *MIME_RAW         = "application/binary";
 static const char *MIME_JPEG        = "image/jpeg";
 static const char *MIME_GIF         = "image/gif";
 static const char *MIME_PNG         = "image/png";
+static const char *MIME_UNKNOWN     = "application/octet-stream";
+static const char *MIME_JS          = "application/javascript";
 
 
 // --------------------------------------------
