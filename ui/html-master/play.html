@@ -14,8 +14,7 @@
      var videoElement = document.getElementById('videoElement');
      var flvPlayer = flvjs.createPlayer({
        type: 'flv',
-       /* url: '/stream/E389A30689CE4E9E8E3C57277E9F0BD9.flv' */
-       url: '/stream/{$page.channel.id}.flv'
+       url: '/stream/{$page.id}.flv'
      });
      flvPlayer.attachMediaElement(videoElement);
      flvPlayer.load();
