@@ -1,8 +1,14 @@
 CATALOGS := $(wildcard catalogs/*.json)
 TEMPLATES := $(wildcard html-master/*.* html-master/images/*.* html-master/js/*.* Templates/*.*)
 PUBLIC_TEMPLATES := $(wildcard public-master/*.* public-master/images/*.* public-master/js/*.* Templates/*.*)
+ASSETS := $(wildcard assets/*/*)
 
-all: html.tar public.tar assets.tar
+.PHONY: all linux/peercast
+
+all: html.tar public.tar assets.tar linux/peercast
+
+linux/peercast:
+	make -C linux peercast
 
 html.tar: $(CATALOGS) $(TEMPLATES)
 	rm -rf html/
@@ -14,7 +20,7 @@ public.tar: $(CATALOGS) $(PUBLIC_TEMPLATES)
 	./generate-public
 	tar cf public.tar public
 
-assets.tar:
+assets.tar: $(ASSETS)
 	tar cf assets.tar assets
 
 clean:
