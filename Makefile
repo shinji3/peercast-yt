@@ -26,9 +26,11 @@ peercast-yt/LICENSE: peercast-yt
 	cp core/LICENSE peercast-yt
 
 $(TARGET_PEERCAST): ui/linux/peercast
-	$(MAKE) -C ui/linux peercast
 	cp ui/linux/peercast $(TARGET_PEERCAST)
 	strip -s $(TARGET_PEERCAST)
+
+ui/linux/peercast:
+	$(MAKE) -C ui/linux peercast
 
 $(TARGET_LICENSES): $(wildcard licenses/*.txt)
 	mkdir -p peercast-yt/licenses
