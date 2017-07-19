@@ -67,8 +67,8 @@ TEST(HostTest, strUlimit)
     ASSERT_STREQ("255.255.255.255", host.str(false).c_str());
 }
 
-// 128 バイトのホスト名で内部バッファーが NUL終端されなくなるバグを発
-// 現させるテスト。valgrind などで検知せよ。
+// 128 �o�C�g�̃z�X�g���œ����o�b�t�@�[�� NUL�I�[����Ȃ��Ȃ�o�O��
+// ��������e�X�g�Bvalgrind �ȂǂŌ��m����B
 TEST(HostTest, fromStrName_128bytes)
 {
     Host host;
