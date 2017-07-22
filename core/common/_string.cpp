@@ -550,7 +550,7 @@ String& String::operator = (const String& other)
 // -----------------------------------
 String& String::operator = (const char* cstr)
 {
-    strncpy_s(this->data, MAX_LEN, cstr, _TRUNCATE);
+    strncpy_s(this->data, _countof(this->data), cstr, _TRUNCATE);
     this->type = T_ASCII;
 
     return *this;
@@ -568,7 +568,7 @@ String& String::operator = (const std::string& rhs)
 // -----------------------------------
 void String::set(const char *p, TYPE t)
 {
-    strncpy_s(data, MAX_LEN, p, _TRUNCATE);
+    strncpy_s(data, _countof(data), p, _TRUNCATE);
     type = t;
 }
 
