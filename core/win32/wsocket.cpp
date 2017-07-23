@@ -201,7 +201,7 @@ void WSAClientSocket::checkTimeout(bool r, bool w)
             throw SockException("select failed.");
     }else{
         char str[32];
-        snprintf(str, _countof(str),"%d",err);
+        snprintf(str,_countof(str),"%d",err);
         throw SockException(str);
     }
 }
