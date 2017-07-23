@@ -52,7 +52,7 @@ public:
     void    setNagle(bool);
     void    setLinger(int);
 
-    static unsigned int resolveHost(const char *);
+    static  unsigned int resolveHost(const char *);
 
     void    checkTimeout(bool,bool);
     void    checkTimeout2(bool,bool);
