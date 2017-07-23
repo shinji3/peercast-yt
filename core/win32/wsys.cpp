@@ -108,7 +108,7 @@ void WSys::appMsg(long msg, long arg)
 void WSys::callLocalURL(const char *str,int port)
 {
     char cmd[512];
-    snprintf(cmd, _countof(cmd),"http://localhost:%d/%s",port,str);
+    snprintf(cmd, _countof(cmd), "http://localhost:%d/%s", port, str);
     ShellExecute(mainWindow, NULL, cmd, NULL, NULL, SW_SHOWNORMAL);
 }
 
