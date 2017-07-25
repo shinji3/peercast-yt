@@ -216,13 +216,16 @@ unsigned int WSys::SetUPnP()
     lh.IPtoStr(sLanIP);
 
     YMSoapAction soap(mST.c_str(),"AddPortMapping");
+
+    _itoa_s(servMgr->serverHost.port, sPort, _countof(sPort), 10);
+
     soap.SetParameter("NewRemoteHost","");
-    soap.SetParameter("NewExternalPort",_itoa(servMgr->serverHost.port,sPort,10));
+    soap.SetParameter("NewExternalPort",sPort);
     soap.SetParameter("NewProtocol","TCP");
     soap.SetParameter("NewInternalPort",sPort);
     soap.SetParameter("NewInternalClient",sLanIP);
     soap.SetParameter("NewEnabled","1");
-    soap.SetParameter("NewPortMappingDescription",PCX_AGENTVP);
+    soap.SetParameter("NewPortMappingDescription","PeerCast");
     soap.SetParameter("NewLeaseDuration","0");
 
     if(soap.Invoke(mControlURL.c_str()) != 200)
@@ -248,8 +251,11 @@ bool WSys::UnSetUPnP()
     char sPort[10] = "";
 
     YMSoapAction soap(mST.c_str(),"DeletePortMapping");
+
+    _itoa_s(servMgr->EnableUPnPPort, sPort, _countof(sPort), 10);
+
     soap.SetParameter("NewRemoteHost","");
-    soap.SetParameter("NewExternalPort",_itoa(servMgr->EnableUPnPPort,sPort,10));
+    soap.SetParameter("NewExternalPort",sPort);
     soap.SetParameter("NewProtocol","TCP");
 
     if(soap.Invoke(mControlURL.c_str()) != 200)

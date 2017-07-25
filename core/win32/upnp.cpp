@@ -6,6 +6,8 @@
 //
 // ------------------------------------------------------------------------------
 #include "upnp.h"
+#include "sys.h"
+#include "socket.h"
 #include <malloc.h>
 #include <ws2tcpip.h>
 #include <algorithm>
@@ -176,7 +178,7 @@ bool YMSSDPDiscover::Send(const char* st)
 	sockaddr_in dest_addr;
 	ZeroMemory(&dest_addr,sizeof(dest_addr));
 	dest_addr.sin_family = AF_INET;
-	dest_addr.sin_addr.s_addr = inet_addr(UPNP_GROUP);
+	dest_addr.sin_addr.s_addr = ClientSocket::getIP(UPNP_GROUP);
 	dest_addr.sin_port = htons(UPNP_PORT);
 
 	in_addr interface_addr;
@@ -188,7 +190,7 @@ bool YMSSDPDiscover::Send(const char* st)
 		interface_addr.s_addr = ((sockaddr_in*)list->Address[i].lpSockaddr)->sin_addr.s_addr;
 		if(setsockopt(mSocket,IPPROTO_IP,IP_MULTICAST_IF,(char*)&interface_addr, sizeof(interface_addr)) == 0)
 		{
-			if(sendto(mSocket,data.data(),data.length(),0,(sockaddr*)&dest_addr,sizeof(dest_addr)) > 0)
+			if(sendto(mSocket,data.data(),static_cast<int>(data.length()),0,(sockaddr*)&dest_addr,sizeof(dest_addr)) > 0)
 			{
 				ok = true;
 			}
@@ -286,13 +288,13 @@ int YMSSDPDiscover::Recv(LocationInfo& info,DWORD timeout)
 		else
 		{
 			//フィールドと値にわける
-			int index = line.find(':');
+			int index = static_cast<int>(line.find(':'));
 			if(index == std::string::npos)
 			{
 				continue;
 			}
 			std::string field = line.substr(0,index);
-			if((index = line.find_first_not_of(' ',index + 1)) != std::string::npos)
+			if((index = static_cast<int>(line.find_first_not_of(' ',index + 1))) != std::string::npos)
 			{
 				std::string value = line.substr(index);
 				if(!value.empty())
@@ -301,11 +303,11 @@ int YMSSDPDiscover::Recv(LocationInfo& info,DWORD timeout)
 					{
 						value = value.substr(0,value.length() - 1); 
 					}
-					if(stricmp(field.c_str(),"ST") == 0)
+					if(Sys::stricmp(field.c_str(),"ST") == 0)
 					{
 						tempInfo.mST = value;
 					}
-					else if(stricmp(field.c_str(),"Location") == 0)
+					else if(Sys::stricmp(field.c_str(),"Location") == 0)
 					{
 						tempInfo.mLocation = value;
 					}
@@ -340,8 +342,8 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 	//XMLを取得
 	try
 	{
-		MSXML::IXMLHttpRequestPtr http;
-		if(FAILED(http.CreateInstance(MSXML::CLSID_XMLHTTPRequest)))
+		MSXML2::IXMLHTTPRequestPtr http;
+		if(FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
 		{
 			return result;
 		}
@@ -351,13 +353,13 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 		{
 			return result;
 		}
-		MSXML::IXMLDOMDocumentPtr doc = http->responseXML;
+		MSXML2::IXMLDOMDocumentPtr doc = http->responseXML;
 
 		//controlURL取得
 		std::string xPath = "//service[serviceType=\"";
 		xPath += st;
 		xPath += "\"]/controlURL";
-		MSXML::IXMLDOMNodePtr controlURLNode = doc->selectSingleNode(xPath.c_str());
+		MSXML2::IXMLDOMNodePtr controlURLNode = doc->selectSingleNode(xPath.c_str());
 		if(controlURLNode)
 		{
 			relativeURL = controlURLNode->text;
@@ -369,7 +371,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 
 		
 		//BASEURL取得
-		MSXML::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//URLBase");
+		MSXML2::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//URLBase");
 		if(baseURLNode)
 		{
 			baseURL = baseURLNode->text;
@@ -426,8 +428,8 @@ int YMSoapAction::Invoke(const char* url)
 
 	try
 	{
-		MSXML::IXMLDOMDocumentPtr sendXML;
-		if(FAILED(sendXML.CreateInstance(MSXML::CLSID_DOMDocument)))
+		MSXML2::IXMLDOMDocumentPtr sendXML;
+		if(FAILED(sendXML.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
 		{
 			return -1;
 		}
@@ -439,24 +441,24 @@ int YMSoapAction::Invoke(const char* url)
 			"<SOAP-ENV:Body>"
 			"</SOAP-ENV:Body>"
 			"</SOAP-ENV:Envelope>");
-		MSXML::IXMLDOMElementPtr body = sendXML->selectSingleNode("/SOAP-ENV:Envelope/SOAP-ENV:Body");
+		MSXML2::IXMLDOMElementPtr body = sendXML->selectSingleNode("/SOAP-ENV:Envelope/SOAP-ENV:Body");
 
 		std::string name = "m:" + mActionName;
-		_variant_t varNodeType((short)MSXML::NODE_ELEMENT);
-		MSXML::IXMLDOMNodePtr node = NULL;
+		_variant_t varNodeType((short)MSXML2::NODE_ELEMENT);
+		MSXML2::IXMLDOMNodePtr node = NULL;
 		node = sendXML->createNode(varNodeType,name.c_str(),mServiceType.c_str());
 		Parameters::const_iterator p;
 		for(p = mParameter.begin(); p != mParameter.end(); ++p)
 		{
-			MSXML::IXMLDOMElementPtr param = sendXML->createElement(p->first.c_str());
+			MSXML2::IXMLDOMElementPtr param = sendXML->createElement(p->first.c_str());
 			param->text = p->second.c_str();
 			node->appendChild(param);
 		}
 		body->appendChild(node);
 
 		//送信する
-		MSXML::IXMLHttpRequestPtr http;
-		if(FAILED(http.CreateInstance(MSXML::CLSID_XMLHTTPRequest)))
+		MSXML2::IXMLHTTPRequestPtr http;
+		if(FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
 		{
 			return -1;
 		}

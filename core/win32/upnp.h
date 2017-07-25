@@ -16,7 +16,7 @@
 #include <winsock2.h>
 #endif
 
-#import <msxml.dll> named_guids
+#import <msxml6.dll> named_guids
 #include <string>
 #include <vector>
 #include <map>

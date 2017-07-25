@@ -55,6 +55,10 @@ public:
     //UPnP
     virtual unsigned int    SetUPnP();
     virtual bool            UnSetUPnP();
+
+    YMSSDPDiscover mSSDP;
+    std::string mControlURL;
+    std::string mST;
 };
 
 #endif
