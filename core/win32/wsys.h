@@ -26,6 +26,9 @@
 #include "socket.h"
 #include "sys.h"
 
+//UPnP
+#include "upnp.h"
+
 // ------------------------------------
 class WSys : public Sys
 {
@@ -48,6 +51,10 @@ public:
 
     HWND    mainWindow;
     peercast::Random rndGen;
+
+    //UPnP
+    virtual unsigned int    SetUPnP();
+    virtual bool            UnSetUPnP();
 };
 
 #endif

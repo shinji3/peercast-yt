@@ -134,3 +134,132 @@ void WSys::executeFile(const char *file)
 {
     ShellExecute(NULL,"open",file,NULL,NULL,SW_SHOWNORMAL);
 }
+
+// --------------------------------------------------
+//UPnP
+unsigned int WSys::SetUPnP()
+{
+    CoInitialize(NULL);
+
+    //ControlURL未取得の場合は取得を試す
+    if(strcmp(mControlURL.c_str(),"") == 0){
+        if(!YMSSDPDiscover::Initialize() || !mSSDP.Open())
+        {
+            LOG_ERROR("UPnP Initialize Failed.");
+            CoUninitialize();
+            return 0;
+        }
+
+        LOG_NETWORK("UPnP Initialize OK.");
+
+        mSSDP.Send("urn:schemas-upnp-org:service:WANPPPConnection:1");
+        mSSDP.Send("urn:schemas-upnp-org:service:WANIPConnection:1");
+
+        //受信を試みる
+        YMSSDPDiscover::LocationInfo info;
+
+        int cnt = 0;
+
+        while(1) {
+            if (cnt > 30)
+            {
+                LOG_ERROR("UPnP Time Out.");
+                CoUninitialize();
+                return 0;
+            }
+
+            int ret = mSSDP.Recv(info,0);
+
+            if(ret < 0)
+            {
+                //error
+                LOG_ERROR("UPnP Error.");
+                CoUninitialize();
+                return 0;
+            }
+            else if(ret != YMSSDPDiscover::OK)
+            {
+                mSSDP.Send("urn:schemas-upnp-org:service:WANPPPConnection:1");
+                mSSDP.Send("urn:schemas-upnp-org:service:WANIPConnection:1");
+            }
+            else
+            {
+                //成功
+                LOG_DEBUG("IGD Location:%s",info.mLocation.c_str());
+
+                //controlURL取得
+                mControlURL = YMSSDPDiscover::GetControlURL(info.mLocation.c_str(),info.mST.c_str());
+                if(mControlURL.empty())
+                {
+                    //失敗
+                    LOG_ERROR("UPnP ControlURL Scan Failed.");
+                    CoUninitialize();
+                    return 0;
+                }
+                mST = info.mST;
+
+                //取得OK
+                LOG_NETWORK("UPnP ControlURL:%s",mControlURL.c_str());
+                break;
+            }
+
+            Sleep(300);
+            cnt++;
+        }
+    }
+
+    //ポート解放
+    char sPort[10] = "",sLanIP[64] = "";
+
+    //ローカルIP取得
+    Host lh(ClientSocket::getIP(NULL),0);
+    lh.IPtoStr(sLanIP);
+
+    YMSoapAction soap(mST.c_str(),"AddPortMapping");
+    soap.SetParameter("NewRemoteHost","");
+    soap.SetParameter("NewExternalPort",_itoa(servMgr->serverHost.port,sPort,10));
+    soap.SetParameter("NewProtocol","TCP");
+    soap.SetParameter("NewInternalPort",sPort);
+    soap.SetParameter("NewInternalClient",sLanIP);
+    soap.SetParameter("NewEnabled","1");
+    soap.SetParameter("NewPortMappingDescription",PCX_AGENTVP);
+    soap.SetParameter("NewLeaseDuration","0");
+
+    if(soap.Invoke(mControlURL.c_str()) != 200)
+    {
+        //失敗
+        LOG_ERROR("UPnP AddPortMapping Error.");
+        CoUninitialize();
+        return 0;
+    }
+
+    //OK
+    LOG_NETWORK("UPnP AddPortMapping OK.(%d Port)",servMgr->serverHost.port,sPort);
+    CoUninitialize();
+
+    return servMgr->serverHost.port;
+}
+
+// --------------------------------------------------
+//UPnP
+bool WSys::UnSetUPnP()
+{
+    //ポート解放削除
+    char sPort[10] = "";
+
+    YMSoapAction soap(mST.c_str(),"DeletePortMapping");
+    soap.SetParameter("NewRemoteHost","");
+    soap.SetParameter("NewExternalPort",_itoa(servMgr->EnableUPnPPort,sPort,10));
+    soap.SetParameter("NewProtocol","TCP");
+
+    if(soap.Invoke(mControlURL.c_str()) != 200)
+    {
+        LOG_ERROR("UPnP DeletePortMapping Error.");
+        return false;
+    }
+
+    //OK
+    LOG_NETWORK("UPnP DeletePortMapping OK.(%d Port)",servMgr->EnableUPnPPort);
+
+    return true;
+}

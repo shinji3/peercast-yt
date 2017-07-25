@@ -102,6 +102,10 @@ public:
     unsigned int rndSeed;
 
     class LogBuffer *logBuf;
+
+    //UPnP
+    virtual unsigned int SetUPnP() = 0;
+    virtual bool         UnSetUPnP() = 0;
 };
 
 #ifdef WIN32

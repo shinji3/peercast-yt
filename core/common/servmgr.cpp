@@ -119,6 +119,10 @@ ServMgr::ServMgr()
     audioCodec = "mp3";
 
     wmvProtocol = "http";
+
+    //UPnP
+    isEnableUPnP = false;
+    EnableUPnPPort = 0;
 }
 
 // -----------------------------------
@@ -686,6 +690,9 @@ void ServMgr::quit()
 
     idleThread.shutdown();
 
+    //UPnP
+    if (servMgr->isEnableUPnP && servMgr->EnableUPnPPort) servMgr->UnSetUPnP();
+
     Servent *s = servents;
     while (s)
     {
@@ -931,6 +938,9 @@ void ServMgr::saveSettings(const char *fn)
 
         networkID.toStr(idStr);
         iniFile.writeStrValue("networkID", idStr);
+
+        //UPnP
+        iniFile.writeBoolValue("enableUPnP", servMgr->isEnableUPnP);
 
         iniFile.writeSection("Broadcast");
         iniFile.writeIntValue("broadcastMsgInterval", chanMgr->broadcastMsgInterval);
@@ -1279,6 +1289,10 @@ void ServMgr::loadSettings(const char *fn)
                 servMgr->audioCodec = iniFile.getStrValue();
             else if (iniFile.isName("wmvProtocol"))
                 servMgr->wmvProtocol = iniFile.getStrValue();
+
+            //UPnP
+            else if (iniFile.isName("enableUPnP"))
+                servMgr->isEnableUPnP = iniFile.getBoolValue();
 
             // debug
             else if (iniFile.isName("logDebug"))
@@ -1970,6 +1984,9 @@ int ServMgr::serverProc(ThreadInfo *thread)
                 else
                     servMgr->setFirewall(ServMgr::FW_UNKNOWN);
 
+                //UPnP
+                if (servMgr->isEnableUPnP) servMgr->SetUPnP();
+
                 Host h = servMgr->serverHost;
 
                 if (!serv->sock)
@@ -2002,6 +2019,9 @@ int ServMgr::serverProc(ThreadInfo *thread)
             }
 
             servMgr->setFirewall(ServMgr::FW_ON);
+
+            //UPnP
+            if (servMgr->isEnableUPnP && servMgr->EnableUPnPPort) servMgr->UnSetUPnP();
         }
 
         sys->sleepIdle();
@@ -2300,3 +2320,23 @@ bool ServMgr::writeVariable(Stream &out, const String &var)
     out.writeString(buf);
     return true;
 }
+
+// --------------------------------------------------
+//UPnP
+bool ServMgr::SetUPnP()
+{
+    EnableUPnPPort = sys->SetUPnP();
+
+    return (servMgr->EnableUPnPPort==0)?false:true;
+}
+
+// --------------------------------------------------
+//UPnP
+bool ServMgr::UnSetUPnP()
+{
+    if(sys->UnSetUPnP()) EnableUPnPPort = 0;
+
+    return (servMgr->EnableUPnPPort==0)?true:false;
+}
+
+// --------------------------------------------------

@@ -196,6 +196,7 @@
     <ClInclude Include="..\..\common\wmhttp.h" />
     <ClInclude Include="..\..\common\xml.h" />
     <ClInclude Include="..\..\common\_string.h" />
+    <ClInclude Include="..\upnp.h" />
     <ClInclude Include="..\wsocket.h" />
     <ClInclude Include="..\wsys.h" />
   </ItemGroup>
@@ -250,6 +251,7 @@
     <ClCompile Include="..\..\common\wmhttp.cpp" />
     <ClCompile Include="..\..\common\xml.cpp" />
     <ClCompile Include="..\..\common\_string.cpp" />
+    <ClCompile Include="..\upnp.cpp" />
     <ClCompile Include="..\wsocket.cpp" />
     <ClCompile Include="..\wsys.cpp" />
   </ItemGroup>

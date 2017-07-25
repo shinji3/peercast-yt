@@ -390,6 +390,12 @@ public:
     std::string         audioCodec;
 
     std::string         wmvProtocol;
+
+    //UPnP
+    bool                isEnableUPnP;
+    unsigned int        EnableUPnPPort;
+    bool                SetUPnP();
+    bool                UnSetUPnP();
 };
 
 // ----------------------------------
