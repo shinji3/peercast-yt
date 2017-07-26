@@ -6,7 +6,6 @@
 //
 // ------------------------------------------------------------------------------
 
-#pragma warning( disable : 4786 )
 #pragma comment(lib, "Wininet.lib")
 
 #ifndef _UPNP_H_
@@ -16,7 +15,7 @@
 #include <winsock2.h>
 #endif
 
-#import <msxml6.dll> named_guids
+#import <msxml6.dll> no_auto_exclude
 #include <string>
 #include <vector>
 #include <map>
