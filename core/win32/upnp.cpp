@@ -7,7 +7,6 @@
 // ------------------------------------------------------------------------------
 #include "upnp.h"
 #include "sys.h"
-#include "socket.h"
 #include <malloc.h>
 #include <ws2tcpip.h>
 #include <algorithm>
@@ -178,8 +177,8 @@ bool YMSSDPDiscover::Send(const char* st)
 	sockaddr_in dest_addr;
 	ZeroMemory(&dest_addr,sizeof(dest_addr));
 	dest_addr.sin_family = AF_INET;
-	dest_addr.sin_addr.s_addr = ClientSocket::getIP(UPNP_GROUP);
 	dest_addr.sin_port = htons(UPNP_PORT);
+    inet_pton(AF_INET, UPNP_GROUP, &dest_addr.sin_addr);
 
 	in_addr interface_addr;
 	ZeroMemory(&interface_addr,sizeof(interface_addr));
