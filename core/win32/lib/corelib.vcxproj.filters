@@ -212,6 +212,9 @@
     <ClInclude Include="..\..\common\rtmp.h">
       <Filter>Core Includes</Filter>
     </ClInclude>
+    <ClInclude Include="..\upnp.h">
+      <Filter>Win32 Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cgi.cpp">
@@ -369,6 +372,9 @@
     </ClCompile>
     <ClCompile Include="..\..\common\rtmp.cpp">
       <Filter>Core Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\upnp.cpp">
+      <Filter>Win32 Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

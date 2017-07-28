@@ -70,6 +70,16 @@ public:
     void waitThread(ThreadInfo*, int timeout = 30000) override
     {
     }
+
+    unsigned int SetUPnP() override
+    {
+        return 0;
+    }
+
+    bool UnSetUPnP() override
+    {
+        return false;
+    }
 };
 
 #endif

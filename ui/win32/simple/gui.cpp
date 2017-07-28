@@ -422,6 +422,10 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
             PostMessage(hwnd, WM_DESTROY, 0, 0);
         }
 
+        //UPnP
+        if (servMgr->isEnableUPnP)
+            setButtonState(IDC_UPNP, true);
+
         break;
 
     case WM_COMMAND:
@@ -444,6 +448,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
                 enableControl(IDC_BUTTON8, true);
                 enableControl(IDC_BUTTON11, true);
                 enableControl(IDC_BUTTON10, true);
+                enableControl(IDC_UPNP, false); //UPnP
 
                 //writeSettings();
                 servMgr->autoServe = true;
@@ -463,6 +468,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
                 enableControl(IDC_BUTTON8, false);
                 enableControl(IDC_BUTTON11, false);
                 enableControl(IDC_BUTTON10, false);
+                enableControl(IDC_UPNP, true); //UPnP
 
                 setEditStr(IDC_CHECK1, "Disabled");
 
@@ -594,6 +600,13 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
             chanMgr->startSearch(info);
         }
         break;
+
+        case IDC_UPNP:
+            if (getButtonState(IDC_UPNP))
+                servMgr->isEnableUPnP = true;
+            else
+                servMgr->isEnableUPnP = false;
+            break;
 
         }
         break;
