@@ -427,8 +427,8 @@ int YMSoapAction::Invoke(const char* url)
 	//送信データ作成
 
 	try
-	{
-		MSXML2::IXMLDOMDocumentPtr sendXML;
+    {
+		MSXML2::IXMLDOMDocument3Ptr sendXML;
 		if(FAILED(sendXML.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
 		{
 			return -1;
@@ -436,6 +436,7 @@ int YMSoapAction::Invoke(const char* url)
 		sendXML->async = VARIANT_FALSE;
 		sendXML->preserveWhiteSpace = VARIANT_FALSE;
 		sendXML->resolveExternals = VARIANT_FALSE;
+        sendXML->setProperty("SelectionNamespaces", "xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/'");
 		sendXML->loadXML("<?xml version=\"1.0\"?>"
 			"<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
 			"<SOAP-ENV:Body>"
@@ -471,10 +472,10 @@ int YMSoapAction::Invoke(const char* url)
 		http->send(sendXML->xml);
 
 		return http->status;
-	}
-	catch(_com_error&/* ex */)
-	{
+    }
+    catch(_com_error&/* ex */)
+    {
 		//ATLTRACE((const char*)ex.Description());
-		return -1;
-	}
+        return -1;
+    }
 }
