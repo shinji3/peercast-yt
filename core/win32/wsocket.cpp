@@ -157,7 +157,7 @@ void WSAClientSocket::open(Host &rh)
 
     remoteAddr.sin_family = AF_INET;
     remoteAddr.sin_port = htons(host.port);
-    remoteAddr.sin_addr.S_un.S_addr = htonl(host.ip);
+    remoteAddr.sin_addr.s_addr = htonl(host.ip);
 }
 
 // --------------------------------------------------
@@ -388,10 +388,7 @@ ClientSocket *WSAClientSocket::accept()
     cs->sockNum = conSock;
 
     cs->host.port = from.sin_port;
-    cs->host.ip = from.sin_addr.S_un.S_un_b.s_b1<<24 |
-                  from.sin_addr.S_un.S_un_b.s_b2<<16 |
-                  from.sin_addr.S_un.S_un_b.s_b3<<8 |
-                  from.sin_addr.S_un.S_un_b.s_b4;
+    cs->host.ip = ntohl(from.sin_addr.s_addr);
 
     cs->setBlocking(false);
 #ifdef DISABLE_NAGLE
