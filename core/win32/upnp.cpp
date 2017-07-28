@@ -340,7 +340,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 
 	//XMLÇéÊìæ
 	try
-	{
+    {
 		MSXML2::IXMLHTTPRequestPtr http;
 		if(FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
 		{
@@ -352,12 +352,13 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 		{
 			return result;
 		}
-		MSXML2::IXMLDOMDocumentPtr doc = http->responseXML;
+		MSXML2::IXMLDOMDocument3Ptr doc = http->responseXML;
+        doc->setProperty("SelectionNamespaces", "xmlns:urn='urn:schemas-upnp-org:device-1-0'");
 
 		//controlURLéÊìæ
-		std::string xPath = "//service[serviceType=\"";
+		std::string xPath = "//urn:service[urn:serviceType=\"";
 		xPath += st;
-		xPath += "\"]/controlURL";
+		xPath += "\"]/urn:controlURL";
 		MSXML2::IXMLDOMNodePtr controlURLNode = doc->selectSingleNode(xPath.c_str());
 		if(controlURLNode)
 		{
@@ -370,7 +371,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 
 		
 		//BASEURLéÊìæ
-		MSXML2::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//URLBase");
+		MSXML2::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//urn:URLBase");
 		if(baseURLNode)
 		{
 			baseURL = baseURLNode->text;
@@ -379,11 +380,11 @@ std::string YMSSDPDiscover::GetControlURL(const char* location,const char* st)
 		{
 			baseURL = location;
 		}
-	}
-	catch(_com_error&)
-	{
-		return result;
-	}
+    }
+    catch(_com_error&)
+    {
+        return result;
+    }
 
 	//URLÇåãçá
 	DWORD size = 0;
