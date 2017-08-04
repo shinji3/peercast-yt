@@ -218,6 +218,12 @@
     <ClInclude Include="..\..\common\rtmpmonit.h">
       <Filter>Core Includes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\splitter.h">
+      <Filter>Core Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\amf0.h">
+      <Filter>Core Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cgi.cpp">

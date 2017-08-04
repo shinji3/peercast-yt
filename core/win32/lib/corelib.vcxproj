@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\amf0.h" />
     <ClInclude Include="..\..\common\asf.h" />
     <ClInclude Include="..\..\common\atom.h" />
     <ClInclude Include="..\..\common\cgi.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\..\common\servent.h" />
     <ClInclude Include="..\..\common\servmgr.h" />
     <ClInclude Include="..\..\common\socket.h" />
+    <ClInclude Include="..\..\common\splitter.h" />
     <ClInclude Include="..\..\common\sstream.h" />
     <ClInclude Include="..\..\common\stats.h" />
     <ClInclude Include="..\..\common\str.h" />
