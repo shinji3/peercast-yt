@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 
     uint16_t rtmp_port = 1935;
 
-    // TODO: ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰ -p PORT ã‚’å—ã‘å–ã‚‹ã€‚
+    // TODO: ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚ç -p PORT ‚ğó‚¯æ‚éB
 
     if (argc == 1)
         die("no URL supplied");
@@ -80,11 +80,11 @@ int main(int argc, char* argv[])
     Host serverHost(0 /* IGNORED */, rtmp_port);
     ClientSocket* server = sys->createSocket();
     server->bind(serverHost);
-    server->setBlocking(true); // accept() ãŒãƒ–ãƒ­ãƒƒã‚¯ã™ã‚‹ã‚ˆã†ã«ã€‚
+    server->setBlocking(true); // accept() ‚ªƒuƒƒbƒN‚·‚é‚æ‚¤‚ÉB
 
     while (true)
     {
-        // ãƒ«ãƒ¼ãƒ—ãƒ–ãƒ­ãƒƒã‚¯ã®æœ€å¾Œã§ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’è§£æ”¾ã™ã‚‹ã€‚
+        // ƒ‹[ƒvƒuƒƒbƒN‚ÌÅŒã‚ÅƒXƒgƒŠ[ƒ€‚ğ‰ğ•ú‚·‚éB
         std::vector<Stream*> streams;
         Defer cb([&]() { for (auto s : streams) delete s; });
 

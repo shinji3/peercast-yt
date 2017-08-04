@@ -34,7 +34,7 @@ namespace iohelpers
             throw std::runtime_error("length mismatch");
 
         int integer = 0;
-        for (int i = 0 ; i < values.size(); ++i)
+        for (size_t i = 0 ; i < values.size(); ++i)
         {
             int v = values[i];
             int w = widths[i];
@@ -46,7 +46,7 @@ namespace iohelpers
         return integer;
     }
 
-    // æ•´æ•°ã‚’ãƒ“ãƒƒãƒˆå¹…ã‚’æŒ‡å®šã—ãŸé…åˆ—ã«ã—ãŸãŒã£ã¦åˆ†è§£ã™ã‚‹ã€‚
+    // ®”‚ðƒrƒbƒg•‚ðŽw’è‚µ‚½”z—ñ‚É‚µ‚½‚ª‚Á‚Ä•ª‰ð‚·‚éB
     std::vector<int> unpack_bits(int integer, std::vector<int> sizes)
     {
         std::vector<int> res;

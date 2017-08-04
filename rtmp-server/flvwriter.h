@@ -99,7 +99,7 @@ namespace rtmpserver
             // write tag header
             out.writeString(
                 std::string({(char)tag_type}) +
-                to_bytes_big_endian(data.size(), 3) +
+                to_bytes_big_endian(static_cast<int>(data.size()), 3) +
                 to_bytes_big_endian(timestamp, 3) +
                 std::string({timestamp_extended}) +
                 to_bytes_big_endian(STREAM_ID, 3));
@@ -107,7 +107,7 @@ namespace rtmpserver
             // write payload
             out.writeString(data);
 
-            previous_tag_size = data.size() + 11;
+            previous_tag_size = static_cast<int>(data.size()) + 11;
         }
 
     };

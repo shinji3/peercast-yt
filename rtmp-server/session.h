@@ -29,7 +29,7 @@ namespace rtmpserver
             , flv_writer(aFlvWriter)
             , quitting(false) {}
 
-        // æ¯å›åŒã˜ä¹±æ•°åˆ—ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+        // –ˆ‰ñ“¯‚¶—”—ñ‚ğ¶¬‚·‚éB
         static std::string generate_random_bytes(int size = 1528)
         {
             std::string res;
@@ -43,7 +43,7 @@ namespace rtmpserver
 
         std::tuple<int,int,int,int> read_type0_header(Stream* io)
         {
-            // int ã§ã„ã„ã®ï¼Ÿ wrap-round å¤§ä¸ˆå¤«ï¼Ÿ
+            // int ‚Å‚¢‚¢‚ÌH wrap-round ‘åä•vH
             int  timestamp         = to_integer_big_endian({ io->readChar(), io->readChar(), io->readChar() });
             int  message_length    = to_integer_big_endian({ io->readChar(), io->readChar(), io->readChar() });
             char message_type_id   = io->readChar();
@@ -68,7 +68,7 @@ namespace rtmpserver
         {
             handshake(client);
 
-            // å„ãƒãƒ£ãƒ³ã‚¯ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®æœ€å¾Œã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¨˜éŒ²ã™ã‚‹ mapã€‚
+            // Šeƒ`ƒƒƒ“ƒNƒXƒgƒŠ[ƒ€‚ÌÅŒã‚ÌƒƒbƒZ[ƒW‚ğ‹L˜^‚·‚é mapB
             std::map<int,Message> cstreams;
 
             while (!quitting)
@@ -132,7 +132,7 @@ namespace rtmpserver
                 }
 
                 Message& message = cstreams[cs_id];
-                int chunk_size = std::min(message.remaining(),
+                int chunk_size = (std::min)(message.remaining(),
                                           max_incoming_chunk_size);
                 message.add_data(client->Stream::read(chunk_size));
 
@@ -184,7 +184,7 @@ namespace rtmpserver
                         {"objectEncoding",0}
                     }).serialize();
 
-                Message message(0, data.size(), 0x14, 0);
+                Message message(0, static_cast<int>(data.size()), 0x14, 0);
                 message.add_data(data);
                 client->writeString(str::join("", message.to_chunks(max_outgoing_chunk_size, 3)));
             }
@@ -199,7 +199,7 @@ namespace rtmpserver
             data += Value("_result").serialize();
             data += transaction_id.serialize();
             data += params[1].serialize(); // name
-            Message message(0, data.size(), 0x14, 0);
+            Message message(0, static_cast<int>(data.size()), 0x14, 0);
             message.add_data(data);
             client->writeString(str::join("", message.to_chunks(max_outgoing_chunk_size, 3)));
         }
@@ -211,7 +211,7 @@ namespace rtmpserver
             data += transaction_id.serialize();
             data += Value(nullptr).serialize();
             data += Value(1).serialize();
-            Message message(0, data.size(), 0x14, 0);
+            Message message(0, static_cast<int>(data.size()), 0x14, 0);
             message.add_data(data);
             client->writeString(str::join("", message.to_chunks(max_outgoing_chunk_size, 3)));
         }
@@ -229,7 +229,7 @@ namespace rtmpserver
                     { "code", "NetStream.Publish.Start" },
                     { "description", "Start publishing" }
                 }).serialize();
-            Message message(0, data.size(), 0x14, 1);
+            Message message(0, static_cast<int>(data.size()), 0x14, 1);
             message.add_data(data);
             client->writeString(str::join("", message.to_chunks(max_outgoing_chunk_size, 8)));
         }
@@ -241,7 +241,7 @@ namespace rtmpserver
 
         void on_command(Message& message)
         {
-            // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‹ã‚‰ command, transaction_id, params ã‚’æŠ½å‡ºã€‚
+            // ƒƒbƒZ[ƒW‚©‚ç command, transaction_id, params ‚ğ’ŠoB
             StringStream mem(message.data);
             amf0::Deserializer d;
             Value command = d.readValue(mem);
@@ -257,7 +257,7 @@ namespace rtmpserver
                 params.push_back(param);
             }
 
-            // ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒã€‚
+            // ƒfƒBƒXƒpƒbƒ`B
             auto c = command.string();
             if (c == "connect")
                 on_connect(transaction_id, params);
@@ -365,7 +365,7 @@ namespace rtmpserver
 
             // receive C2
             std::string c2 = client->Stream::read(1536);
-            // è§£æã¯çœç•¥ã€‚
+            // ‰ğÍ‚ÍÈ—ªB
         }
 
         static void test()

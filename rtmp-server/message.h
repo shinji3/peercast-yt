@@ -13,7 +13,7 @@ namespace rtmpserver
         int stream_id;
         std::string data;
 
-        // ãƒžãƒƒãƒ—ã§å€¤ã¨ã—ã¦ä½¿ã†ãŸã‚ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
+        // ƒ}ƒbƒv‚Å’l‚Æ‚µ‚ÄŽg‚¤‚½‚ß‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^B
         Message()
             : timestamp ( 0 )
             , length ( 0 )
@@ -34,13 +34,13 @@ namespace rtmpserver
             data += chunk_data;
         }
 
-        // ã‚ã¨ä½•ãƒã‚¤ãƒˆè¿½åŠ ã—ãŸã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå®Œæˆã™ã‚‹ã‹ã€‚åå‰ãŒã¾ãŽã‚‰
-        // ã‚ã—ã„ãªã€‚æ­£ã®é‡ã«è´ã“ãˆã‚‹ã€‚
+        // ‚ ‚Æ‰½ƒoƒCƒg’Ç‰Á‚µ‚½‚çƒƒbƒZ[ƒW‚ªŠ®¬‚·‚é‚©B–¼‘O‚ª‚Ü‚¬‚ç
+        // ‚í‚µ‚¢‚ÈB³‚Ì—Ê‚É’®‚±‚¦‚éB
         int
         remaining()
         {
             assert(length - data.size() >= 0);
-            return length - data.size();
+            return length - static_cast<int>(data.size());
         }
 
         std::vector<std::string>
@@ -51,17 +51,17 @@ namespace rtmpserver
 
             std::vector<std::string> chunks;
 
-            int remaining = data.size();
+            int remaining = static_cast<int>(data.size());
 
             while (remaining != 0)
             {
-                int chunk_size = std::min(remaining, maximum_chunk_size); // size of this chunk
+                int chunk_size = (std::min)(remaining, maximum_chunk_size); // size of this chunk
                 std::string header;
                 if (chunk_size == data.size())
                 {
                     header =
                         make_basic_header(0, chunk_stream_id) +
-                        make_type0_header(0, data.size(), type_id, stream_id);
+                        make_type0_header(0, static_cast<int>(data.size()), type_id, stream_id);
                 }else
                 {
                     header = make_basic_header(3, chunk_stream_id);
