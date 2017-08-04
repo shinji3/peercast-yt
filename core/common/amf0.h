@@ -26,19 +26,19 @@
 
 namespace amf0
 {
-    static const int AMF_NUMBER      = 0x00;
-    static const int AMF_BOOL        = 0x01;
-    static const int AMF_STRING      = 0x02;
-    static const int AMF_OBJECT      = 0x03;
-    static const int AMF_MOVIECLIP   = 0x04;
-    static const int AMF_NULL        = 0x05;
-    static const int AMF_UNDEFINED   = 0x06;
-    static const int AMF_REFERENCE   = 0x07;
-    static const int AMF_ARRAY       = 0x08;
-    static const int AMF_OBJECT_END  = 0x09;
-    static const int AMF_STRICTARRAY = 0x0a;
-    static const int AMF_DATE        = 0x0b;
-    static const int AMF_LONG_STRING = 0x0c;
+    static const char AMF_NUMBER      = 0x00;
+    static const char AMF_BOOL        = 0x01;
+    static const char AMF_STRING      = 0x02;
+    static const char AMF_OBJECT      = 0x03;
+    static const char AMF_MOVIECLIP   = 0x04;
+    static const char AMF_NULL        = 0x05;
+    static const char AMF_UNDEFINED   = 0x06;
+    static const char AMF_REFERENCE   = 0x07;
+    static const char AMF_ARRAY       = 0x08;
+    static const char AMF_OBJECT_END  = 0x09;
+    static const char AMF_STRICTARRAY = 0x0a;
+    static const char AMF_DATE        = 0x0b;
+    static const char AMF_LONG_STRING = 0x0c;
 
     class Value;
     typedef std::pair<std::string,Value> KeyValuePair;
