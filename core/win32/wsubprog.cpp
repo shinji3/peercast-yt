@@ -43,12 +43,12 @@ std::string createCommandLine(std::string prog, std::vector<std::string> args)
     for (auto s : args)
         words.push_back(s);
 
-    for (int i = 0; i < words.size(); ++i)
+    for (size_t i = 0; i < words.size(); ++i)
     {
         auto s = words[i];
         // Replace unsafe characters with a space.  The percent mark
         // '%' is intentionally allowed.
-        for (int j = 0; j < s.size(); j++)
+        for (size_t j = 0; j < s.size(); j++)
             if (s[j] == '!' || s[j] == '\"')
                 s[j] = ' ';
         words[i] = "\"" + s + "\"";
@@ -56,10 +56,7 @@ std::string createCommandLine(std::string prog, std::vector<std::string> args)
     return str::join(" ", words);
 }
 
-// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®å®Ÿè¡Œã‚’é–‹å§‹ã€‚
-extern "C" {
-    extern DWORD WINAPI GetProcessId(HANDLE Process);
-}
+// ƒvƒƒOƒ‰ƒ€‚ÌÀs‚ğŠJnB
 bool Subprogram::start(std::initializer_list<std::string> arguments, Environment& env)
 {
     SECURITY_ATTRIBUTES sa;
@@ -68,8 +65,8 @@ bool Subprogram::start(std::initializer_list<std::string> arguments, Environment
     sa.bInheritHandle = TRUE;
     sa.lpSecurityDescriptor = NULL;
 
-    HANDLE stdoutRead;
-    HANDLE stdoutWrite;
+    HANDLE stdoutRead = NULL;
+    HANDLE stdoutWrite = NULL;
 
     if (m_receiveData)
     {
@@ -90,7 +87,7 @@ bool Subprogram::start(std::initializer_list<std::string> arguments, Environment
         startupInfo.hStdOutput = stdoutWrite;
     }
     startupInfo.dwFlags |= STARTF_USESTDHANDLES;
-    // æ¨™æº–å…¥åŠ›ã®ãƒãƒ³ãƒ‰ãƒ«æŒ‡å®šã—ãªãã¦ã„ã„ã®ã‹ãªï¼Ÿ
+    // •W€“ü—Í‚Ìƒnƒ“ƒhƒ‹w’è‚µ‚È‚­‚Ä‚¢‚¢‚Ì‚©‚ÈH
 
     std::string cmdline = createCommandLine(m_name, arguments);
     LOG_DEBUG("cmdline: %s", str::inspect(cmdline).c_str());
@@ -122,8 +119,8 @@ bool Subprogram::start(std::initializer_list<std::string> arguments, Environment
     return true;
 }
 
-// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã«ã‚ˆã‚Šçµ‚äº†ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒè¿”ã•ã‚ŒãŸå ´åˆã¯ true ã‚’è¿”ã—ã€ã‚¹ãƒ†ãƒ¼
-// ã‚¿ã‚¹ãŒ *status ã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
+// ƒvƒƒOƒ‰ƒ€‚É‚æ‚èI—¹ƒXƒe[ƒ^ƒX‚ª•Ô‚³‚ê‚½ê‡‚Í true ‚ğ•Ô‚µAƒXƒe[
+// ƒ^ƒX‚ª *status ‚ÉƒZƒbƒg‚³‚ê‚éB
 bool Subprogram::wait(int* status)
 {
     DWORD res;

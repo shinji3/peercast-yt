@@ -215,6 +215,9 @@
     <ClInclude Include="..\upnp.h">
       <Filter>Win32 Includes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\rtmpmonit.h">
+      <Filter>Core Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cgi.cpp">
@@ -374,6 +377,12 @@
       <Filter>Core Source</Filter>
     </ClCompile>
     <ClCompile Include="..\upnp.cpp">
+      <Filter>Win32 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\rtmpmonit.cpp">
+      <Filter>Core Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\wsubprog.cpp">
       <Filter>Win32 Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\common\public.h" />
     <ClInclude Include="..\..\common\regexp.h" />
     <ClInclude Include="..\..\common\rtmp.h" />
+    <ClInclude Include="..\..\common\rtmpmonit.h" />
     <ClInclude Include="..\..\common\servent.h" />
     <ClInclude Include="..\..\common\servmgr.h" />
     <ClInclude Include="..\..\common\socket.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\..\common\public.cpp" />
     <ClCompile Include="..\..\common\regexp.cpp" />
     <ClCompile Include="..\..\common\rtmp.cpp" />
+    <ClCompile Include="..\..\common\rtmpmonit.cpp" />
     <ClCompile Include="..\..\common\servent.cpp" />
     <ClCompile Include="..\..\common\servhs.cpp" />
     <ClCompile Include="..\..\common\servmgr.cpp" />
@@ -253,6 +255,7 @@
     <ClCompile Include="..\..\common\_string.cpp" />
     <ClCompile Include="..\upnp.cpp" />
     <ClCompile Include="..\wsocket.cpp" />
+    <ClCompile Include="..\wsubprog.cpp" />
     <ClCompile Include="..\wsys.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

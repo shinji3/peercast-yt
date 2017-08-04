@@ -28,7 +28,7 @@ void RTMPServerMonitor::update()
 
     if (!m_enabled) return;
 
-    // RTMP server ã®æ­»æ´»ã‚’ç›£è¦–ã™ã‚‹ã€‚
+    // RTMP server ‚Ì€Šˆ‚ğŠÄ‹‚·‚éB
     if (!m_rtmpServer.isAlive())
     {
         LOG_ERROR("RTMP server is down! Restarting... ");
@@ -67,7 +67,7 @@ bool RTMPServerMonitor::writeVariable(Stream &out, const String &var)
 
 void RTMPServerMonitor::start()
 {
-    // Environment env ã‚’ç¾åœ¨ã®ç’°å¢ƒã‹ã‚‰åˆæœŸåŒ–ã™ã‚‹ã€‚
+    // Environment env ‚ğŒ»İ‚ÌŠÂ‹«‚©‚ç‰Šú‰»‚·‚éB
     Environment env;
     env.copyFromCurrentProcess();
 
