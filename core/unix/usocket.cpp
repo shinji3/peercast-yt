@@ -155,7 +155,7 @@ hostent *UClientSocket::resolveHost(const char *hostName)
 }
 
 // --------------------------------------------------
-void UClientSocket::open(Host &rh)
+void UClientSocket::open(const Host &rh)
 {
     sockNum = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -322,6 +322,9 @@ void UClientSocket::bind(Host &h)
 
     if ((sockNum = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
         throw SockException("Can`t open socket");
+
+    if (fcntl(sockNum, F_SETFD, FD_CLOEXEC) == -1)
+        throw SockException("Can`t set close-on-exec flag");
 
     setReuse(true);
     setBlocking(false);

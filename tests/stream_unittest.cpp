@@ -525,19 +525,19 @@ TEST_F(StreamFixture, lastBytesOut)
 TEST_F(StreamFixture, readLineStdString)
 {
     mem.str("abc");
-    ASSERT_THROW(mem.readLine(), StreamException);
+    ASSERT_THROW(mem.readLine(1000), StreamException);
 
     mem.str("abc\ndef");
-    ASSERT_EQ("abc", mem.readLine());
+    ASSERT_EQ("abc", mem.readLine(1000));
 
     mem.str("abc\r\ndef");
-    ASSERT_EQ("abc", mem.readLine());
+    ASSERT_EQ("abc", mem.readLine(1000));
 
     // CR Ç≈ÇÕí‚é~ÇµÇ»Ç¢
     mem.str("abc\rdef");
-    ASSERT_THROW(mem.readLine(), StreamException);
+    ASSERT_THROW(mem.readLine(1000), StreamException);
 
     // çsíÜÇÃ CR ÇÕçÌèúÇ≥ÇÍÇÈ
     mem.str("abc\rdef\r\n");
-    ASSERT_EQ("abcdef", mem.readLine());
+    ASSERT_EQ("abcdef", mem.readLine(1000));
 }

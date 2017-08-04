@@ -27,12 +27,14 @@
 #include "pcp.h"
 #include "atom.h"
 #include "version2.h"
+#include "rtmpmonit.h"
 
 ThreadInfo ServMgr::serverThread, ServMgr::idleThread;
 
 // -----------------------------------
 ServMgr::ServMgr()
     : publicDirectoryEnabled(false)
+    , rtmpServerMonitor(std::string(peercastApp->getPath()) + "rtmp-server")
 {
     validBCID = NULL;
 
@@ -1869,9 +1871,6 @@ int ServMgr::idleProc(ThreadInfo *thread)
 {
     sys->setThreadName(thread, "IDLE");
 
-    // nothing much to do for the first couple of seconds, so just hang around.
-    sys->sleep(2000);
-
     unsigned int lastBroadcastConnect = 0;
     unsigned int lastRootBroadcast = 0;
 
@@ -1943,6 +1942,8 @@ int ServMgr::idleProc(ThreadInfo *thread)
         // ƒ`ƒƒƒ“ƒlƒ‹ˆê——‚ðŽæ“¾‚·‚éB
         servMgr->channelDirectory.update();
 
+        servMgr->rtmpServerMonitor.update();
+
         sys->sleep(500);
     }
 
@@ -1965,7 +1966,6 @@ int ServMgr::serverProc(ThreadInfo *thread)
         {
             serv->abort();      // force close
             serv2->abort();     // force close
-            //servMgr->quit();
 
             servMgr->restartServer = false;
         }
@@ -2296,6 +2296,12 @@ bool ServMgr::writeVariable(Stream &out, const String &var)
     }else if (var == "wmvProtocol")
     {
         buf = servMgr->wmvProtocol;
+    }else if (var.startsWith("defaultChannelInfo."))
+    {
+        return servMgr->defaultChannelInfo.writeVariable(out, var + strlen("defaultChannelInfo."));
+    }else if (var.startsWith("rtmpServerMonitor."))
+    {
+        return servMgr->rtmpServerMonitor.writeVariable(out, var + strlen("rtmpServerMonitor."));
     }else if (var == "test")
     {
         out.writeUTF8(0x304b);
