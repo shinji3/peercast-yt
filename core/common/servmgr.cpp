@@ -1878,6 +1878,9 @@ int ServMgr::idleProc(ThreadInfo *thread)
 
     unsigned int lastForceIPCheck = 0;
 
+    //UPnP
+    unsigned int lastUPnP = 0;
+
     while (thread->active)
     {
         stats.update();
@@ -1919,6 +1922,16 @@ int ServMgr::idleProc(ThreadInfo *thread)
             {
                 servMgr->broadcastRootSettings(true);
                 lastRootBroadcast = ctime;
+            }
+        }
+
+        //UPnP
+        if (servMgr->isEnableUPnP)
+        {
+            if ((ctime - lastUPnP) > 60)
+            {
+                servMgr->SetUPnP();
+                lastUPnP = ctime;
             }
         }
 
