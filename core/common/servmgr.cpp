@@ -1041,7 +1041,10 @@ void ServMgr::saveSettings(const char *fn)
 
                 iniFile.writeSection("RelayChannel");
                 iniFile.writeStrValue("name", c->getName());
-                iniFile.writeStrValue("genre", c->info.genre.cstr());
+                iniFile.writeStrValue("desc", c->info.desc.c_str());
+                iniFile.writeStrValue("genre", c->info.genre.c_str());
+                iniFile.writeStrValue("contactURL", c->info.url.c_str());
+                iniFile.writeStrValue("comment", c->info.comment.c_str());
                 if (!c->sourceURL.isEmpty())
                     iniFile.writeStrValue("sourceURL", c->sourceURL.cstr());
                 iniFile.writeStrValue("sourceProtocol", ChanInfo::getProtocolStr(c->info.srcProtocol));
@@ -1049,7 +1052,6 @@ void ServMgr::saveSettings(const char *fn)
                 iniFile.writeStrValue("MIMEType", c->info.MIMEType);
                 iniFile.writeStrValue("streamExt", c->info.streamExt);
                 iniFile.writeIntValue("bitrate", c->info.bitrate);
-                iniFile.writeStrValue("contactURL", c->info.url.cstr());
                 iniFile.writeStrValue("id", idstr);
                 iniFile.writeBoolValue("stayConnected", c->stayConnected);
 
@@ -1363,6 +1365,14 @@ void ServMgr::loadSettings(const char *fn)
                         break;
                     else if (iniFile.isName("name"))
                         info.name.set(iniFile.getStrValue());
+                    else if (iniFile.isName("desc"))
+                        info.desc.set(iniFile.getStrValue());
+                    else if (iniFile.isName("genre"))
+                        info.genre.set(iniFile.getStrValue());
+                    else if (iniFile.isName("contactURL"))
+                        info.url.set(iniFile.getStrValue());
+                    else if (iniFile.isName("comment"))
+                        info.comment.set(iniFile.getStrValue());
                     else if (iniFile.isName("id"))
                         info.id.fromStr(iniFile.getStrValue());
                     else if (iniFile.isName("sourceType"))
@@ -1380,10 +1390,6 @@ void ServMgr::loadSettings(const char *fn)
                         stayConnected = iniFile.getBoolValue();
                     else if (iniFile.isName("sourceURL"))
                         sourceURL.set(iniFile.getStrValue());
-                    else if (iniFile.isName("genre"))
-                        info.genre.set(iniFile.getStrValue());
-                    else if (iniFile.isName("contactURL"))
-                        info.url.set(iniFile.getStrValue());
                     else if (iniFile.isName("bitrate"))
                         info.bitrate = atoi(iniFile.getStrValue());
                     else if (iniFile.isName("tracker"))
