@@ -400,7 +400,6 @@ public:
     bool                isEnableUPnP;
     unsigned int        EnableUPnPPort;
     bool                SetUPnP();
-    bool                UnSetUPnP();
 };
 
 // ----------------------------------

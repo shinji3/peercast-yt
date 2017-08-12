@@ -448,7 +448,6 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
                 enableControl(IDC_BUTTON8, true);
                 enableControl(IDC_BUTTON11, true);
                 enableControl(IDC_BUTTON10, true);
-                enableControl(IDC_UPNP, false); //UPnP
 
                 //writeSettings();
                 servMgr->autoServe = true;
@@ -468,7 +467,6 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
                 enableControl(IDC_BUTTON8, false);
                 enableControl(IDC_BUTTON11, false);
                 enableControl(IDC_BUTTON10, false);
-                enableControl(IDC_UPNP, true); //UPnP
 
                 setEditStr(IDC_CHECK1, "Disabled");
 

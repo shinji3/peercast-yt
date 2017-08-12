@@ -75,11 +75,6 @@ public:
     {
         return 0;
     }
-
-    bool UnSetUPnP() override
-    {
-        return false;
-    }
 };
 
 #endif

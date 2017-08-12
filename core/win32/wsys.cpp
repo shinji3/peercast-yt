@@ -246,30 +246,3 @@ unsigned int WSys::SetUPnP()
 
     return servMgr->serverHost.port;
 }
-
-// --------------------------------------------------
-//UPnP
-bool WSys::UnSetUPnP()
-{
-    //ƒ|[ƒg‰ð•úíœ
-    char sPort[10] = "";
-
-    YMSoapAction soap(mST.c_str(),"DeletePortMapping");
-
-    _itoa_s(servMgr->EnableUPnPPort, sPort, _countof(sPort), 10);
-
-    soap.SetParameter("NewRemoteHost","");
-    soap.SetParameter("NewExternalPort",sPort);
-    soap.SetParameter("NewProtocol","TCP");
-
-    if(soap.Invoke(mControlURL.c_str()) != 200)
-    {
-        LOG_ERROR("UPnP DeletePortMapping Error.");
-        return false;
-    }
-
-    //OK
-    LOG_NETWORK("UPnP DeletePortMapping OK.(%d Port)",servMgr->EnableUPnPPort);
-
-    return true;
-}

@@ -694,9 +694,6 @@ void ServMgr::quit()
 
     idleThread.shutdown();
 
-    //UPnP
-    if (servMgr->isEnableUPnP && servMgr->EnableUPnPPort) servMgr->UnSetUPnP();
-
     Servent *s = servents;
     while (s)
     {
@@ -2005,9 +2002,6 @@ int ServMgr::serverProc(ThreadInfo *thread)
                 else
                     servMgr->setFirewall(ServMgr::FW_UNKNOWN);
 
-                //UPnP
-                if (servMgr->isEnableUPnP) servMgr->SetUPnP();
-
                 Host h = servMgr->serverHost;
 
                 if (!serv->sock)
@@ -2040,9 +2034,6 @@ int ServMgr::serverProc(ThreadInfo *thread)
             }
 
             servMgr->setFirewall(ServMgr::FW_ON);
-
-            //UPnP
-            if (servMgr->isEnableUPnP && servMgr->EnableUPnPPort) servMgr->UnSetUPnP();
         }
 
         sys->sleepIdle();
@@ -2359,14 +2350,3 @@ bool ServMgr::SetUPnP()
 
     return (servMgr->EnableUPnPPort==0)?false:true;
 }
-
-// --------------------------------------------------
-//UPnP
-bool ServMgr::UnSetUPnP()
-{
-    if(sys->UnSetUPnP()) EnableUPnPPort = 0;
-
-    return (servMgr->EnableUPnPPort==0)?true:false;
-}
-
-// --------------------------------------------------
