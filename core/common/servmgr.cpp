@@ -125,7 +125,7 @@ ServMgr::ServMgr()
     rtmpPort = 1935;
 
     //UPnP
-    isEnableUPnP = false;
+    isEnableUPnP = true;
     EnableUPnPPort = 0;
 }
 
