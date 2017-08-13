@@ -97,11 +97,34 @@ table.table-panel tbody tr:nth-child(even) {
 	background-color: #ddd;
 }
 
+/* パネルの上部のスパンする見出し行。他の行よりも背景が濃い。 */
 table.table-panel tbody tr:nth-child(1) {
 	background-color: #ccc;
 }
 
+/* 通常、上の指定で十分。 */
+table.table-panel tbody tr.heading-row {
+	background-color: #ccc;
+}
+
 table.table-panel th {
+    text-align: center;
+}
+
+table.table-panel th.left-heading {
 	text-align: right;
 	font-weight: normal;
+}
+
+td.bandwidth-cell {
+    min-width: 4em;
+    text-align: right;
+}
+
+input.fill-parent {
+    width: 100%;
+}
+
+td.checkbox-cell {
+    text-align: center;
 }

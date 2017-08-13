@@ -162,7 +162,7 @@ public:
     HTTPHeaders(const std::initializer_list<std::pair<std::string,std::string> >& aHeaders)
     {
         for (auto pair : aHeaders)
-            m_headers[pair.first] = pair.second;
+            m_headers[str::upcase(pair.first)] = pair.second;
     }
 
     HTTPHeaders(const std::map<std::string,std::string>& aHeaders)
@@ -212,8 +212,10 @@ public:
     {
     }
 
-    HTTPRequest(const std::string& aMethod, const std::string& aUrl, const std::string& aProtocolVersion,
-        HTTPHeaders& aHeaders)
+    HTTPRequest(const std::string& aMethod,
+                const std::string& aUrl,
+                const std::string& aProtocolVersion,
+                const HTTPHeaders& aHeaders)
         : method(aMethod)
         , url(aUrl)
         , protocolVersion(aProtocolVersion)
