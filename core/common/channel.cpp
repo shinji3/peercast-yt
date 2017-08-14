@@ -999,9 +999,9 @@ void Channel::updateInfo(const ChanInfo &newInfo)
     String oldComment = info.comment;
 
     if (!info.update(newInfo))
-        return; // ãƒãƒ£ãƒ³ãƒãƒ«æƒ…å ±ã¯æ›´æ–°ã•ã‚Œãªã‹ã£ãŸã€‚
+        return; // ƒ`ƒƒƒ“ƒlƒ‹î•ñ‚ÍXV‚³‚ê‚È‚©‚Á‚½B
 
-    // ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°ã®é€šçŸ¥ã€‚
+    // ƒRƒƒ“ƒgXV‚Ì’Ê’mB
     if (!oldComment.isSame(info.comment))
     {
 #ifdef WIN32

@@ -89,7 +89,7 @@ void FileStream::openWriteReplace(int fd)
     if (file)
         close();
 
-    file = fdopen(fd, "wb");
+    file = _fdopen(fd, "wb");
 
     if (!file)
         throw StreamException("Unable to open file");

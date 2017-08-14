@@ -170,7 +170,7 @@ void ADDCONN(void *d, const char *fmt, ...)
 THREAD_PROC showConnections(ThreadInfo *thread)
 {
     //	thread->lock();
-    while (thread->active)
+    while (thread->active())
     {
         int sel, top, i;
         sel = static_cast<int>(SendDlgItemMessage(guiWnd, statusID, LB_GETCURSEL, 0, 0));
@@ -309,7 +309,7 @@ THREAD_PROC showConnections(ThreadInfo *thread)
         // sleep for 1 second .. check every 1/10th for shutdown
         for (i = 0; i < 10; i++)
         {
-            if (!thread->active)
+            if (!thread->active())
                 break;
             sys->sleep(100);
         }
@@ -545,14 +545,14 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
         {
             Servent *s = (Servent *)getListBoxSelData(statusID);
             if (s)
-                s->thread.active = false;
+                s->thread.shutdown();
         }
         break;
         case IDC_BUTTON5:		// chan disconnect
         {
             Channel *c = (Channel *)getListBoxSelData(chanID);
             if (c)
-                c->thread.active = false;
+                c->thread.shutdown();
         }
 
         break;
@@ -614,7 +614,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
         break;
 
     case WM_DESTROY:
-        guiThread.active = false;
+        guiThread.shutdown();
         //			guiThread.lock();
         guiWnd = NULL;
         //			guiThread.unlock();

@@ -224,6 +224,15 @@
     <ClInclude Include="..\..\common\amf0.h">
       <Filter>Core Includes</Filter>
     </ClInclude>
+    <ClInclude Include="..\mingw.thread.h">
+      <Filter>Win32 Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mingw.mutex.h">
+      <Filter>Win32 Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mingw.condition_variable.h">
+      <Filter>Win32 Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cgi.cpp">

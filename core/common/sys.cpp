@@ -355,7 +355,7 @@ bool    Sys::startThread(ThreadInfo *info)
         childBlocker.unlock();  // allow child to continue
         parentBlocker.lock();   // wait til child holds childBlocker
         return true;
-    } catch (std::system_error& e)
+    } catch (std::system_error&)
     {
         LOG_ERROR("Error creating thread");
         return false;

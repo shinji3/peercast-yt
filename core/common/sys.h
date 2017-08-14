@@ -217,13 +217,14 @@ public:
 };
 
 // ------------------------------------
-typedef int (*THREAD_FUNC)(ThreadInfo *);
 #define THREAD_PROC int
 typedef std::thread THREAD_HANDLE;
 
 class ThreadInfo
 {
 public:
+    typedef int (*THREAD_FUNC)(ThreadInfo *);
+
     ThreadInfo()
         : m_active(false)
     {
