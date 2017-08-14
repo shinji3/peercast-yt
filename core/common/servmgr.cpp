@@ -417,7 +417,7 @@ Servent *ServMgr::findOldestServent(Servent::TYPE type, bool priv)
     while (s)
     {
         if (s->type == type)
-            if (s->thread.active)
+            if (s->thread.active())
                 if (s->isOlderThan(oldest))
                     if (s->isPrivate() == priv)
                         oldest = s;
@@ -536,7 +536,7 @@ void    ServMgr::closeConnections(Servent::TYPE type)
     {
         if (sv->isConnected())
             if (sv->type == type)
-                sv->thread.active = false;
+                sv->thread.shutdown();
         sv=sv->next;
     }
 }
@@ -550,7 +550,7 @@ unsigned int ServMgr::numConnected(int type, bool priv, unsigned int uptime)
     Servent *s = servents;
     while (s)
     {
-        if (s->thread.active)
+        if (s->thread.active())
             if (s->isConnected())
                 if (s->type == type)
                     if (s->isPrivate()==priv)
@@ -570,7 +570,7 @@ unsigned int ServMgr::numConnected()
     Servent *s = servents;
     while (s)
     {
-        if (s->thread.active)
+        if (s->thread.active())
             if (s->isConnected())
                 cnt++;
 
@@ -616,7 +616,7 @@ unsigned int ServMgr::numActiveOnPort(int port)
     Servent *s = servents;
     while (s)
     {
-        if (s->thread.active && s->sock && (s->servPort == port))
+        if (s->thread.active() && s->sock && (s->servPort == port))
             cnt++;
         s=s->next;
     }
@@ -631,7 +631,7 @@ unsigned int ServMgr::numActive(Servent::TYPE tp)
     Servent *s = servents;
     while (s)
     {
-        if (s->thread.active && s->sock && (s->type == tp))
+        if (s->thread.active() && s->sock && (s->type == tp))
             cnt++;
         s=s->next;
     }
@@ -699,7 +699,7 @@ void ServMgr::quit()
     {
         try
         {
-            if (s->thread.active)
+            if (s->thread.active())
                 s->thread.shutdown();
         }catch (StreamException &)
         {
@@ -1756,7 +1756,7 @@ int ServMgr::clientProc(ThreadInfo *thread)
             while (s)
             {
                 if (s->type == Servent::T_OUTGOING)
-                    s->thread.active = false;
+                    s->thread.shutdown();
                 s=s->next;
             }
 #endif
@@ -1884,7 +1884,7 @@ int ServMgr::idleProc(ThreadInfo *thread)
     //UPnP
     unsigned int lastUPnP = 0;
 
-    while (thread->active)
+    while (thread->active())
     {
         stats.update();
 
@@ -1978,7 +1978,7 @@ int ServMgr::serverProc(ThreadInfo *thread)
 
     //unsigned int lastLookupTime=0;
 
-    while (thread->active)
+    while (thread->active())
     {
         if (servMgr->restartServer)
         {
@@ -2029,7 +2029,7 @@ int ServMgr::serverProc(ThreadInfo *thread)
             while (s)
             {
                 if (s->type == Servent::T_INCOMING)
-                    s->thread.active = false;
+                    s->thread.shutdown();
                 s=s->next;
             }
 

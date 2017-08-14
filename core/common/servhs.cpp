@@ -1384,7 +1384,7 @@ void Servent::CMD_stop(char *cmd, HTTP& http, HTML& html, String& jumpStr)
 
     Channel *c = chanMgr->findChannelByID(id);
     if (c)
-        c->thread.active = false;
+        c->thread.shutdown();
 
     sys->sleep(500);
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
