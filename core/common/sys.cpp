@@ -337,23 +337,11 @@ bool    Sys::startThread(ThreadInfo *info)
     info->m_active.store(true);
 
     try {
-        std::mutex childBlocker, parentBlocker;
-
-        childBlocker.lock();
-        parentBlocker.lock();
-        info->handle = std::thread([info, &childBlocker, &parentBlocker]()
-                                   {
-                                       childBlocker.lock();    // wait til info is setup
-                                       parentBlocker.unlock(); // allow parent to return
-                                       info->func(info);
-                                   });
-
+        info->handle = std::thread(info->func, info); 
         info->nativeHandle = info->handle.native_handle();
         info->handle.detach();
         setThreadName(info, "new thread");
 
-        childBlocker.unlock();  // allow child to continue
-        parentBlocker.lock();   // wait til child holds childBlocker
         return true;
     } catch (std::system_error&)
     {

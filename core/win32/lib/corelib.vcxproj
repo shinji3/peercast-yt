@@ -199,9 +199,6 @@
     <ClInclude Include="..\..\common\wmhttp.h" />
     <ClInclude Include="..\..\common\xml.h" />
     <ClInclude Include="..\..\common\_string.h" />
-    <ClInclude Include="..\mingw.condition_variable.h" />
-    <ClInclude Include="..\mingw.mutex.h" />
-    <ClInclude Include="..\mingw.thread.h" />
     <ClInclude Include="..\upnp.h" />
     <ClInclude Include="..\wsocket.h" />
     <ClInclude Include="..\wsys.h" />
