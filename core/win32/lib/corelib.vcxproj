@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\common\jis.h" />
     <ClInclude Include="..\..\common\jrpc.h" />
     <ClInclude Include="..\..\common\json.hpp" />
+    <ClInclude Include="..\..\common\logbuf.h" />
     <ClInclude Include="..\..\common\LUrlParser.h" />
     <ClInclude Include="..\..\common\mapper.h" />
     <ClInclude Include="..\..\common\matroska.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="..\..\common\subprog.h" />
     <ClInclude Include="..\..\common\sys.h" />
     <ClInclude Include="..\..\common\template.h" />
+    <ClInclude Include="..\..\common\threading.h" />
     <ClInclude Include="..\..\common\uri.h" />
     <ClInclude Include="..\..\common\url.h" />
     <ClInclude Include="..\..\common\varwriter.h" />
@@ -224,6 +226,7 @@
     <ClCompile Include="..\..\common\inifile.cpp" />
     <ClCompile Include="..\..\common\jis.cpp" />
     <ClCompile Include="..\..\common\jrpc.cpp" />
+    <ClCompile Include="..\..\common\logbuf.cpp" />
     <ClCompile Include="..\..\common\LUrlParser.cpp" />
     <ClCompile Include="..\..\common\mapper.cpp" />
     <ClCompile Include="..\..\common\md5.cpp" />

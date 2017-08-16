@@ -32,9 +32,7 @@ public:
     USys();
 
     ClientSocket    *createSocket() override;
-    void            sleep(int ) override;
     void            appMsg(long, long) override;
-    unsigned int    getTime() override;
     double          getDTime() override;
     unsigned int    rnd() override { return rndGen.next(); }
     void            getURL(const char *) override;

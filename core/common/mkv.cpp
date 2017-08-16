@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits.h> // INT_MAX
 
 #include "mkv.h"

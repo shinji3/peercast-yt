@@ -16,7 +16,7 @@
 // GNU General Public License for more details.
 // ------------------------------------------------
 
-#include <time.h> // for ctime
+#include <ctime> // for ctime
 
 #include "_string.h"
 #include "jis.h"

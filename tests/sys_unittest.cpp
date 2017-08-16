@@ -1,15 +1,26 @@
 #include <gtest/gtest.h>
 
 #include "sys.h"
+#ifdef _UNIX
+#include "usys.h"
+#else
+#include "wsys.h"
+#endif
 
 class SysFixture : public ::testing::Test {
 public:
     SysFixture()
     {
+#ifdef _UNIX
+        m_sys = new USys();
+#else
+        m_sys = new WSys();
+#endif
     }
 
     void SetUp()
     {
+        m_done = false;
     }
 
     void TearDown()
@@ -18,8 +29,20 @@ public:
 
     ~SysFixture()
     {
+        delete m_sys;
     }
+
+    static THREAD_PROC proc(ThreadInfo* p)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        m_done = true;
+    }
+
+    static bool m_done;
+    Sys* m_sys;
 };
+
+bool SysFixture::m_done;
 
 TEST_F(SysFixture, strdup)
 {
@@ -85,4 +108,27 @@ TEST_F(SysFixture, strcpy_truncate)
     ASSERT_STREQ("hoge", Sys::strcpy_truncate(dest, 10, "hoge"));
     ASSERT_STREQ("f", Sys::strcpy_truncate(dest, 2, "fuga"));
     ASSERT_STREQ("", Sys::strcpy_truncate(dest, 1, "piyo"));
+}
+
+TEST_F(SysFixture, sleep)
+{
+    auto t0 = m_sys->getDTime();
+    m_sys->sleep(1);
+    auto t1 = m_sys->getDTime();
+    //ASSERT_TRUE(t1 - t0 < 1.000);
+    ASSERT_TRUE(t1 - t0 >= 0.001);
+}
+
+TEST_F(SysFixture, getTime)
+{
+    ASSERT_LT(0, m_sys->getTime());
+}
+
+TEST_F(SysFixture, waitThread)
+{
+    ThreadInfo info;
+    info.func = proc;
+    m_sys->startWaitableThread(&info);
+    m_sys->waitThread(&info);
+    ASSERT_TRUE(m_done);
 }

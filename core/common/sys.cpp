@@ -23,18 +23,8 @@
 #include "common.h"
 #include "sys.h"
 #include "gnutella.h"
-#include <stdlib.h>
-#include <time.h>
-
-// -----------------------------------
-const char *LogBuffer::logTypes[]=
-{
-    "",
-    "DBUG",
-    "EROR",
-    "GNET",
-    "CHAN",
-};
+#include "logbuf.h"
+#include <chrono>
 
 // ------------------------------------------
 Sys::Sys()
@@ -47,6 +37,12 @@ Sys::Sys()
 Sys::~Sys()
 {
     delete logBuf;
+}
+
+// ------------------------------------------
+void Sys::sleep(int ms)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
 // ------------------------------------------
@@ -122,41 +118,6 @@ char *stristr(const char *s1, const char *s2)
 }
 
 // -----------------------------------
-void LogBuffer::write(const char *str, TYPE t)
-{
-    lock.on();
-
-    size_t len = strlen(str);
-    int cnt=0;
-    while (len)
-    {
-        size_t rlen = len;
-        if (rlen > (lineLen-1))
-            rlen = lineLen-1;
-
-        int i = currLine % maxLines;
-        int bp = i*lineLen;
-        strncpy_s(&buf[bp], rlen + 1, str, _TRUNCATE);
-        if (cnt==0)
-        {
-            times[i] = sys->getTime();
-            types[i] = t;
-        }else
-        {
-            times[i] = 0;
-            types[i] = T_NONE;
-        }
-        currLine++;
-
-        str += rlen;
-        len -= rlen;
-        cnt++;
-    }
-
-    lock.off();
-}
-
-// -----------------------------------
 const char *getCGIarg(const char *str, const char *arg)
 {
     if (!str)
@@ -199,79 +160,6 @@ bool hasCGIarg(const char *str, const char *arg)
         return false;
 
     return true;
-}
-
-// ---------------------------
-void LogBuffer::escapeHTML(char* dest, char* src)
-{
-    while (*src)
-    {
-        switch (*src)
-        {
-        case '&':
-            strcpy_s(dest, 6, "&amp;");
-            dest += 5;
-            break;
-        case '<':
-            strcpy_s(dest, 5, "&lt;");
-            dest += 4;
-            break;
-        case '>':
-            strcpy_s(dest, 5, "&gt;");
-            dest += 4;
-            break;
-        default:
-            *dest = *src;
-            dest++;
-        }
-        src++;
-    }
-    *dest = '\0';
-}
-
-// ---------------------------
-void LogBuffer::dumpHTML(Stream &out)
-{
-    lock.on();
-
-    unsigned int nl = currLine;
-    unsigned int sp = 0;
-    if (nl > maxLines)
-    {
-        nl = maxLines-1;
-        sp = (currLine+1)%maxLines;
-    }
-
-    String tim;
-    const size_t BUFSIZE = (lineLen - 1) * 5 + 1;
-    char* escaped = new char [BUFSIZE];
-    if (nl)
-    {
-        for (unsigned int i=0; i<nl; i++)
-        {
-            unsigned int bp = sp*lineLen;
-
-            if (types[sp])
-            {
-                tim.setFromTime(times[sp]);
-
-                out.writeString(tim.cstr());
-                out.writeString(" <b>[");
-                out.writeString(getTypeStr(types[sp]));
-                out.writeString("]</b> ");
-            }
-
-            escapeHTML(escaped, &buf[bp]);
-            out.writeString(escaped);
-            out.writeString("<br>");
-
-            sp++;
-            sp %= maxLines;
-        }
-    }
-    delete[] escaped;
-
-    lock.off();
 }
 
 // ---------------------------
@@ -348,5 +236,42 @@ bool    Sys::startThread(ThreadInfo *info)
     {
         LOG_ERROR("Error creating thread");
         return false;
+    }
+}
+
+// ---------------------------------
+bool    Sys::startWaitableThread(ThreadInfo *info)
+{
+    info->m_active.store(true);
+
+    try {
+        info->handle = std::thread([info]()
+                                   {
+                                       sys->setThreadName("new thread");
+                                       info->func(info);
+                                   });
+        return true;
+    } catch (std::system_error&)
+    {
+        LOG_ERROR("Error creating thread");
+        return false;
+    }
+}
+
+// ---------------------------------
+unsigned int Sys::getTime()
+{
+    return static_cast<unsigned>(time(NULL));
+}
+
+// ---------------------------------
+void Sys::waitThread(ThreadInfo* info)
+{
+    if (info->handle.joinable())
+    {
+        info->handle.join();
+    }else
+    {
+        LOG_ERROR("waitThread called on non-joinable thread");
     }
 }

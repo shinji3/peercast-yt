@@ -52,23 +52,9 @@ double WSys::getDTime()
 }
 
 // ---------------------------------
-unsigned int WSys::getTime()
-{
-    time_t ltime;
-    time( &ltime );
-    return static_cast<unsigned>(ltime);
-}
-
-// ---------------------------------
 ClientSocket *WSys::createSocket()
 {
     return new WSAClientSocket();
-}
-
-// ---------------------------------
-void    WSys::sleep(int ms)
-{
-    Sleep(ms);
 }
 
 // ---------------------------------

@@ -56,14 +56,6 @@ double USys::getDTime()
 }
 
 // ---------------------------------
-unsigned int USys::getTime()
-{
-    time_t ltime;
-    time( &ltime );
-    return ltime;
-}
-
-// ---------------------------------
 ClientSocket *USys::createSocket()
 {
     return new UClientSocket();
@@ -77,12 +69,6 @@ void    USys::setThreadName(const char* name)
     snprintf(buf, 16, "%s", name);
     pthread_setname_np(pthread_self(), buf);
 #endif
-}
-
-// ---------------------------------
-void    USys::sleep(int ms)
-{
-    ::usleep(ms*1000);
 }
 
 // ---------------------------------

@@ -1,8 +1,10 @@
 // ------------------------------------------------
-// File : gui.h
+// File : socket.cpp
 // Date: 4-apr-2002
 // Author: giles
-// 
+// Desc:
+//      ClientSocket is a generic socket interface, Non OS/HW dependant.
+//
 // (c) 2002 peercast.org
 // ------------------------------------------------
 // This program is free software; you can redistribute it and/or modify
@@ -16,30 +18,3 @@
 // GNU General Public License for more details.
 // ------------------------------------------------
 
-#ifndef _GUI_H
-#define _GUI_H
-
-#include "sys.h"
-#include "logbuf.h"
-
-extern LRESULT CALLBACK GUIProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-extern void ADDLOG(const char *str, int id, bool sel, void *data, LogBuffer::TYPE type);
-
-extern String iniFileName;
-extern HWND guiWnd;
-extern int logID;
-
-enum
-{
-    WM_INITSETTINGS = WM_USER,
-    WM_GETPORTNUMBER,
-    WM_PLAYCHANNEL,
-    WM_TRAYICON,
-    WM_SHOWGUI,
-    WM_SHOWMENU,
-    WM_PROCURL
-
-};
-
-
-#endif
