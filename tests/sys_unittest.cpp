@@ -14,7 +14,7 @@ public:
 #ifdef _UNIX
         m_sys = new USys();
 #else
-        m_sys = new WSys();
+        m_sys = new WSys(0);
 #endif
     }
 
@@ -36,6 +36,7 @@ public:
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
         m_done = true;
+        return NULL;
     }
 
     static bool m_done;
@@ -121,7 +122,7 @@ TEST_F(SysFixture, sleep)
 
 TEST_F(SysFixture, getTime)
 {
-    ASSERT_LT(0, m_sys->getTime());
+    ASSERT_LT(0, static_cast<int>(m_sys->getTime()));
 }
 
 TEST_F(SysFixture, waitThread)
