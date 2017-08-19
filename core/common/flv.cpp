@@ -29,12 +29,12 @@ static String timestampToString(uint32_t timestamp)
 }
 
 // ------------------------------------------
-void FLVStream::readEnd(Stream &, Channel *)
+void FLVStream::readEnd(Stream &, std::shared_ptr<Channel>)
 {
 }
 
 // ------------------------------------------
-void FLVStream::readHeader(Stream &in, Channel *ch)
+void FLVStream::readHeader(Stream &in, std::shared_ptr<Channel> ch)
 {
     metaBitrate = 0;
     fileHeader.read(in);
@@ -42,7 +42,7 @@ void FLVStream::readHeader(Stream &in, Channel *ch)
 }
 
 // ------------------------------------------
-int FLVStream::readPacket(Stream &in, Channel *ch)
+int FLVStream::readPacket(Stream &in, std::shared_ptr<Channel> ch)
 {
     bool headerUpdate = false;
 
@@ -76,7 +76,7 @@ int FLVStream::readPacket(Stream &in, Channel *ch)
             avcHeader = flvTag;
             if (avcHeader.getTimestamp() != 0)
             {
-                LOG_CHANNEL("AVC header has non-zero timestamp. Cleared to zero.");
+                LOG_INFO("AVC header has non-zero timestamp. Cleared to zero.");
                 avcHeader.setTimestamp(0);
             }
             headerUpdate = true;
@@ -88,7 +88,7 @@ int FLVStream::readPacket(Stream &in, Channel *ch)
             aacHeader = flvTag;
             if (aacHeader.getTimestamp() != 0)
             {
-                LOG_CHANNEL("AAC header has non-zero timestamp. Cleared to zero.");
+                LOG_INFO("AAC header has non-zero timestamp. Cleared to zero.");
                 aacHeader.setTimestamp(0);
             }
             headerUpdate = true;
@@ -152,7 +152,7 @@ int FLVStream::readPacket(Stream &in, Channel *ch)
     return 0;
 }
 
-bool FLVTagBuffer::put(FLVTag& tag, Channel* ch)
+bool FLVTagBuffer::put(FLVTag& tag, std::shared_ptr<Channel> ch)
 {
     if (tag.isKeyFrame())
     {
@@ -205,7 +205,7 @@ void FLVTagBuffer::rateLimit(uint32_t timestamp)
     }
 }
 
-void FLVTagBuffer::sendImmediately(FLVTag& tag, Channel* ch)
+void FLVTagBuffer::sendImmediately(FLVTag& tag, std::shared_ptr<Channel> ch)
 {
     if (ch->readDelay)
         rateLimit(tag.getTimestamp());
@@ -244,7 +244,7 @@ void FLVTagBuffer::sendImmediately(FLVTag& tag, Channel* ch)
     }
 }
 
-void FLVTagBuffer::flush(Channel* ch)
+void FLVTagBuffer::flush(std::shared_ptr<Channel> ch)
 {
     if (m_mem.pos == 0)
         return;

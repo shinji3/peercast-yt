@@ -19,21 +19,26 @@
 
 #include "logbuf.h"
 #include "stream.h"
+#include "critsec.h"
+#include "cgi.h"
 
 // -----------------------------------
 const char *LogBuffer::logTypes[]=
 {
     "",
+    "TRAC",
     "DBUG",
+    "INFO",
+    "WARN",
     "EROR",
-    "GNET",
-    "CHAN",
+    "FATL",
+    " OFF",
 };
 
 // -----------------------------------
 void LogBuffer::write(const char *str, TYPE t)
 {
-    lock.on();
+    CriticalSection cs(lock);
 
     size_t len = strlen(str);
     int cnt=0;
@@ -61,42 +66,12 @@ void LogBuffer::write(const char *str, TYPE t)
         len -= rlen;
         cnt++;
     }
-
-    lock.off();
-}
-
-// ---------------------------
-void LogBuffer::escapeHTML(char* dest, char* src)
-{
-    while (*src)
-    {
-        switch (*src)
-        {
-        case '&':
-            strcpy_s(dest, 6, "&amp;");
-            dest += 5;
-            break;
-        case '<':
-            strcpy_s(dest, 5, "&lt;");
-            dest += 4;
-            break;
-        case '>':
-            strcpy_s(dest, 5, "&gt;");
-            dest += 4;
-            break;
-        default:
-            *dest = *src;
-            dest++;
-        }
-        src++;
-    }
-    *dest = '\0';
 }
 
 // ---------------------------
 void LogBuffer::dumpHTML(Stream &out)
 {
-    lock.on();
+    CriticalSection cs(lock);
 
     unsigned int nl = currLine;
     unsigned int sp = 0;
@@ -107,34 +82,30 @@ void LogBuffer::dumpHTML(Stream &out)
     }
 
     String tim;
-    const size_t BUFSIZE = (lineLen - 1) * 5 + 1;
-    char* escaped = new char [BUFSIZE];
-    if (nl)
+    for (unsigned int i=0; i<nl; i++)
     {
-        for (unsigned int i=0; i<nl; i++)
+        unsigned int bp = sp*lineLen;
+
+        if (types[sp] != LogBuffer::T_NONE)
         {
-            unsigned int bp = sp*lineLen;
+            tim.setFromTime(times[sp]);
 
-            if (types[sp])
-            {
-                tim.setFromTime(times[sp]);
-
-                out.writeString(tim.cstr());
-                out.writeString(" <b>[");
-                out.writeString(getTypeStr(types[sp]));
-                out.writeString("]</b> ");
-            }
-
-            escapeHTML(escaped, &buf[bp]);
-            out.writeString(escaped);
-            out.writeString("<br>");
-
-            sp++;
-            sp %= maxLines;
+            out.writeString(tim.cstr());
+            out.writeString(" <b>[");
+            out.writeString(getTypeStr(types[sp]));
+            out.writeString("]</b> ");
         }
-    }
-    delete[] escaped;
 
-    lock.off();
+        out.writeString(cgi::escape_html(&buf[bp]).c_str());
+        out.writeString("<br>");
+
+        sp = (sp+1) % maxLines;
+    }
 }
 
+// ---------------------------
+void    LogBuffer::clear()
+{
+    CriticalSection cs(lock);
+    currLine = 0;
+}

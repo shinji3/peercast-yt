@@ -10,7 +10,7 @@
 using namespace matroska;
 
 // data を type パケットとして送信する
-void MKVStream::sendPacket(ChanPacket::TYPE type, const byte_string& data, bool continuation, Channel* ch)
+void MKVStream::sendPacket(ChanPacket::TYPE type, const byte_string& data, bool continuation, std::shared_ptr<Channel> ch)
 {
     if (data.size() > ChanPacket::MAX_DATALEN)
         throw StreamException("MKV packet too big");
@@ -109,7 +109,7 @@ void MKVStream::rateLimit(uint64_t timecode)
 
 // 非継続パケットの頭出しができないクライアントのために、なるべく要素
 // をパケットの先頭にして送信する
-void MKVStream::sendCluster(const byte_string& cluster, Channel* ch)
+void MKVStream::sendCluster(const byte_string& cluster, std::shared_ptr<Channel> ch)
 {
     bool continuation;
 
@@ -254,7 +254,7 @@ void MKVStream::readInfo(const std::string& data)
     }
 }
 
-void MKVStream::readHeader(Stream &in, Channel *ch)
+void MKVStream::readHeader(Stream &in, std::shared_ptr<Channel> ch)
 {
     try{
         byte_string header;
@@ -324,7 +324,7 @@ void MKVStream::readHeader(Stream &in, Channel *ch)
 }
 
 // ビットレートの計測、更新
-void MKVStream::checkBitrate(Stream &in, Channel *ch)
+void MKVStream::checkBitrate(Stream &in, std::shared_ptr<Channel> ch)
 {
     ChanInfo info = ch->info;
     int newBitrate = in.stat.bytesInPerSecAvg() / 1000 * 8;
@@ -335,7 +335,7 @@ void MKVStream::checkBitrate(Stream &in, Channel *ch)
 }
 
 // Cluster 要素を読む
-int MKVStream::readPacket(Stream &in, Channel *ch)
+int MKVStream::readPacket(Stream &in, std::shared_ptr<Channel> ch)
 {
     try {
         checkBitrate(in, ch);
@@ -361,7 +361,7 @@ int MKVStream::readPacket(Stream &in, Channel *ch)
     }
 }
 
-void MKVStream::readEnd(Stream &, Channel *)
+void MKVStream::readEnd(Stream &, std::shared_ptr<Channel>)
 {
     // we will never reach the end
 }

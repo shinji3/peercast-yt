@@ -34,6 +34,8 @@
 #include <windows.h> // GetModuleFileName
 
 // ----------------------------------
+static std::string utf8ToAnsi(const char *utf8);
+
 extern "C" {
     char *_fullpath(char*, const char*, size_t);
 }
@@ -63,6 +65,7 @@ public:
         return new WSys(0);
     }
 };
+
 // ---------------------------------
 class MyPeercastApp : public PeercastApplication
 {
@@ -92,13 +95,32 @@ public:
                 fprintf(logfile, "[%s] ", LogBuffer::getTypeStr(t));
             }
         }
-        printf("%s\n", str);
+        printf("%s\n", utf8ToAnsi(str).c_str());
         if (logfile != NULL) {
             fprintf(logfile, "%s\n", str);
         }
         loglock.off();
     }
 };
+
+// ----------------------------------
+static std::string utf8ToAnsi(const char *utf8)
+{
+    int nchars = MultiByteToWideChar(CP_UTF8, 0, utf8, -1, NULL, 0);
+
+    LPWSTR wstring = new wchar_t[nchars];
+    MultiByteToWideChar(CP_UTF8, 0, utf8, -1, wstring, nchars);
+
+    int nbytes = WideCharToMultiByte(CP_ACP, 0, wstring, nchars, NULL, 0, NULL, NULL);
+
+    LPSTR ansi = new char[nbytes];
+    WideCharToMultiByte(CP_ACP, 0, wstring, nchars, ansi, nbytes, NULL, NULL);
+
+    std::string res(ansi);
+    delete[] wstring;
+    delete[] ansi;
+    return res;
+}
 
 // ----------------------------------
 void setSettingsUI() {}

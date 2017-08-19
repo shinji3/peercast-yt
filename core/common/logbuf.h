@@ -28,17 +28,20 @@ class LogBuffer
 public:
     enum TYPE
     {
-        T_NONE,
-        T_DEBUG,
-        T_ERROR,
-        T_NETWORK,
-        T_CHANNEL,
+        T_NONE  = 0,
+        T_TRACE = 1,
+        T_DEBUG = 2,
+        T_INFO  = 3,
+        T_WARN  = 4,
+        T_ERROR = 5,
+        T_FATAL = 6,
+        T_OFF   = 7,
     };
 
-    LogBuffer(int i, int l)
+    LogBuffer(int aMaxLines, int aLineLen)
+        : lineLen(aLineLen)
+        , maxLines(aMaxLines)
     {
-        lineLen = l;
-        maxLines = i;
         currLine = 0;
         buf = new char[lineLen*maxLines];
         times = new unsigned int [maxLines];
@@ -52,10 +55,7 @@ public:
         delete[] types;
     }
 
-    void    clear()
-    {
-        currLine = 0;
-    }
+    void    clear();
 
     void                write(const char *, TYPE);
     static const char   *getTypeStr(TYPE t) { return logTypes[t]; }
@@ -63,12 +63,14 @@ public:
 
     static void         escapeHTML(char* dest, char* src);
 
-    char            *buf;
-    unsigned int    *times;
-    unsigned int    currLine, maxLines, lineLen;
-    TYPE            *types;
-    WLock           lock;
-    static          const char *logTypes[];
+    char                *buf;
+    unsigned int        *times;
+    unsigned int        currLine;
+    const unsigned int  maxLines;
+    const unsigned int  lineLen;
+    TYPE                *types;
+    WLock               lock;
+    static const char   *logTypes[];
 };
 
 #endif

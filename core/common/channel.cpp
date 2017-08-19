@@ -114,7 +114,7 @@ void Channel::endThread()
 
     reset();
 
-    chanMgr->deleteChannel(this);
+    chanMgr->deleteChannel(shared_from_this());
 }
 
 // -----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ void    Channel::startURL(const char *u)
 // -----------------------------------
 void Channel::startStream()
 {
-    thread.data = this;
+    thread.channel = shared_from_this();
     thread.func = stream;
     if (!sys->startThread(&thread))
         reset();
@@ -327,13 +327,16 @@ void Channel::checkReadDelay(unsigned int len)
 // -----------------------------------
 THREAD_PROC Channel::stream(ThreadInfo *thread)
 {
-    Channel *ch = (Channel *)thread->data;
+    auto ch = thread->channel;
+
+    assert(thread->channel != nullptr);
+    thread->channel = nullptr; // make sure to not leave the reference behind
 
     sys->setThreadName("CHANNEL");
 
     while (thread->active() && !peercastInst->isQuitting)
     {
-        LOG_CHANNEL("Channel started");
+        LOG_INFO("Channel started");
 
         ChanHitList *chl = chanMgr->findHitList(ch->info);
         if (!chl)
@@ -341,7 +344,7 @@ THREAD_PROC Channel::stream(ThreadInfo *thread)
 
         ch->sourceData->stream(ch);
 
-        LOG_CHANNEL("Channel stopped");
+        LOG_INFO("Channel stopped");
 
         if (!ch->stayConnected)
         {
@@ -353,11 +356,13 @@ THREAD_PROC Channel::stream(ThreadInfo *thread)
 
             unsigned int diff = (sys->getTime() - ch->info.lastPlayEnd) + 5;
 
-            LOG_DEBUG("Channel sleeping for %d seconds", diff);
             for (unsigned int i=0; i<diff; i++)
             {
                 if (!thread->active() || peercastInst->isQuitting)
                     break;
+
+                if (i == 0)
+                    LOG_DEBUG("Channel sleeping for %d seconds", diff);
                 sys->sleep(1000);
             }
         }
@@ -391,7 +396,7 @@ void Channel::connectFetch()
     {
         sock->setReadTimeout(30000);
         sock->setWriteTimeout(30000);
-        LOG_CHANNEL("Channel using longer timeouts");
+        LOG_INFO("Channel using longer timeouts");
     }
 
     sock->open(sourceHost.host);
@@ -418,7 +423,7 @@ int Channel::handshakeFetch()
 
     int r = http.readResponse();
 
-    LOG_CHANNEL("Got response: %d", r);
+    LOG_INFO("Got response: %d", r);
 
     while (http.nextHeader())
     {
@@ -431,7 +436,7 @@ int Channel::handshakeFetch()
         else
             Servent::readICYHeader(http, info, NULL, 0);
 
-        LOG_CHANNEL("Channel fetch: %s", http.cmdLine);
+        LOG_INFO("Channel fetch: %s", http.cmdLine);
     }
 
     if ((r != 200) && (r != 503))
@@ -474,7 +479,7 @@ int PeercastSource::getSourceRateAvg()
 }
 
 // -----------------------------------
-ChanHit PeercastSource::pickFromHitList(Channel *ch, ChanHit &oldHit)
+ChanHit PeercastSource::pickFromHitList(std::shared_ptr<Channel> ch, ChanHit &oldHit)
 {
     ChanHit res = oldHit;
     ChanHitList *chl = NULL;
@@ -546,7 +551,7 @@ static std::string chName(ChanInfo& info)
 }
 
 // -----------------------------------
-void PeercastSource::stream(Channel *ch)
+void PeercastSource::stream(std::shared_ptr<Channel> ch)
 {
     m_channel = ch;
 
@@ -556,7 +561,7 @@ void PeercastSource::stream(Channel *ch)
         ch->sourceHost.init();
 
         ch->setStatus(Channel::S_SEARCHING);
-        LOG_CHANNEL("Channel searching for hit..");
+        LOG_INFO("Channel searching for hit..");
         do
         {
             if (ch->pushSock)
@@ -625,11 +630,11 @@ void PeercastSource::stream(Channel *ch)
         if (ch->sourceHost.yp)
         {
             numYPTries++;
-            LOG_CHANNEL("Channel contacting YP, try %d", numYPTries);
+            LOG_INFO("Channel contacting YP, try %d", numYPTries);
             peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(ch->info)+" ‚ðYP‚É–â‚¢‡‚í‚¹‚Ä‚¢‚Ü‚·...");
         }else
         {
-            LOG_CHANNEL("Channel found hit");
+            LOG_INFO("Channel found hit");
             numYPTries=0;
         }
 
@@ -656,7 +661,7 @@ void PeercastSource::stream(Channel *ch)
 
                 if (!ch->sock)
                 {
-                    LOG_CHANNEL("Channel connecting to %s %s", ipstr, type);
+                    LOG_INFO("Channel connecting to %s %s", ipstr, type);
                     ch->connectFetch();
                 }
 
@@ -673,7 +678,7 @@ void PeercastSource::stream(Channel *ch)
                 error = 0;      // no errors, closing normally.
                 ch->setStatus(Channel::S_CLOSING);
 
-                LOG_CHANNEL("Channel closed normally");
+                LOG_INFO("Channel closed normally");
             }catch (StreamException &e)
             {
                 ch->setStatus(Channel::S_ERROR);
@@ -1072,18 +1077,18 @@ ChannelStream *Channel::createSource()
 
     if (info.srcProtocol == ChanInfo::SP_PEERCAST)
     {
-        LOG_CHANNEL("Channel is Peercast");
+        LOG_INFO("Channel is Peercast");
         source = new PeercastStream();
     }
     else if (info.srcProtocol == ChanInfo::SP_PCP)
     {
-        LOG_CHANNEL("Channel is PCP");
+        LOG_INFO("Channel is PCP");
         PCPStream *pcp = new PCPStream(remoteID);
         source = pcp;
     }
     else if (info.srcProtocol == ChanInfo::SP_MMS)
     {
-        LOG_CHANNEL("Channel is MMS");
+        LOG_INFO("Channel is MMS");
         source = new MMSStream();
     }else if (info.srcProtocol == ChanInfo::SP_WMHTTP)
     {
@@ -1091,7 +1096,7 @@ ChannelStream *Channel::createSource()
         {
             case ChanInfo::T_WMA:
             case ChanInfo::T_WMV:
-                LOG_CHANNEL("Channel is WMHTTP");
+                LOG_INFO("Channel is WMHTTP");
                 source = new WMHTTPStream();
                 break;
             default:
@@ -1102,37 +1107,37 @@ ChannelStream *Channel::createSource()
         switch (info.contentType)
         {
             case ChanInfo::T_MP3:
-                LOG_CHANNEL("Channel is MP3 - meta: %d", icyMetaInterval);
+                LOG_INFO("Channel is MP3 - meta: %d", icyMetaInterval);
                 source = new MP3Stream();
                 break;
             case ChanInfo::T_NSV:
-                LOG_CHANNEL("Channel is NSV");
+                LOG_INFO("Channel is NSV");
                 source = new NSVStream();
                 break;
             case ChanInfo::T_WMA:
             case ChanInfo::T_WMV:
-                LOG_CHANNEL("Channel is MMS");
+                LOG_INFO("Channel is MMS");
                 source = new MMSStream();
                 break;
             case ChanInfo::T_FLV:
-                LOG_CHANNEL("Channel is FLV");
+                LOG_INFO("Channel is FLV");
                 source = new FLVStream();
                 break;
             case ChanInfo::T_OGG:
             case ChanInfo::T_OGM:
-                LOG_CHANNEL("Channel is OGG");
+                LOG_INFO("Channel is OGG");
                 source = new OGGStream();
                 break;
             case ChanInfo::T_MKV:
-                LOG_CHANNEL("Channel is MKV");
+                LOG_INFO("Channel is MKV");
                 source = new MKVStream();
                 break;
             case ChanInfo::T_WEBM:
-                LOG_CHANNEL("Channel is WebM");
+                LOG_INFO("Channel is WebM");
                 source = new MKVStream();
                 break;
             default:
-                LOG_CHANNEL("Channel is Raw");
+                LOG_INFO("Channel is Raw");
                 source = new RawStream();
                 break;
         }
@@ -1166,7 +1171,7 @@ int Channel::readStream(Stream &in, ChannelStream *source)
 
     info.numSkips = 0;
 
-    source->readHeader(in, this);
+    source->readHeader(in, shared_from_this());
 
     peercastApp->channelStart(&info);
 
@@ -1201,7 +1206,7 @@ int Channel::readStream(Stream &in, ChannelStream *source)
 
             if (in.readReady(sys->idleSleepTime))
             {
-                error = source->readPacket(in, this);
+                error = source->readPacket(in, shared_from_this());
 
                 if (error)
                     break;
@@ -1230,7 +1235,7 @@ int Channel::readStream(Stream &in, ChannelStream *source)
                         }
                         setStatus(Channel::S_RECEIVING);
                     }
-                    source->updateStatus(this);
+                    source->updateStatus(shared_from_this());
                 }
             }
         }
@@ -1250,25 +1255,25 @@ int Channel::readStream(Stream &in, ChannelStream *source)
 
     peercastApp->channelStop(&info);
 
-    source->readEnd(in, this);
+    source->readEnd(in, shared_from_this());
 
     return error;
 }
 
 // -----------------------------------
-void PeercastStream::readHeader(Stream &in, Channel *ch)
+void PeercastStream::readHeader(Stream &in, std::shared_ptr<Channel> ch)
 {
     if (in.readTag() != 'PCST')
         throw StreamException("Not PeerCast stream");
 }
 
 // -----------------------------------
-void PeercastStream::readEnd(Stream &, Channel *)
+void PeercastStream::readEnd(Stream &, std::shared_ptr<Channel>)
 {
 }
 
 // -----------------------------------
-int PeercastStream::readPacket(Stream &in, Channel *ch)
+int PeercastStream::readPacket(Stream &in, std::shared_ptr<Channel> ch)
 {
     ChanPacket pack;
 
@@ -1314,7 +1319,7 @@ int PeercastStream::readPacket(Stream &in, Channel *ch)
                 unsigned int s = mem.readLong();
                 if ((s-ch->syncPos) != 1)
                 {
-                    LOG_CHANNEL("Ch.%d SKIP: %d to %d (%d)", ch->index, ch->syncPos, s, ch->info.numSkips);
+                    LOG_INFO("Ch.%d SKIP: %d to %d (%d)", ch->index, ch->syncPos, s, ch->info.numSkips);
                     if (ch->syncPos)
                     {
                         ch->info.numSkips++;
@@ -1333,19 +1338,19 @@ int PeercastStream::readPacket(Stream &in, Channel *ch)
 }
 
 // ------------------------------------------
-void RawStream::readHeader(Stream &, Channel *)
+void RawStream::readHeader(Stream &, std::shared_ptr<Channel>)
 {
 }
 
 // ------------------------------------------
-int RawStream::readPacket(Stream &in, Channel *ch)
+int RawStream::readPacket(Stream &in, std::shared_ptr<Channel> ch)
 {
     readRaw(in, ch);
     return 0;
 }
 
 // ------------------------------------------
-void RawStream::readEnd(Stream &, Channel *)
+void RawStream::readEnd(Stream &, std::shared_ptr<Channel>)
 {
 }
 

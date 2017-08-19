@@ -349,7 +349,7 @@ void Servent::handshakeGET(HTTP &http)
             for (size_t i=0; i<slen; i++)
                 if (fn[i]=='&') fn[i] = 0;
 
-            Channel *c=chanMgr->channel;
+            auto c = chanMgr->channel;
             while (c)
             {
                 if ((c->status == Channel::S_BROADCASTING) &&
@@ -371,11 +371,11 @@ void Servent::handshakeGET(HTTP &http)
                         if (urlArg)
                             if (urlArg[0])
                                 newInfo.track.contact.set(urlArg, String::T_ESC);
-                        LOG_CHANNEL("Channel Shoutcast update: %s", songArg);
+                        LOG_INFO("Channel Shoutcast update: %s", songArg);
                         c->updateInfo(newInfo);
                     }
                 }
-                c=c->next;
+                c = c->next;
             }
         }
     }else if (strncmp(fn, "/pls/", 5) == 0)
@@ -577,7 +577,7 @@ void Servent::handshakeGIV(const char *requestLine)
     if (id.isSet())
     {
         // at the moment we don`t really care where the GIV came from, so just give to chan. no. if its waiting.
-        Channel *ch = chanMgr->findChannelByID(id);
+        auto ch = chanMgr->findChannelByID(id);
 
         if (!ch)
             throw HTTPException(HTTP_SC_NOTFOUND, 404);
@@ -1193,14 +1193,8 @@ void Servent::CMD_apply(char *cmd, HTTP& http, HTML& html, String& jumpStr)
                 servMgr->cookieList.neverExpire = true;
         }
 
-        else if (strcmp(curr, "logDebug") == 0)
-            showLog |= atoi(arg) ? (1<<LogBuffer::T_DEBUG) : 0;
-        else if (strcmp(curr, "logErrors") == 0)
-            showLog |= atoi(arg) ? (1<<LogBuffer::T_ERROR) : 0;
-        else if (strcmp(curr, "logNetwork") == 0)
-            showLog |= atoi(arg) ? (1<<LogBuffer::T_NETWORK) : 0;
-        else if (strcmp(curr, "logChannel") == 0)
-            showLog |= atoi(arg) ? (1<<LogBuffer::T_CHANNEL) : 0;
+        else if (strcmp(curr, "logLevel") == 0)
+            servMgr->logLevel = atoi(arg); // ã“ã‚Œãƒãƒªãƒ‡ãƒ¼ãƒˆã—ãŸã»ã†ãŒè‰¯ããªã„ï¼Ÿ
 
         else if (strcmp(curr, "allowHTML1") == 0)
             allowServer1 |= atoi(arg) ? (ALLOW_HTML) : 0;
@@ -1226,7 +1220,6 @@ void Servent::CMD_apply(char *cmd, HTTP& http, HTML& html, String& jumpStr)
             servMgr->wmvProtocol = arg;
     }
 
-    servMgr->showLog = showLog;
     servMgr->allowServer1 = allowServer1;
     servMgr->allowServer2 = allowServer2;
 
@@ -1310,7 +1303,7 @@ void Servent::CMD_fetch(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     info.id = chanMgr->broadcastID;
     info.id.encode(NULL, info.name, info.genre, info.bitrate);
 
-    Channel *c = chanMgr->createChannel(info, NULL);
+    auto c = chanMgr->createChannel(info, NULL);
     if (c)
         c->startURL(curl.cstr());
 
@@ -1381,7 +1374,7 @@ void Servent::CMD_stop(char *cmd, HTTP& http, HTML& html, String& jumpStr)
             id.fromStr(arg);
     }
 
-    Channel *c = chanMgr->findChannelByID(id);
+    auto c = chanMgr->findChannelByID(id);
     if (c)
         c->thread.shutdown();
 
@@ -1402,7 +1395,7 @@ void Servent::CMD_bump(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     Host designation;
     designation.fromStrIP(ip.c_str(), 7144);
 
-    Channel *c = chanMgr->findChannelByID(id);
+    auto c = chanMgr->findChannelByID(id);
     if (c)
     {
         if (!ip.empty())
@@ -1455,7 +1448,7 @@ void Servent::CMD_keep(char *cmd, HTTP& http, HTML& html, String& jumpStr)
             id.fromStr(arg);
     }
 
-    Channel *c = chanMgr->findChannelByID(id);
+    auto c = chanMgr->findChannelByID(id);
     if (c)
         c->stayConnected = !c->stayConnected;
 
@@ -1558,66 +1551,68 @@ void Servent::CMD_update_channel_info(char *cmd, HTTP& http, HTML& html, String&
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
 }
 
-void Servent::handshakeCMD(char *cmd)
+void Servent::handshakeCMD(char *query)
 {
     String jumpStr;
 
     HTTP http(*sock);
     HTML html("", *sock);
 
-    if (!handshakeAuth(http, cmd, true))
+    if (!handshakeAuth(http, query, true))
         return;
+
+    std::string cmd = cgi::Query(query).get("cmd");
 
     try
     {
-        if (cmpCGIarg(cmd, "cmd=", "add_bcid"))
+        if (cmd == "add_bcid")
         {
-            CMD_add_bcid(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "apply"))
+            CMD_add_bcid(query, http, html, jumpStr);
+        }else if (cmd == "apply")
         {
-            CMD_apply(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "bump"))
+            CMD_apply(query, http, html, jumpStr);
+        }else if (cmd == "bump")
         {
-            CMD_bump(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "clear"))
+            CMD_bump(query, http, html, jumpStr);
+        }else if (cmd == "clear")
         {
-            CMD_clear(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "clearlog"))
+            CMD_clear(query, http, html, jumpStr);
+        }else if (cmd == "clearlog")
         {
-            CMD_clearlog(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "control_rtmp"))
+            CMD_clearlog(query, http, html, jumpStr);
+        }else if (cmd == "control_rtmp")
         {
-            CMD_control_rtmp(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "edit_bcid"))
+            CMD_control_rtmp(query, http, html, jumpStr);
+        }else if (cmd == "edit_bcid")
         {
-            CMD_edit_bcid(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "fetch"))
+            CMD_edit_bcid(query, http, html, jumpStr);
+        }else if (cmd == "fetch")
         {
-            CMD_fetch(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "keep"))
+            CMD_fetch(query, http, html, jumpStr);
+        }else if (cmd == "keep")
         {
-            CMD_keep(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "login"))
+            CMD_keep(query, http, html, jumpStr);
+        }else if (cmd == "login")
         {
-            CMD_login(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "logout"))
+            CMD_login(query, http, html, jumpStr);
+        }else if (cmd == "logout")
         {
-            CMD_logout(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "shutdown"))
+            CMD_logout(query, http, html, jumpStr);
+        }else if (cmd == "shutdown")
         {
-            CMD_shutdown(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "stop"))
+            CMD_shutdown(query, http, html, jumpStr);
+        }else if (cmd == "stop")
         {
-            CMD_stop(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "redirect"))
+            CMD_stop(query, http, html, jumpStr);
+        }else if (cmd == "redirect")
         {
-            CMD_redirect(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "update_channel_info"))
+            CMD_redirect(query, http, html, jumpStr);
+        }else if (cmd == "update_channel_info")
         {
-            CMD_update_channel_info(cmd, http, html, jumpStr);
-        }else if (cmpCGIarg(cmd, "cmd=", "viewxml"))
+            CMD_update_channel_info(query, http, html, jumpStr);
+        }else if (cmd == "viewxml")
         {
-            CMD_viewxml(cmd, http, html, jumpStr);
+            CMD_viewxml(query, http, html, jumpStr);
         }else{
             throw HTTPException(HTTP_SC_BADREQUEST, 400);
         }
@@ -1642,7 +1637,7 @@ void Servent::handshakeCMD(char *cmd)
 }
 
 // -----------------------------------
-static XML::Node *createChannelXML(Channel *c)
+static XML::Node *createChannelXML(std::shared_ptr<Channel> c)
 {
     XML::Node *n = c->info.createChannelXML();
     n->add(c->createRelayXML(true));
@@ -1681,12 +1676,12 @@ void Servent::handshakeXML()
     XML::Node *an = new XML::Node("channels_relayed total=\"%d\"", chanMgr->numChannels());
     rn->add(an);
 
-    Channel *c = chanMgr->channel;
+    auto c = chanMgr->channel;
     while (c)
     {
         if (c->isActive())
             an->add(createChannelXML(c));
-        c=c->next;
+        c = c->next;
     }
 
     // add public channels
@@ -1895,10 +1890,10 @@ void Servent::handshakeWMHTTPPush(HTTP& http, const std::string& path)
     info.id = chanMgr->broadcastID;
     info.id.encode(NULL, info.name.cstr(), info.genre.cstr(), info.bitrate);
 
-    Channel *c = chanMgr->findChannelByID(info.id);
+    auto c = chanMgr->findChannelByID(info.id);
     if (c)
     {
-        LOG_CHANNEL("WMHTTP Push channel already active, closing old one");
+        LOG_INFO("WMHTTP Push channel already active, closing old one");
         c->thread.shutdown();
     }
 
@@ -1958,10 +1953,10 @@ void Servent::handshakeHTTPPush(const std::string& args)
 
     ChanInfo info = createChannelInfo(chanMgr->broadcastID, chanMgr->broadcastMsg, query, http.headers.get("Content-Type"));
 
-    Channel *c = chanMgr->findChannelByID(info.id);
+    auto c = chanMgr->findChannelByID(info.id);
     if (c)
     {
-        LOG_CHANNEL("HTTP Push channel already active, closing old one");
+        LOG_INFO("HTTP Push channel already active, closing old one");
         c->thread.shutdown();
     }
     // ‚±‚±‚ÅƒVƒƒƒbƒgƒ_ƒEƒ“‘Ò‚½‚È‚­‚Ä‚¢‚¢‚ÌH
@@ -2014,10 +2009,10 @@ void Servent::handshakeICY(Channel::SRC_TYPE type, bool isHTTP)
     else
         sock->writeLine("OK");
 
-    Channel *c = chanMgr->findChannelByID(info.id);
+    auto c = chanMgr->findChannelByID(info.id);
     if (c)
     {
-        LOG_CHANNEL("ICY channel already active, closing old one");
+        LOG_INFO("ICY channel already active, closing old one");
         c->thread.shutdown();
     }
 

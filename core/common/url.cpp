@@ -29,7 +29,7 @@
 #endif
 
 // ------------------------------------------------
-void URLSource::stream(Channel *ch)
+void URLSource::stream(std::shared_ptr<Channel> ch)
 {
     String url;
     while (ch->thread.active() && !peercastInst->isQuitting)
@@ -94,7 +94,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 }
 
 // ------------------------------------------------
-::String URLSource::streamURL(Channel *ch, const char *url)
+::String URLSource::streamURL(std::shared_ptr<Channel> ch, const char *url)
 {
     String nextURL;
 
@@ -109,7 +109,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
     PlayList *pls = NULL;
     ChannelStream *source = NULL;
 
-    LOG_CHANNEL("Fetch URL=%s", fileName);
+    LOG_INFO("Fetch URL=%s", fileName);
 
     try
     {
@@ -127,7 +127,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
             if ((ch->info.contentType == ChanInfo::T_WMA) || (ch->info.contentType == ChanInfo::T_WMV))
                 ch->info.srcProtocol = ChanInfo::SP_MMS;
 
-            LOG_CHANNEL("Channel source is HTTP");
+            LOG_INFO("Channel source is HTTP");
 
             ClientSocket *inputSocket = sys->createSocket();
             if (!inputSocket)
@@ -139,9 +139,9 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
             if (dir)
                 *dir++ = 0;
 
-            LOG_CHANNEL("Fetch Host=%s", fileName);
+            LOG_INFO("Fetch Host=%s", fileName);
             if (dir)
-                LOG_CHANNEL("Fetch Dir=%s", dir);
+                LOG_INFO("Fetch Dir=%s", dir);
 
             Host host;
             host.fromStrName(fileName, 80);
@@ -177,7 +177,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 
             while (http.nextHeader())
             {
-                LOG_CHANNEL("Fetch HTTP: %s", http.cmdLine);
+                LOG_INFO("Fetch HTTP: %s", http.cmdLine);
 
                 ChanInfo tmpInfo = ch->info;
                 Servent::readICYHeader(http, ch->info, NULL, 0);
@@ -219,7 +219,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 
             if ((!nextURL.isEmpty()) && (res == 302))
             {
-                LOG_CHANNEL("Channel redirect: %s", nextURL.cstr());
+                LOG_INFO("Channel redirect: %s", nextURL.cstr());
                 inputSocket->close();
                 delete inputSocket;
                 inputSocket = NULL;
@@ -234,7 +234,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
         }else if (ch->info.srcProtocol == ChanInfo::SP_RTMP)
         {
 #ifdef WITH_RTMP
-            LOG_CHANNEL("Channel source is RTMP");
+            LOG_INFO("Channel source is RTMP");
 
             RTMPClientStream *rs = new RTMPClientStream();
             rs->open(url);
@@ -248,7 +248,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 #endif
         }else if (ch->info.srcProtocol == ChanInfo::SP_FILE)
         {
-            LOG_CHANNEL("Channel source is FILE");
+            LOG_INFO("Channel source is FILE");
 
             FileStream *fs = new FileStream();
             fs->openReadOnly(fileName);
@@ -276,7 +276,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 
         if (pls)
         {
-            LOG_CHANNEL("Channel is Playlist");
+            LOG_INFO("Channel is Playlist");
 
             pls->read(*inputStream);
 
@@ -287,7 +287,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
             int urlNum = 0;
             String url;
 
-            LOG_CHANNEL("Playlist: %d URLs", pls->numURLs);
+            LOG_INFO("Playlist: %d URLs", pls->numURLs);
             while ((ch->thread.active()) && (pls->numURLs) && (!peercastInst->isQuitting))
             {
                 if (url.isEmpty())

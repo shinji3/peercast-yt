@@ -132,18 +132,20 @@ class ThreadInfo
 public:
     ThreadInfo()
         : m_active(false)
+        , channel(NULL)
     {
         func         = NULL;
         data         = NULL;
     }
 
-    void    shutdown();
+    void    shutdown() noexcept;
 
-    bool active() { return m_active.load(); }
+    bool active() noexcept { return m_active.load(); }
 
     std::atomic<bool>   m_active;
     THREAD_FUNC     func;
     void            *data;
+    std::shared_ptr<class Channel> channel;
 
     THREAD_HANDLE   handle;
 };

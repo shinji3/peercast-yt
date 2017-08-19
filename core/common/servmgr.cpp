@@ -98,7 +98,7 @@ ServMgr::ServMgr()
     totalStreams = 0;
     firewallTimeout = 30;
     pauseLog = false;
-    showLog = (1<<LogBuffer::T_ERROR);
+    logLevel = LogBuffer::T_INFO;
 
     shutdownTimer = 0;
 
@@ -516,9 +516,9 @@ Servent *ServMgr::allocServent()
         s->next = servents;
         servents = s;
 
-        LOG_DEBUG("allocated servent %d", serventNum);
+        LOG_TRACE("allocated servent %d", serventNum);
     }else
-        LOG_DEBUG("reused servent %d", s->serventIndex);
+        LOG_TRACE("reused servent %d", s->serventIndex);
 
     s->reset();
 
@@ -690,20 +690,20 @@ void ServMgr::quit()
     LOG_DEBUG("ServMgr is quitting..");
 
     serverThread.shutdown();
+    LOG_DEBUG("waiting for server thread..");
+    sys->waitThread(&serverThread);
 
     idleThread.shutdown();
+    LOG_DEBUG("waiting for idle thread..");
+    sys->waitThread(&idleThread);
 
     Servent *s = servents;
     while (s)
     {
-        try
-        {
-            if (s->thread.active())
-                s->thread.shutdown();
-        }catch (StreamException &)
-        {
-        }
-        s=s->next;
+        if (s->thread.active())
+            s->thread.shutdown();
+
+        s = s->next;
     }
 }
 
@@ -732,7 +732,7 @@ int ServMgr::broadcast(GnuPacket &pack, Servent *src)
         }
     }
 
-    LOG_NETWORK("broadcast: %s (%d) to %d servents", GNU_FUNC_STR(pack.func), pack.ttl, cnt);
+    LOG_INFO("broadcast: %s (%d) to %d servents", GNU_FUNC_STR(pack.func), pack.ttl, cnt);
 
     return cnt;
 }
@@ -763,7 +763,7 @@ int ServMgr::route(GnuPacket &pack, GnuID &routeID, Servent *src)
         }
     }
 
-    LOG_NETWORK("route: %s (%d) to %d servents", GNU_FUNC_STR(pack.func), pack.ttl, cnt);
+    LOG_INFO("route: %s (%d) to %d servents", GNU_FUNC_STR(pack.func), pack.ttl, cnt);
     return cnt;
 }
 
@@ -1001,10 +1001,7 @@ void ServMgr::saveSettings(const char *fn)
         iniFile.writeLine("[End]");
 
         iniFile.writeSection("Debug");
-        iniFile.writeBoolValue("logDebug", (showLog&(1<<LogBuffer::T_DEBUG))!=0);
-        iniFile.writeBoolValue("logErrors", (showLog&(1<<LogBuffer::T_ERROR))!=0);
-        iniFile.writeBoolValue("logNetwork", (showLog&(1<<LogBuffer::T_NETWORK))!=0);
-        iniFile.writeBoolValue("logChannel", (showLog&(1<<LogBuffer::T_CHANNEL))!=0);
+        iniFile.writeIntValue("logLevel", logLevel);
         iniFile.writeBoolValue("pauseLog", pauseLog);
         iniFile.writeIntValue("idleSleepTime", sys->idleSleepTime);
 
@@ -1027,7 +1024,7 @@ void ServMgr::saveSettings(const char *fn)
             }
         }
 
-        Channel *c = chanMgr->channel;
+        std::shared_ptr<Channel> c = chanMgr->channel;
         while (c)
         {
             char idstr[64];
@@ -1146,7 +1143,6 @@ void ServMgr::loadSettings(const char *fn)
         saveSettings(fn);
 
     servMgr->numFilters = 0;
-    showLog = 0;
 
     if (iniFile.openReadOnly(fn))
     {
@@ -1297,14 +1293,8 @@ void ServMgr::loadSettings(const char *fn)
                 servMgr->isEnableUPnP = iniFile.getBoolValue();
 
             // debug
-            else if (iniFile.isName("logDebug"))
-                showLog |= iniFile.getBoolValue() ? 1<<LogBuffer::T_DEBUG:0;
-            else if (iniFile.isName("logErrors"))
-                showLog |= iniFile.getBoolValue() ? 1<<LogBuffer::T_ERROR:0;
-            else if (iniFile.isName("logNetwork"))
-                showLog |= iniFile.getBoolValue() ? 1<<LogBuffer::T_NETWORK:0;
-            else if (iniFile.isName("logChannel"))
-                showLog |= iniFile.getBoolValue() ? 1<<LogBuffer::T_CHANNEL:0;
+            else if (iniFile.isName("logLevel"))
+                logLevel = iniFile.getIntValue();
             else if (iniFile.isName("pauseLog"))
                 pauseLog = iniFile.getBoolValue();
             else if (iniFile.isName("idleSleepTime"))
@@ -1407,7 +1397,7 @@ void ServMgr::loadSettings(const char *fn)
                 }else
                 {
                     info.bcID = chanMgr->broadcastID;
-                    Channel *c = chanMgr->createChannel(info, NULL);
+                    auto c = chanMgr->createChannel(info, NULL);
                     if (c)
                         c->startURL(sourceURL.cstr());
                 }
@@ -1494,9 +1484,7 @@ bool ServMgr::getChannel(char *str, ChanInfo &info, bool relay)
 {
     procConnectArgs(str, info);
 
-    Channel *ch;
-
-    ch = chanMgr->findChannelByNameID(info);
+    auto ch = chanMgr->findChannelByNameID(info);
     if (ch)
     {
         if (!ch->isPlaying())
@@ -1564,7 +1552,7 @@ int ServMgr::findChannel(ChanInfo &info)
     addReplyID(pack.id);
     int cnt = broadcast(pack, NULL);
 
-    LOG_NETWORK("Querying network: %s %s - %d servents", info.name.cstr(), idStr, cnt);
+    LOG_INFO("Querying network: %s %s - %d servents", info.name.cstr(), idStr, cnt);
 
     return cnt;
 #endif
@@ -1634,14 +1622,14 @@ void ServMgr::procConnectArgs(char *str, ChanInfo &info)
                 Host h;
                 h.fromStrName(arg, DEFAULT_PORT);
                 if (addOutgoing(h, servMgr->networkID, true))
-                    LOG_NETWORK("Added connection: %s", arg);
+                    LOG_INFO("Added connection: %s", arg);
             }else if (strcmp(curr, "pip")==0)
             // pip - add private network connection to client with channel
             {
                 Host h;
                 h.fromStrName(arg, DEFAULT_PORT);
                 if (addOutgoing(h, info.id, true))
-                    LOG_NETWORK("Added private connection: %s", arg);
+                    LOG_INFO("Added private connection: %s", arg);
             }else if (strcmp(curr, "ip")==0)
             // ip - add hit
             {
@@ -1678,22 +1666,22 @@ bool ServMgr::start()
 #else
     priv = "";
 #endif
-    LOG_DEBUG("Peercast %s, %s %s", PCX_VERSTRING, peercastApp->getClientTypeOS(), priv);
+    LOG_INFO("Peercast %s, %s %s", PCX_VERSTRING, peercastApp->getClientTypeOS(), priv);
 
     sessionID.toStr(idStr);
-    LOG_DEBUG("SessionID: %s", idStr);
+    LOG_INFO("SessionID: %s", idStr);
 
     chanMgr->broadcastID.toStr(idStr);
-    LOG_DEBUG("BroadcastID: %s", idStr);
+    LOG_INFO("BroadcastID: %s", idStr);
 
     checkForceIP();
 
     serverThread.func = ServMgr::serverProc;
-    if (!sys->startThread(&serverThread))
+    if (!sys->startWaitableThread(&serverThread))
         return false;
 
     idleThread.func = ServMgr::idleProc;
-    if (!sys->startThread(&idleThread))
+    if (!sys->startWaitableThread(&idleThread))
         return false;
 
     return true;
@@ -2258,14 +2246,8 @@ bool ServMgr::writeVariable(Stream &out, const String &var)
             buf = (cookieList.neverExpire==false) ? "1" : "0";
     }else if (var.startsWith("log."))
     {
-        if (var == "log.debug")
-            buf = (showLog & (1<<LogBuffer::T_DEBUG)) ? "1" : "0";
-        else if (var == "log.errors")
-            buf = (showLog & (1<<LogBuffer::T_ERROR)) ? "1" : "0";
-        else if (var == "log.gnet")
-            buf = (showLog & (1<<LogBuffer::T_NETWORK)) ? "1" : "0";
-        else if (var == "log.channel")
-            buf = (showLog & (1<<LogBuffer::T_CHANNEL)) ? "1" : "0";
+        if (var == "log.level")
+            buf = std::to_string(logLevel);
         else
             return false;
     }else if (var.startsWith("lang."))
