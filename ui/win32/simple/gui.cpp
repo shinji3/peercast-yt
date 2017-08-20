@@ -422,6 +422,16 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
             PostMessage(hwnd, WM_DESTROY, 0, 0);
         }
 
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 0, (LPARAM)"トレース");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 1, (LPARAM)"デバッグ");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 2, (LPARAM)"情報");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 3, (LPARAM)"警告");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 4, (LPARAM)"エラー");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 5, (LPARAM)"致命的なエラー");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 6, (LPARAM)"オフ");
+
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel - 1, 0);
+
         //UPnP
         if (servMgr->isEnableUPnP)
             setButtonState(IDC_UPNP, true);
@@ -429,7 +439,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
         break;
 
     case WM_COMMAND:
-        switch (wParam)
+        switch (LOWORD(wParam))
         {
         case IDC_CHECK1:		// start server
             if (getButtonState(IDC_CHECK1))
@@ -596,6 +606,14 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
             info.init();
             info.name.set(str);
             chanMgr->startSearch(info);
+        }
+        break;
+
+        case IDC_COMBO2:
+        {
+            if (HIWORD(wParam) == CBN_SELCHANGE) {
+                servMgr->logLevel = static_cast<int>(SendDlgItemMessage(hwnd, IDC_COMBO2, CB_GETCURSEL, 0, 0)) + 1;
+            }
         }
         break;
 

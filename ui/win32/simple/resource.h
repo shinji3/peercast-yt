@@ -63,7 +63,8 @@
 #define IDC_BUTTON3                     1059
 #define IDC_EDIT9                       1060
 #define IDC_CHECK11                     1061
-#define IDC_UPNP                        1062
+#define IDC_COMBO2                      1062
+#define IDC_UPNP                        1063
 #define IDM_SETTINGS_GUI                32771
 #define ID_POPUP_ABOUT                  32779
 #define ID_POPUP_EXIT_CONFIRM           32781
