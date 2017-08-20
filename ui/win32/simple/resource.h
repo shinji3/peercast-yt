@@ -50,14 +50,10 @@
 #define IDC_BUTTON6                     1021
 #define IDC_EDIT3                       1025
 #define IDC_EDIT5                       1027
-#define IDC_LOGDEBUG                    1037
-#define IDC_LOGNETWORK                  1038
-#define IDC_LOGERRORS                   1039
 #define IDC_CHECK9                      1041
 #define IDC_BUTTON8                     1043
 #define IDC_BUTTON10                    1046
 #define IDC_BUTTON11                    1047
-#define IDC_LOGCHANNELS                 1050
 #define IDC_BUTTON2                     1056
 #define IDC_EDIT4                       1058
 #define IDC_BUTTON3                     1059

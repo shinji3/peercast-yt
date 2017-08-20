@@ -368,10 +368,7 @@ static void setControls(bool fromGUI)
 
     setButtonState(IDC_CHECK11, chanMgr->broadcastMsg[0] != 0);
 
-    //setButtonState(IDC_LOGDEBUG, (servMgr->showLog&(1 << LogBuffer::T_DEBUG)) != 0);
-    //setButtonState(IDC_LOGERRORS, (servMgr->showLog&(1 << LogBuffer::T_ERROR)) != 0);
-    //setButtonState(IDC_LOGNETWORK, (servMgr->showLog&(1 << LogBuffer::T_NETWORK)) != 0);
-    //setButtonState(IDC_LOGCHANNELS, (servMgr->showLog&(1 << LogBuffer::T_CHANNEL)) != 0);
+    SendDlgItemMessage(guiWnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel - 1, 0);
 
     setButtonState(IDC_CHECK9, servMgr->pauseLog);
 
@@ -494,18 +491,6 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
                 enableControl(IDC_EDIT9, true);
                 chanMgr->broadcastMsg.clear();
             }
-            break;
-        case IDC_LOGDEBUG:		// log debug
-            //servMgr->showLog = getButtonState(static_cast<int>(wParam)) ? servMgr->showLog | (1 << LogBuffer::T_DEBUG) : servMgr->showLog&~(1 << LogBuffer::T_DEBUG);
-            break;
-        case IDC_LOGERRORS:		// log errors
-            //servMgr->showLog = getButtonState(static_cast<int>(wParam)) ? servMgr->showLog | (1 << LogBuffer::T_ERROR) : servMgr->showLog&~(1 << LogBuffer::T_ERROR);
-            break;
-        case IDC_LOGNETWORK:		// log network
-            //servMgr->showLog = getButtonState(static_cast<int>(wParam)) ? servMgr->showLog | (1 << LogBuffer::T_NETWORK) : servMgr->showLog&~(1 << LogBuffer::T_NETWORK);
-            break;
-        case IDC_LOGCHANNELS:		// log channels
-            //servMgr->showLog = getButtonState(static_cast<int>(wParam)) ? servMgr->showLog | (1 << LogBuffer::T_CHANNEL) : servMgr->showLog&~(1 << LogBuffer::T_CHANNEL);
             break;
         case IDC_CHECK9:		// pause log
             servMgr->pauseLog = getButtonState(static_cast<int>(wParam));
