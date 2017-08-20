@@ -109,7 +109,7 @@ unsigned int WSys::SetUPnP()
             return 0;
         }
 
-        LOG_NETWORK("UPnP Initialize OK.");
+        LOG_INFO("UPnP Initialize OK.");
 
         mSSDP.Send("urn:schemas-upnp-org:service:WANPPPConnection:1");
         mSSDP.Send("urn:schemas-upnp-org:service:WANIPConnection:1");
@@ -158,7 +158,7 @@ unsigned int WSys::SetUPnP()
                 mST = info.mST;
 
                 //Žæ“¾OK
-                LOG_NETWORK("UPnP ControlURL:%s",mControlURL.c_str());
+                LOG_INFO("UPnP ControlURL:%s",mControlURL.c_str());
                 break;
             }
 
@@ -196,7 +196,7 @@ unsigned int WSys::SetUPnP()
     }
 
     //OK
-    LOG_NETWORK("UPnP AddPortMapping OK.(%d Port)",servMgr->serverHost.port,sPort);
+    LOG_INFO("UPnP AddPortMapping OK.(%d Port)",servMgr->serverHost.port,sPort);
     CoUninitialize();
 
     return servMgr->serverHost.port;

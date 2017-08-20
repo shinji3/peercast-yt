@@ -577,7 +577,7 @@ void addRelayedChannelsMenu(HMENU cm)
     for (int i = 0; i < cnt - 3; i++)
         DeleteMenu(cm, 0, MF_BYPOSITION);
 
-    Channel *c = chanMgr->channel;
+    auto c = chanMgr->channel;
     while (c)
     {
         if (c->isActive())
@@ -623,7 +623,7 @@ void addAllChannelsMenu(HMENU cm)
 
     // add channels to menu
     int numActive = 0;
-    Channel *ch = chanMgr->channel;
+    auto ch = chanMgr->channel;
     while (ch)
     {
         char str[128], name[64];
@@ -686,7 +686,7 @@ static void showHTML(const char *file)
 
 static ChanInfo getChannelInfo(int index)
 {
-    Channel *c = chanMgr->findChannelByIndex(index);
+    auto c = chanMgr->findChannelByIndex(index);
     if (c)
         return c->info;
 
@@ -990,7 +990,7 @@ LRESULT CALLBACK ChanInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
         if (!chanInfo.url.isValidURL())
             EnableWindow(GetDlgItem(hDlg, IDC_CONTACT), false);
 
-        Channel *ch = chanMgr->findChannelByID(chanInfo.id);
+        auto ch = chanMgr->findChannelByID(chanInfo.id);
         if (ch)
         {
             SendDlgItemMessage(hDlg, IDC_EDIT_STATUS, WM_SETTEXT, 0, (LPARAM)ch->getStatusStr());
@@ -1050,7 +1050,7 @@ LRESULT CALLBACK ChanInfoProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
         }
         case IDC_KEEP:
         {
-            Channel *ch = chanMgr->findChannelByID(chanInfo.id);
+            auto ch = chanMgr->findChannelByID(chanInfo.id);
             if (ch)
                 ch->stayConnected = SendDlgItemMessage(hDlg, IDC_KEEP, BM_GETCHECK, 0, 0) == BST_CHECKED;;
             return TRUE;

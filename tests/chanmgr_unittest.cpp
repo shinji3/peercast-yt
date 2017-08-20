@@ -72,7 +72,7 @@ TEST_F(ChanMgrFixture, createChannel)
 
     auto c = x->createChannel(info, NULL);
 
-    ASSERT_TRUE(c != nullptr); // ASSERT_TRUE(c) 縺ｨ譖ｸ縺上→繧ｨ繝ｩ繝ｼ縺ｫ縺ｪ繧九さ繝ｳ繝代う繝ｩ縺後≠繧九�
+    ASSERT_TRUE(c != nullptr); // ASSERT_TRUE(c) と書くとエラーになるコンパイラがある。
     ASSERT_EQ(c, x->channel);
 
     x->deleteChannel(c);
