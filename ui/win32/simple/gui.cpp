@@ -244,7 +244,7 @@ THREAD_PROC showConnections(ThreadInfo *thread)
                 {
                     String cname = c->info.name;
                     cname.convertTo(String::T_SJIS);
-                    ADDCHAN(&c, "%s - %d kb/s - %s", cname.cstr(), c->getBitrate(), c->getStatusStr());
+                    ADDCHAN(c.get(), "%s - %d kb/s - %s", cname.cstr(), c->getBitrate(), c->getStatusStr());
                 }
                 c = c->next;
             }
