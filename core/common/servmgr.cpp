@@ -28,8 +28,6 @@
 #include "version2.h"
 #include "rtmpmonit.h"
 
-ThreadInfo ServMgr::serverThread, ServMgr::idleThread;
-
 // -----------------------------------
 ServMgr::ServMgr()
     : publicDirectoryEnabled(false)
@@ -690,12 +688,10 @@ void ServMgr::quit()
     LOG_DEBUG("ServMgr is quitting..");
 
     serverThread.shutdown();
-    LOG_DEBUG("waiting for server thread..");
-    sys->waitThread(&serverThread);
-
     idleThread.shutdown();
-    LOG_DEBUG("waiting for idle thread..");
-    sys->waitThread(&idleThread);
+
+    LOG_DEBUG("Disabling RMTP server..");
+    rtmpServerMonitor.disable();
 
     Servent *s = servents;
     while (s)
@@ -1677,11 +1673,11 @@ bool ServMgr::start()
     checkForceIP();
 
     serverThread.func = ServMgr::serverProc;
-    if (!sys->startWaitableThread(&serverThread))
+    if (!sys->startThread(&serverThread))
         return false;
 
     idleThread.func = ServMgr::idleProc;
-    if (!sys->startWaitableThread(&idleThread))
+    if (!sys->startThread(&idleThread))
         return false;
 
     return true;
@@ -1905,6 +1901,7 @@ int ServMgr::idleProc(ThreadInfo *thread)
             if ((servMgr->lastIncoming) && (((int64_t)ctime - servMgr->lastIncoming) > 60*60))
             {
                 peercastInst->saveSettings();
+                peercastInst->quit();
                 sys->exit();
             }
 
@@ -1936,6 +1933,7 @@ int ServMgr::idleProc(ThreadInfo *thread)
             if (--servMgr->shutdownTimer <= 0)
             {
                 peercastInst->saveSettings();
+                peercastInst->quit();
                 sys->exit();
             }
         }
@@ -1995,6 +1993,7 @@ int ServMgr::serverProc(ThreadInfo *thread)
                     if (!serv->initServer(h))
                     {
                         LOG_ERROR("Failed to start server on port %d. Exitting...", h.port);
+                        peercastInst->quit();
                         sys->exit();
                     }
 
@@ -2003,6 +2002,7 @@ int ServMgr::serverProc(ThreadInfo *thread)
                     if (!serv2->initServer(h))
                     {
                         LOG_ERROR("Failed to start server on port %d. Exitting...", h.port);
+                        peercastInst->quit();
                         sys->exit();
                     }
             }
