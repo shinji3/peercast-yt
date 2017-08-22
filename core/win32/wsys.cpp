@@ -174,6 +174,12 @@ unsigned int WSys::SetUPnP()
     Host lh(ClientSocket::getIP(NULL),0);
     lh.IPtoStr(sLanIP);
 
+    if(strcmp(sLanIP, "127.0.0.1") == 0)
+    {
+        CoUninitialize();
+        return 0;
+    }
+
     YMSoapAction soap(mST.c_str(),"AddPortMapping");
 
     _itoa_s(servMgr->serverHost.port, sPort, _countof(sPort), 10);
