@@ -55,7 +55,7 @@ static int base64chartoval(char input)
 }
 
 // -----------------------------------
-void String::setFromTime(unsigned int t)
+String& String::setFromTime(unsigned int t)
 {
     time_t t2 = t;
     char p[26];
@@ -65,10 +65,12 @@ void String::setFromTime(unsigned int t)
     else
         strcpy_s(data, _countof(data), "-");
     type = T_ASCII;
+
+    return *this;
 }
 
 // -----------------------------------
-void String::setFromStopwatch(unsigned int t)
+String& String::setFromStopwatch(unsigned int t)
 {
     unsigned int sec, min, hour, day;
 
@@ -89,10 +91,12 @@ void String::setFromStopwatch(unsigned int t)
         std::snprintf(data, _countof(data), "-");
 
     type = T_ASCII;
+
+    return *this;
 }
 
 // -----------------------------------
-void String::setFromString(const char *str, TYPE t)
+String& String::setFromString(const char *str, TYPE t)
 {
     int cnt = 0;
     bool quote = false;
@@ -127,6 +131,8 @@ void String::setFromString(const char *str, TYPE t)
     }
     data[cnt] = 0;
     type = t;
+
+    return *this;
 }
 
 // -----------------------------------
@@ -493,7 +499,7 @@ void String::convertTo(TYPE t)
 }
 
 // -----------------------------------
-void String::setUnquote(const char *p, TYPE t)
+String& String::setUnquote(const char *p, TYPE t)
 {
     size_t slen = strlen(p);
     if (slen > 2)
@@ -503,6 +509,8 @@ void String::setUnquote(const char *p, TYPE t)
     }else
         clear();
     type = t;
+
+    return *this;
 }
 
 // -----------------------------------
@@ -566,10 +574,12 @@ String& String::operator = (const std::string& rhs)
 }
 
 // -----------------------------------
-void String::set(const char *p, TYPE t)
+String& String::set(const char *p, TYPE t)
 {
     strncpy_s(data, _countof(data), p, _TRUNCATE);
     type = t;
+
+    return *this;
 }
 
 // -----------------------------------

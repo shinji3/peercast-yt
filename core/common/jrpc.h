@@ -190,12 +190,14 @@ public:
         m_methods
         ({
             { "bumpChannel",             &JrpcApi::bumpChannel,             { "channelId" } },
+            { "clearLog",                &JrpcApi::clearLog,                {} },
             { "fetch",                   &JrpcApi::fetch,                   { "url", "name", "desc", "genre", "contact", "bitrate", "type" } },
             { "getChannelConnections",   &JrpcApi::getChannelConnections,   { "channelId" } },
             { "getChannelInfo",          &JrpcApi::getChannelInfo,          { "channelId" } },
             { "getChannelRelayTree",     &JrpcApi::getChannelRelayTree,     { "channelId" } },
             { "getChannelStatus",        &JrpcApi::getChannelStatus,        { "channelId" } },
             { "getChannels",             &JrpcApi::getChannels,             {} },
+            { "getLog",                  &JrpcApi::getLog,                  { "from", "maxLines" } },
             { "getNewVersions",          &JrpcApi::getNewVersions,          {} },
             { "getNotificationMessages", &JrpcApi::getNotificationMessages, {} },
             { "getPlugins",              &JrpcApi::getPlugins,              {} },
@@ -928,6 +930,9 @@ public:
         }
         return res;
     }
+
+    json getLog(json::array_t args);
+    json clearLog(json::array_t args);
 };
 
 #endif
