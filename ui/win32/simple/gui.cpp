@@ -368,7 +368,7 @@ static void setControls(bool fromGUI)
 
     setButtonState(IDC_CHECK11, chanMgr->broadcastMsg[0] != 0);
 
-    SendDlgItemMessage(guiWnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel - 1, 0);
+    SendDlgItemMessage(guiWnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel() - 1, 0);
 
     setButtonState(IDC_CHECK9, servMgr->pauseLog);
 
@@ -427,7 +427,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
         SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 5, (LPARAM)"致命的なエラー");
         SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 6, (LPARAM)"オフ");
 
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel - 1, 0);
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel() - 1, 0);
 
         //UPnP
         if (servMgr->isEnableUPnP)
@@ -597,7 +597,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
         case IDC_COMBO2:
         {
             if (HIWORD(wParam) == CBN_SELCHANGE) {
-                servMgr->logLevel = static_cast<int>(SendDlgItemMessage(hwnd, IDC_COMBO2, CB_GETCURSEL, 0, 0)) + 1;
+                servMgr->logLevel(static_cast<int>(SendDlgItemMessage(hwnd, IDC_COMBO2, CB_GETCURSEL, 0, 0)) + 1);
             }
         }
         break;
