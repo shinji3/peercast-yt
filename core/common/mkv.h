@@ -1,4 +1,4 @@
-#ifndef _MKV_H
+ï»¿#ifndef _MKV_H
 #define _MKV_H
 
 #include "stream.h"
@@ -32,7 +32,7 @@ public:
 
     uint64_t     m_videoTrackNumber;
     bool         m_hasKeyFrame;
-    uint64_t     m_timecodeScale; // ƒiƒm•b
+    uint64_t     m_timecodeScale; // ãƒŠãƒŽç§’
     unsigned int m_startTime;
 };
 

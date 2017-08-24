@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : servent.h
 // Date: 4-apr-2002
 // Author: giles
@@ -249,7 +249,7 @@ public:
 
     GnuID               remoteID;
     GnuID               chanID;
-    GnuID               givID; // GIV ‚·‚éƒ`ƒƒƒ“ƒlƒ‹‚ÌID
+    GnuID               givID; // GIV ã™ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ã®ID
 
     ThreadInfo          thread;
 

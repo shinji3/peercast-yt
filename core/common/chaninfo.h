@@ -1,4 +1,4 @@
-#ifndef _CHANINFO_H
+ï»¿#ifndef _CHANINFO_H
 #define _CHANINFO_H
 
 // ------------------------------------------------
@@ -148,13 +148,13 @@ public:
     GnuID           id, bcID;
     int             bitrate;
 
-    // TYPE ‚ÍƒNƒ[ƒYƒh‚¾‚©‚çˆê”Ê«‚ª‚È‚­AƒvƒƒgƒRƒ‹ã‚Í•¶š—ñ‚Å‚â‚è
-    // ‚Æ‚è‚·‚é‚Ì‚ÅAç’·‚È‹C‚ª‚·‚éB
+    // TYPE ã¯ã‚¯ãƒ­ãƒ¼ã‚ºãƒ‰ã ã‹ã‚‰ä¸€èˆ¬æ€§ãŒãªãã€ãƒ—ãƒ­ãƒˆã‚³ãƒ«ä¸Šã¯æ–‡å­—åˆ—ã§ã‚„ã‚Š
+    // ã¨ã‚Šã™ã‚‹ã®ã§ã€å†—é•·ãªæ°—ãŒã™ã‚‹ã€‚
 
     TYPE            contentType;
-    ::String        contentTypeStr; // getTypeStr(contentType) "WMV" ‚È‚Ç
-    ::String        MIMEType;       // MIME ƒ^ƒCƒv
-    String          streamExt;      // "." ‚Ån‚Ü‚éŠg’£q
+    ::String        contentTypeStr; // getTypeStr(contentType) "WMV" ãªã©
+    ::String        MIMEType;       // MIME ã‚¿ã‚¤ãƒ—
+    String          streamExt;      // "." ã§å§‹ã¾ã‚‹æ‹¡å¼µå­
 
     PROTOCOL        srcProtocol;
     unsigned int    lastPlayStart, lastPlayEnd;

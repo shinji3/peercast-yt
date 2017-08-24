@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : servmgr.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -1897,7 +1897,7 @@ int ServMgr::idleProc(ThreadInfo *thread)
 
         if (servMgr->isRoot)
         {
-            // 1ŠÔ’…M‚ª‚È‚©‚Á‚½‚çI—¹‚·‚éBc‚È‚ºH
+            // 1æ™‚é–“ç€ä¿¡ãŒãªã‹ã£ãŸã‚‰çµ‚äº†ã™ã‚‹ã€‚â€¦ãªãœï¼Ÿ
             if ((servMgr->lastIncoming) && (((int64_t)ctime - servMgr->lastIncoming) > 60*60))
             {
                 peercastInst->saveSettings();
@@ -1922,10 +1922,10 @@ int ServMgr::idleProc(ThreadInfo *thread)
             }
         }
 
-        // ƒfƒbƒhƒqƒbƒg‚ğƒNƒŠƒA‚·‚éBƒIƒŠƒWƒiƒ‹‚Íƒgƒ‰ƒbƒJ[‚ğƒNƒŠƒA‚·
-        // ‚é‚ªAŠJ‚­ƒ`ƒƒƒ“ƒlƒ‹‚ª‚±‚ÌƒT[ƒo[‚Éİ’è‚³‚ê‚Ä‚¢‚é YP ‚ÉŒf
-        // Ú‚³‚ê‚Ä‚¢‚é‚Æ‚ÍŒÀ‚ç‚È‚¢‚Ì‚ÅAƒgƒ‰ƒbƒJ[‚ªÁ‚¦‚é‚ÆÄ‚ÑŠJ‚­
-        // ‚±‚Æ‚ª‚Å‚«‚È‚¢‚Ì‚ÅAƒgƒ‰ƒbƒJ[‚ğc‚·B
+        // ãƒ‡ãƒƒãƒ‰ãƒ’ãƒƒãƒˆã‚’ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚ã‚ªãƒªã‚¸ãƒŠãƒ«ã¯ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã‚’ã‚¯ãƒªã‚¢ã™
+        // ã‚‹ãŒã€é–‹ããƒãƒ£ãƒ³ãƒãƒ«ãŒã“ã®ã‚µãƒ¼ãƒãƒ¼ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹ YP ã«æ²
+        // è¼‰ã•ã‚Œã¦ã„ã‚‹ã¨ã¯é™ã‚‰ãªã„ã®ã§ã€ãƒˆãƒ©ãƒƒã‚«ãƒ¼ãŒæ¶ˆãˆã‚‹ã¨å†ã³é–‹ã
+        // ã“ã¨ãŒã§ããªã„ã®ã§ã€ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã‚’æ®‹ã™ã€‚
         chanMgr->clearDeadHits(false);
 
         if (servMgr->shutdownTimer)
@@ -1942,7 +1942,7 @@ int ServMgr::idleProc(ThreadInfo *thread)
         if (chanMgr->numIdleChannels() > ChanMgr::MAX_IDLE_CHANNELS)
             chanMgr->closeOldestIdle();
 
-        // ƒ`ƒƒƒ“ƒlƒ‹ˆê——‚ğæ“¾‚·‚éB
+        // ãƒãƒ£ãƒ³ãƒãƒ«ä¸€è¦§ã‚’å–å¾—ã™ã‚‹ã€‚
         servMgr->channelDirectory.update();
 
         servMgr->rtmpServerMonitor.update();
@@ -2183,7 +2183,7 @@ bool ServMgr::writeVariable(Stream &out, const String &var)
     else if (var == "maxServIn")
         buf = to_string(maxServIn);
     else if (var == "numFilters")
-        buf = to_string(numFilters+1); // “ü—Í—p‚Ì‹ó—“‚ğ¶¬‚·‚éˆ×‚É+1‚·‚éB
+        buf = to_string(numFilters+1); // å…¥åŠ›ç”¨ã®ç©ºæ¬„ã‚’ç”Ÿæˆã™ã‚‹ç‚ºã«+1ã™ã‚‹ã€‚
     else if (var == "maxPGNUIn")
         buf = to_string(maxGnuIncoming);
     else if (var == "minPGNUIn")

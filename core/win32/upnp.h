@@ -1,8 +1,8 @@
-// ------------------------------------------------------------------------------
-// UPnPƒNƒ‰ƒX
+ï»¿// ------------------------------------------------------------------------------
+// UPnPã‚¯ãƒ©ã‚¹
 //
-// ‰º‹Lƒz[ƒ€ƒy[ƒW‚ÅŒöŠJ‚³‚ê‚Ä‚¢‚éƒ\[ƒX‚ğ—˜—p‚³‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚µ‚½B
-// ƒÀ‚¦‚ñ‚Ç‚é‚Ó‚¡‚ñ -•½‰¸‚Å•s‰¸‚È“úX-—l URL:http://www.bosuke.mine.nu/blog/ 
+// ä¸‹è¨˜ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸ã§å…¬é–‹ã•ã‚Œã¦ã„ã‚‹ã‚½ãƒ¼ã‚¹ã‚’åˆ©ç”¨ã•ã›ã¦ã„ãŸã ãã¾ã—ãŸã€‚
+// Î²ãˆã‚“ã©ã‚‹ãµãƒã‚“ -å¹³ç©ã§ä¸ç©ãªæ—¥ã€…-æ§˜ URL:http://www.bosuke.mine.nu/blog/ 
 //
 // ------------------------------------------------------------------------------
 
@@ -36,14 +36,14 @@ public:
         std::string mLocation;
     };
 
-    //ƒ\ƒPƒbƒgƒI[ƒvƒ“‚ÆƒNƒ[ƒY
+    //ã‚½ã‚±ãƒƒãƒˆã‚ªãƒ¼ãƒ—ãƒ³ã¨ã‚¯ãƒ­ãƒ¼ã‚º
     bool Open();
     void Close();
 
-    //ŒŸõƒŠƒNƒGƒXƒg‚ğo‚·
+    //æ¤œç´¢ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å‡ºã™
     bool Send(const char* st);
 
-    //Œ‹‰Ê‚ğó‚¯æ‚é
+    //çµæœã‚’å—ã‘å–ã‚‹
     enum
     {
         Error = -1,
@@ -54,13 +54,13 @@ public:
     };
     int Recv(LocationInfo& info, DWORD timeout);
 
-    //ƒGƒ‰[î•ñ
+    //ã‚¨ãƒ©ãƒ¼æƒ…å ±
     int GetLastError() const
     {
         return mLastError;
     }
 
-    //controlURL‚Ìæ“¾
+    //controlURLã®å–å¾—
     static std::string GetControlURL(const char* location, const char* st);
 
 protected:
@@ -81,11 +81,11 @@ public:
     YMSoapAction(const char* serviceType, const char* actionName);
     virtual ~YMSoapAction();
 
-    //ƒpƒ‰ƒ[ƒ^‚ğƒZƒbƒg‚·‚é
+    //ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
     void SetParameter(const char* filed, const char* value);
     void ResetParameter();
 
-    //POST‚·‚é
+    //POSTã™ã‚‹
     int Invoke(const char* url);
 
 protected:

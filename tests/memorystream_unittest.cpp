@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 #include "stream.h"
 
 class MemoryStreamFixture : public ::testing::Test {
@@ -21,7 +21,7 @@ public:
     MemoryStream hoge_mm;
 };
 
-// readUpto ‚ÍÀ‘•‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚Å‰½‚à‚¹‚¸ 0 ‚ğ•Ô‚·B
+// readUpto ã¯å®Ÿè£…ã•ã‚Œã¦ã„ãªã„ã®ã§ä½•ã‚‚ã›ãš 0 ã‚’è¿”ã™ã€‚
 TEST_F(MemoryStreamFixture, readUpto)
 {
     char buf[1024] = "X";
@@ -47,12 +47,12 @@ TEST_F(MemoryStreamFixture, ThrowsExceptionIfCannotWrite)
 {
     char buf[1024];
 
-    // ƒƒ‚ƒŠ[‚Éû‚Ü‚ç‚È‚¢ write ‚Í StreamException ‚ğã‚°‚éB
+    // ãƒ¡ãƒ¢ãƒªãƒ¼ã«åã¾ã‚‰ãªã„ write ã¯ StreamException ã‚’ä¸Šã’ã‚‹ã€‚
     ASSERT_THROW(one_byte_mm.write("XXX", 3), StreamException);
 
     one_byte_mm.rewind();
 
-    // ƒGƒ‰[‚É‚È‚Á‚½ê‡‚Í1•¶š‚à‘‚«‚Ü‚ê‚Ä‚¢‚È‚¢B
+    // ã‚¨ãƒ©ãƒ¼ã«ãªã£ãŸå ´åˆã¯1æ–‡å­—ã‚‚æ›¸ãè¾¼ã¾ã‚Œã¦ã„ãªã„ã€‚
     one_byte_mm.read(buf, 1);
     ASSERT_EQ('A', buf[0]);
 }

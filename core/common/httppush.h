@@ -1,4 +1,4 @@
-#ifndef _HTTPPUSH_H
+﻿#ifndef _HTTPPUSH_H
 #define _HTTPPUSH_H
 
 #include "channel.h"

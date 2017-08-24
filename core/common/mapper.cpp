@@ -1,4 +1,4 @@
-#include <limits.h>
+ï»¿#include <limits.h>
 
 #include "common.h"
 #include "mapper.h"
@@ -46,7 +46,7 @@ pair<string,string> FileSystemMapper::resolvePath(const string& rawPath, const v
     return make_pair("", "");
 }
 
-// path ‚ğâ‘ÎƒpƒX‚É’¼‚·Bpath ‚ªw‚·ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚Í‹ó•¶š—ñ‚ğ•Ô‚·B
+// path ã‚’çµ¶å¯¾ãƒ‘ã‚¹ã«ç›´ã™ã€‚path ãŒæŒ‡ã™ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ç©ºæ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
 #ifdef _UNIX
 string FileSystemMapper::realPath(const string& path)
 {
@@ -95,7 +95,7 @@ pair<string,string> FileSystemMapper::toLocalFilePath(const string& vpath, const
         return make_pair("", "");
     }
 
-    // ƒfƒBƒŒƒNƒgƒŠƒgƒ‰ƒo[ƒTƒ‹ƒ`ƒFƒbƒN
+    // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒˆãƒ©ãƒãƒ¼ã‚µãƒ«ãƒã‚§ãƒƒã‚¯
     if (documentRoot == resolvedPath || !is_prefix_of(documentRoot, resolvedPath))
     {
         LOG_ERROR("Possible directory traversal attack!");

@@ -1,4 +1,4 @@
-#include <stdexcept>
+ï»¿#include <stdexcept>
 
 #include "subprog.h"
 #include "str.h"
@@ -56,7 +56,7 @@ std::string createCommandLine(std::string prog, std::vector<std::string> args)
     return str::join(" ", words);
 }
 
-// ƒvƒƒOƒ‰ƒ€‚ÌÀs‚ğŠJnB
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®å®Ÿè¡Œã‚’é–‹å§‹ã€‚
 bool Subprogram::start(std::initializer_list<std::string> arguments, Environment& env)
 {
     SECURITY_ATTRIBUTES sa;
@@ -87,7 +87,7 @@ bool Subprogram::start(std::initializer_list<std::string> arguments, Environment
         startupInfo.hStdOutput = stdoutWrite;
     }
     startupInfo.dwFlags |= STARTF_USESTDHANDLES;
-    // •W€“ü—Í‚Ìƒnƒ“ƒhƒ‹w’è‚µ‚È‚­‚Ä‚¢‚¢‚Ì‚©‚ÈH
+    // æ¨™æº–å…¥åŠ›ã®ãƒãƒ³ãƒ‰ãƒ«æŒ‡å®šã—ãªãã¦ã„ã„ã®ã‹ãªï¼Ÿ
 
     std::string cmdline = createCommandLine(m_name, arguments);
     LOG_DEBUG("cmdline: %s", str::inspect(cmdline).c_str());
@@ -119,8 +119,8 @@ bool Subprogram::start(std::initializer_list<std::string> arguments, Environment
     return true;
 }
 
-// ƒvƒƒOƒ‰ƒ€‚É‚æ‚èI—¹ƒXƒe[ƒ^ƒX‚ª•Ô‚³‚ê‚½ê‡‚Í true ‚ğ•Ô‚µAƒXƒe[
-// ƒ^ƒX‚ª *status ‚ÉƒZƒbƒg‚³‚ê‚éB
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã«ã‚ˆã‚Šçµ‚äº†ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒè¿”ã•ã‚ŒãŸå ´åˆã¯ true ã‚’è¿”ã—ã€ã‚¹ãƒ†ãƒ¼
+// ã‚¿ã‚¹ãŒ *status ã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
 bool Subprogram::wait(int* status)
 {
     DWORD res;

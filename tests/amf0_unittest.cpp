@@ -1,4 +1,4 @@
-#include "amf0.h"
+﻿#include "amf0.h"
 #include "sstream.h"
 
 #include <gtest/gtest.h>

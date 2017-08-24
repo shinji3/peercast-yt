@@ -1,4 +1,4 @@
-#ifndef _URI_H
+﻿#ifndef _URI_H
 #define _URI_H
 
 #include <string>

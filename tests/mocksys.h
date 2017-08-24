@@ -1,4 +1,4 @@
-#ifndef MOCKSYS_H
+ï»¿#ifndef MOCKSYS_H
 #define MOCKSYS_H
 
 #include "sys.h"
@@ -48,7 +48,7 @@ public:
         return 123456789;
     }
 
-    // URL‚ğƒuƒ‰ƒEƒU‚âƒ[ƒ‰‚ÅŠJ‚­B
+    // URLã‚’ãƒ–ãƒ©ã‚¦ã‚¶ã‚„ãƒ¡ãƒ¼ãƒ©ã§é–‹ãã€‚
     void getURL(const char*) override
     {
     }
@@ -62,12 +62,12 @@ public:
         return false;
     }
 
-    // ƒ[ƒJƒ‹ƒT[ƒo[‚ÌURL‚ğŠJ‚­B
+    // ãƒ­ãƒ¼ã‚«ãƒ«ã‚µãƒ¼ãƒãƒ¼ã®URLã‚’é–‹ãã€‚
     void callLocalURL(const char*, int) override
     {
     }
 
-    // ƒtƒ@ƒCƒ‹‚ğŠJ‚­B
+    // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã€‚
     void executeFile(const char*) override
     {
     }

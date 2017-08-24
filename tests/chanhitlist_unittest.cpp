@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "channel.h"
 
@@ -41,7 +41,7 @@ TEST_F(ChanHitListFixture, initialState)
 
 TEST_F(ChanHitListFixture, contactTrackers)
 {
-    // Žg‚í‚ê‚Ä‚È‚¢B
+    // ä½¿ã‚ã‚Œã¦ãªã„ã€‚
     ASSERT_EQ(0, hitlist->contactTrackers(false, 0, 0, 0));
 }
 
@@ -64,7 +64,7 @@ TEST_F(ChanHitListFixture, addHit)
 
     ASSERT_EQ(1, listCount(hitlist));
 
-    // “¯‚¶ƒzƒXƒg‚ð’Ç‰Á‚µ‚Ä‚à‘‚¦‚È‚¢B
+    // åŒã˜ãƒ›ã‚¹ãƒˆã‚’è¿½åŠ ã—ã¦ã‚‚å¢—ãˆãªã„ã€‚
     hitlist->addHit(hit);
 
     ASSERT_EQ(1, listCount(hitlist));
@@ -170,7 +170,7 @@ TEST_F(ChanHitListFixture, deleteHit)
     hitlist->addHit(hit);
 
     ASSERT_EQ(1, listCount(hitlist->hit));
-    // ASSERT_NE(NULL, hitlist->hit); // ‚È‚ñ‚ÅƒRƒ“ƒpƒCƒ‹‚Å‚«‚È‚¢H
+    // ASSERT_NE(NULL, hitlist->hit); // ãªã‚“ã§ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã§ããªã„ï¼Ÿ
 
     ASSERT_EQ(NULL, hitlist->deleteHit(hitlist->hit));
     ASSERT_EQ(0, listCount(hitlist->hit));

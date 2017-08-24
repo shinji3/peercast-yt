@@ -1,7 +1,7 @@
-#include "subprog.h"
+ï»¿#include "subprog.h"
 #include <stdexcept>
 
-// ƒvƒƒOƒ‰ƒ€‚Ìo—Í‚ğ“Ç‚İo‚·ƒXƒgƒŠ[ƒ€B
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®å‡ºåŠ›ã‚’èª­ã¿å‡ºã™ã‚¹ãƒˆãƒªãƒ¼ãƒ ã€‚
 Stream& Subprogram::inputStream()
 {
     if (!m_receiveData)
@@ -16,7 +16,7 @@ Stream& Subprogram::outputStream()
     return m_outputStream;
 }
 
-// ƒvƒƒZƒXIDB
+// ãƒ—ãƒ­ã‚»ã‚¹IDã€‚
 int Subprogram::pid()
 {
     return m_pid;

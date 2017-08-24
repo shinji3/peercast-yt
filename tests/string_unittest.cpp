@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 #include "sys.h"
 
 TEST(StringTest, isEmptyWorks) {
@@ -46,8 +46,8 @@ TEST(StringTest, appendChar) {
         buf.append('A');
     }
 
-    // ƒoƒbƒtƒ@[‚Í 256 ƒoƒCƒg‚ ‚é‚Ì‚ÅANUL ‚Ì•ª‚ğl—¶‚µ‚Ä‚à 255 •¶š
-    // ‚Ü‚Å“ü‚è‚»‚¤‚È‚à‚Ì‚¾‚ªA“ü‚é‚Ì‚Í 254 •¶š‚Ü‚ÅB
+    // ãƒãƒƒãƒ•ã‚¡ãƒ¼ã¯ 256 ãƒã‚¤ãƒˆã‚ã‚‹ã®ã§ã€NUL ã®åˆ†ã‚’è€ƒæ…®ã—ã¦ã‚‚ 255 æ–‡å­—
+    // ã¾ã§å…¥ã‚Šãã†ãªã‚‚ã®ã ãŒã€å…¥ã‚‹ã®ã¯ 254 æ–‡å­—ã¾ã§ã€‚
     ASSERT_EQ(254, strlen(buf.data));
 }
 
@@ -84,7 +84,7 @@ TEST(StringTest, ASCII2HTMLWorks) {
     str.ASCII2HTML("AAA");
     ASSERT_STREQ("AAA", str);
 
-    // ‰p”šˆÈŠO‚Í16i‚Ì•¶šÀ‘ÌQÆ‚Æ‚µ‚ÄƒGƒXƒP[ƒv‚³‚ê‚éB
+    // è‹±æ•°å­—ä»¥å¤–ã¯16é€²ã®æ–‡å­—å®Ÿä½“å‚ç…§ã¨ã—ã¦ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã‚‹ã€‚
     str.ASCII2HTML("   ");
     ASSERT_STREQ("&#x20;&#x20;&#x20;", str);
 
@@ -144,7 +144,7 @@ TEST(StringTest, assignment)
 
 TEST(StringTest, sjisToUtf8)
 {
-    String tmp = "4\x93\xFA\x96\xDA"; // "4“ú–Ú" in Shit_JIS
+    String tmp = "4\x93\xFA\x96\xDA"; // "4æ—¥ç›®" in Shit_JIS
     tmp.convertTo(String::T_UNICODESAFE);
     ASSERT_STREQ("4\xE6\x97\xA5\xE7\x9B\xAE", tmp.cstr());
 }
@@ -156,7 +156,7 @@ TEST(StringTest, setUnquote)
     s.setUnquote("\"abc\"");
     ASSERT_STREQ("abc", s.cstr());
 
-    // “ñ•¶š‚É–‚½‚È‚¢ê‡‚Í‹ó‚É‚È‚éB
+    // äºŒæ–‡å­—ã«æº€ãŸãªã„å ´åˆã¯ç©ºã«ãªã‚‹ã€‚
     s.setUnquote("a");
     ASSERT_STREQ("", s.cstr());
 }

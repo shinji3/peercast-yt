@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "stream.h"
 #include "sstream.h"
@@ -270,12 +270,12 @@ TEST_F(StreamFixture, readLine)
     ASSERT_EQ(3, mem.readLine(buf, 1024));
     ASSERT_STREQ("abc", buf);
 
-    // CR ‚Å‚Í’â~‚µ‚È‚¢
+    // CR ã§ã¯åœæ­¢ã—ãªã„
     memset(buf, 0, 1024);
     mem.str("abc\rdef");
     ASSERT_THROW(mem.readLine(buf, 1024), StreamException);
 
-    // s’†‚Ì CR ‚Ííœ‚³‚ê‚é
+    // è¡Œä¸­ã® CR ã¯å‰Šé™¤ã•ã‚Œã‚‹
     memset(buf, 0, 1024);
     mem.str("abc\rdef\r\n");
     ASSERT_EQ(6, mem.readLine(buf, 1024));
@@ -366,7 +366,7 @@ TEST_F(StreamFixture, readWord_bufferSize)
 {
     char buf[1024] = "ABCD";
 
-    // ƒoƒbƒtƒ@[ƒTƒCƒY‚ª‘«‚è‚È‚¢‚Æ‹L˜^‚Å‚«‚È‚©‚Á‚½1•¶š‚ÍÁ‚¦‚Ä‚µ‚Ü‚¤
+    // ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚µã‚¤ã‚ºãŒè¶³ã‚Šãªã„ã¨è¨˜éŒ²ã§ããªã‹ã£ãŸ1æ–‡å­—ã¯æ¶ˆãˆã¦ã—ã¾ã†
     mem.str("abc");
     ASSERT_EQ(1, mem.readWord(buf, 2));
     ASSERT_STREQ("a", buf);
@@ -374,7 +374,7 @@ TEST_F(StreamFixture, readWord_bufferSize)
     ASSERT_STREQ("c", buf);
 }
 
-// ‚±‚Ìƒƒ\ƒbƒhg‚¢•û‚í‚©‚ç‚È‚¢‚µAg‚í‚ê‚Ä‚È‚¢‚©‚çÁ‚µ‚½‚¢‚ÈB
+// ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ä½¿ã„æ–¹ã‚ã‹ã‚‰ãªã„ã—ã€ä½¿ã‚ã‚Œã¦ãªã„ã‹ã‚‰æ¶ˆã—ãŸã„ãªã€‚
 TEST_F(StreamFixture, readBase64)
 {
     // Base64.strict_encode64("foo")
@@ -506,7 +506,7 @@ TEST_F(StreamFixture, totalBytesOut)
     ASSERT_EQ(2, s.totalBytesOut());
 }
 
-// ŠÔ‚ği‚ß‚È‚¢‚Æ•Ï‰»‚µ‚È‚¢B
+// æ™‚é–“ã‚’é€²ã‚ãªã„ã¨å¤‰åŒ–ã—ãªã„ã€‚
 TEST_F(StreamFixture, lastBytesIn)
 {
     ASSERT_EQ(0, s.lastBytesIn());
@@ -514,7 +514,7 @@ TEST_F(StreamFixture, lastBytesIn)
     ASSERT_EQ(0, s.lastBytesIn());
 }
 
-// ŠÔ‚ği‚ß‚È‚¢‚Æ•Ï‰»‚µ‚È‚¢B
+// æ™‚é–“ã‚’é€²ã‚ãªã„ã¨å¤‰åŒ–ã—ãªã„ã€‚
 TEST_F(StreamFixture, lastBytesOut)
 {
     ASSERT_EQ(0, s.lastBytesOut());
@@ -533,11 +533,11 @@ TEST_F(StreamFixture, readLineStdString)
     mem.str("abc\r\ndef");
     ASSERT_EQ("abc", mem.readLine(1000));
 
-    // CR ‚Å‚Í’â~‚µ‚È‚¢
+    // CR ã§ã¯åœæ­¢ã—ãªã„
     mem.str("abc\rdef");
     ASSERT_THROW(mem.readLine(1000), StreamException);
 
-    // s’†‚Ì CR ‚Ííœ‚³‚ê‚é
+    // è¡Œä¸­ã® CR ã¯å‰Šé™¤ã•ã‚Œã‚‹
     mem.str("abc\rdef\r\n");
     ASSERT_EQ("abcdef", mem.readLine(1000));
 }

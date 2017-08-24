@@ -1,8 +1,8 @@
-// ------------------------------------------------------------------------------
-// UPnPƒNƒ‰ƒX
+ï»¿// ------------------------------------------------------------------------------
+// UPnPã‚¯ãƒ©ã‚¹
 //
-// ‰º‹Lƒz[ƒ€ƒy[ƒW‚ÅŒöŠJ‚³‚ê‚Ä‚¢‚éƒ\[ƒX‚ğ—˜—p‚³‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚µ‚½B
-// ƒÀ‚¦‚ñ‚Ç‚é‚Ó‚¡‚ñ -•½‰¸‚Å•s‰¸‚È“úX-—l URL:http://www.bosuke.mine.nu/blog/ 
+// ä¸‹è¨˜ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸ã§å…¬é–‹ã•ã‚Œã¦ã„ã‚‹ã‚½ãƒ¼ã‚¹ã‚’åˆ©ç”¨ã•ã›ã¦ã„ãŸã ãã¾ã—ãŸã€‚
+// Î²ãˆã‚“ã©ã‚‹ãµãƒã‚“ -å¹³ç©ã§ä¸ç©ãªæ—¥ã€…-æ§˜ URL:http://www.bosuke.mine.nu/blog/ 
 //
 // ------------------------------------------------------------------------------
 #include "upnp.h"
@@ -23,7 +23,7 @@ namespace
 }
 
 //////////////////////////////////////////////////
-//winsock‰Šú‰»
+//winsockåˆæœŸåŒ–
 //////////////////////////////////////////////////
 
 bool YMSSDPDiscover::mInitialized = false;
@@ -67,7 +67,7 @@ YMSSDPDiscover::~YMSSDPDiscover()
 }
 
 //////////////////////////////////////////////////
-// ƒ\ƒPƒbƒgƒI[ƒvƒ“‚ÆƒNƒ[ƒY
+// ã‚½ã‚±ãƒƒãƒˆã‚ªãƒ¼ãƒ—ãƒ³ã¨ã‚¯ãƒ­ãƒ¼ã‚º
 //////////////////////////////////////////////////
 
 bool YMSSDPDiscover::Open()
@@ -78,7 +78,7 @@ bool YMSSDPDiscover::Open()
         return true;
     }
 
-    //UDPƒ\ƒPƒbƒg‚Â‚­‚è[‚Ì
+    //UDPã‚½ã‚±ãƒƒãƒˆã¤ãã‚Šãƒ¼ã®
     mSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (mSocket == INVALID_SOCKET)
     {
@@ -86,7 +86,7 @@ bool YMSSDPDiscover::Open()
         return false;
     }
 
-    //‹ó‚¢‚Ä‚¢‚éƒ|[ƒg‚Ébind
+    //ç©ºã„ã¦ã„ã‚‹ãƒãƒ¼ãƒˆã«bind
     sockaddr_in addr;
     ZeroMemory(&addr, sizeof(addr));
     addr.sin_family = AF_INET;
@@ -97,18 +97,18 @@ bool YMSSDPDiscover::Open()
         addr.sin_port = htons(port);
         if (bind(mSocket, (sockaddr*)&addr, sizeof(addr)) == 0)
         {
-            //¬Œ÷
+            //æˆåŠŸ
             break;
         }
         int err = WSAGetLastError();
         if (err == WSAEADDRINUSE)
         {
-            //g—p’†
+            //ä½¿ç”¨ä¸­
             ++port;
         }
         else
         {
-            //ƒGƒ‰[
+            //ã‚¨ãƒ©ãƒ¼
             mLastError = err;
             closesocket(mSocket);
             mSocket = INVALID_SOCKET;
@@ -116,13 +116,13 @@ bool YMSSDPDiscover::Open()
         }
     }
 
-    //TTLEƒmƒ“ƒuƒƒbƒLƒ“ƒOİ’è
+    //TTLãƒ»ãƒãƒ³ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°è¨­å®š
     const char TTL = 4;
     unsigned long flags = 1;
     setsockopt(mSocket, IPPROTO_IP, IP_MULTICAST_TTL, &TTL, sizeof(TTL));
     ioctlsocket(mSocket, FIONBIO, &flags);
 
-    //ƒCƒxƒ“ƒgƒIƒuƒWƒFƒNƒgì¬
+    //ã‚¤ãƒ™ãƒ³ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
     mEvent = WSACreateEvent();
 
     return true;
@@ -142,14 +142,14 @@ void YMSSDPDiscover::Close()
 }
 
 //////////////////////////////////////////////////
-// M-SEARCH‘—M
+// M-SEARCHé€ä¿¡
 //////////////////////////////////////////////////
 
 bool YMSSDPDiscover::Send(const char* st)
 {
     mLastError = 0;
 
-    //IPƒAƒhƒŒƒXƒŠƒXƒg‚ğæ“¾‚·‚é
+    //IPã‚¢ãƒ‰ãƒ¬ã‚¹ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
     DWORD bufferSize = 0;
     SOCKET s = socket(AF_INET, SOCK_DGRAM, 0);
     WSAIoctl(s, SIO_ADDRESS_LIST_QUERY, NULL, 0, NULL, 0, &bufferSize, NULL, NULL);
@@ -168,12 +168,12 @@ bool YMSSDPDiscover::Send(const char* st)
     }
     closesocket(s);
 
-    //‘—M‚·‚éƒf[ƒ^‚ğì¬
+    //é€ä¿¡ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’ä½œæˆ
     std::string data = "M-SEARCH * HTTP/1.1\r\nMX: 3\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nST: ";
     data += st;
     data += "\r\n\r\n";
 
-    //ƒf[ƒ^‚ğ‚¬‚á‚ñ‚¬‚á‚ñƒ}ƒ‹ƒ`ƒLƒƒƒXƒg‚µ‚Ä‚¢‚­
+    //ãƒ‡ãƒ¼ã‚¿ã‚’ãã‚ƒã‚“ãã‚ƒã‚“ãƒãƒ«ãƒã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã„ã
     sockaddr_in dest_addr;
     ZeroMemory(&dest_addr, sizeof(dest_addr));
     dest_addr.sin_family = AF_INET;
@@ -204,12 +204,12 @@ bool YMSSDPDiscover::Send(const char* st)
         }
     }
 
-    //‚P‚Â‚Å‚à‚¤‚Ü‚­‘—‚é‚±‚Æ‚ª‚Å‚«‚½‚ç—Ç‚µ‚Æ‚·‚é
+    //ï¼‘ã¤ã§ã‚‚ã†ã¾ãé€ã‚‹ã“ã¨ãŒã§ããŸã‚‰è‰¯ã—ã¨ã™ã‚‹
     if (ok)
     {
         mLastError = 0;
 
-        //ST‚ÌƒŠƒXƒg‚É‚Ô‚¿‚Ş
+        //STã®ãƒªã‚¹ãƒˆã«ã¶ã¡è¾¼ã‚€
         if (std::find(mSTList.begin(), mSTList.end(), st) == mSTList.end())
         {
             mSTList.push_back(st);
@@ -220,14 +220,14 @@ bool YMSSDPDiscover::Send(const char* st)
 
 
 //////////////////////////////////////////////////
-// ƒf[ƒ^óM
+// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
 //////////////////////////////////////////////////
 int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
 {
 
     mLastError = 0;
 
-    //w’èƒ~ƒŠƒZƒJƒ“ƒhƒf[ƒ^‚ªóM‚Å‚«‚é‚Ü‚Å‘Ò‚Â
+    //æŒ‡å®šãƒŸãƒªã‚»ã‚«ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ãŒå—ä¿¡ã§ãã‚‹ã¾ã§å¾…ã¤
     WSAResetEvent(mEvent);
     if (WSAEventSelect(mSocket, mEvent, FD_READ) == SOCKET_ERROR)
     {
@@ -249,7 +249,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
         return Error;
     }
 
-    //óM
+    //å—ä¿¡
     char buffer[BUFFER_SIZE + 1];
     sockaddr_in addr;
     int addrLen = sizeof(addr);
@@ -261,7 +261,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
     }
     buffer[readLen] = '\0';
 
-    //ƒp[ƒX
+    //ãƒ‘ãƒ¼ã‚¹
     LocationInfo tempInfo;
     std::istrstream input(buffer);
     std::string line;
@@ -273,7 +273,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
 
         if (first)
         {
-            //200ˆÈŠO‚Íƒ_ƒƒ|
+            //200ä»¥å¤–ã¯ãƒ€ãƒ¡ãƒ
             std::istringstream responseLine(line);
             std::string dummy;
             int code = 0;
@@ -286,7 +286,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
         }
         else
         {
-            //ƒtƒB[ƒ‹ƒh‚Æ’l‚É‚í‚¯‚é
+            //ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¨å€¤ã«ã‚ã‘ã‚‹
             int index = static_cast<int>(line.find(':'));
             if (index == std::string::npos)
             {
@@ -315,7 +315,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
         }
     }
 
-    //’l‚ğƒ`ƒFƒbƒN
+    //å€¤ã‚’ãƒã‚§ãƒƒã‚¯
     if (tempInfo.mST.empty()
         || tempInfo.mLocation.empty()
         || std::find(mSTList.begin(), mSTList.end(), tempInfo.mST) == mSTList.end())
@@ -330,7 +330,7 @@ int YMSSDPDiscover::Recv(LocationInfo& info, DWORD timeout)
 }
 
 //////////////////////////////////////////////////
-// controlURL‚Ìæ“¾
+// controlURLã®å–å¾—
 //////////////////////////////////////////////////
 std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
 {
@@ -338,7 +338,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
     std::string baseURL;
     std::string relativeURL;
 
-    //XML‚ğæ“¾
+    //XMLã‚’å–å¾—
     try
     {
         MSXML2::IXMLHTTPRequestPtr http;
@@ -355,7 +355,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         MSXML2::IXMLDOMDocument3Ptr doc = http->responseXML;
         doc->setProperty("SelectionNamespaces", "xmlns:urn='urn:schemas-upnp-org:device-1-0'");
 
-        //controlURLæ“¾
+        //controlURLå–å¾—
         std::string xPath = "//urn:service[urn:serviceType=\"";
         xPath += st;
         xPath += "\"]/urn:controlURL";
@@ -370,7 +370,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         }
 
 
-        //BASEURLæ“¾
+        //BASEURLå–å¾—
         MSXML2::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//urn:URLBase");
         if (baseURLNode)
         {
@@ -386,7 +386,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         return result;
     }
 
-    //URL‚ğŒ‹‡
+    //URLã‚’çµåˆ
     DWORD size = 0;
     InternetCombineUrl(baseURL.c_str(), relativeURL.c_str(), NULL, &size, 0);
     char* buf = (char*)_alloca(size);
@@ -412,19 +412,19 @@ YMSoapAction::~YMSoapAction()
 
 void YMSoapAction::SetParameter(const char* field, const char* value)
 {
-    //ƒpƒ‰ƒ[ƒ^[‚ğƒZƒbƒg
+    //ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     mParameter[field] = value;
 }
 
 void YMSoapAction::ResetParameter()
 {
-    //ƒpƒ‰ƒ[ƒ^ƒNƒŠƒA
+    //ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚¯ãƒªã‚¢
     mParameter.clear();
 }
 
 int YMSoapAction::Invoke(const char* url)
 {
-    //‘—Mƒf[ƒ^ì¬
+    //é€ä¿¡ãƒ‡ãƒ¼ã‚¿ä½œæˆ
 
     try
     {
@@ -457,7 +457,7 @@ int YMSoapAction::Invoke(const char* url)
         }
         body->appendChild(node);
 
-        //‘—M‚·‚é
+        //é€ä¿¡ã™ã‚‹
         MSXML2::IXMLHTTPRequestPtr http;
         if (FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
         {

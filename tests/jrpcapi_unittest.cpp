@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 #include "jrpc.h"
 
 using json = nlohmann::json;
@@ -72,7 +72,7 @@ TEST_F(JrpcApiFixture, bumpChannel_noArgs)
 
 TEST_F(JrpcApiFixture, bumpChannel_nullArg)
 {
-    // Invalid params ‚ğ•Ô‚·‚×‚«‚¾‚ªAƒ`ƒFƒbƒN‚ª‚ß‚ñ‚Ç‚­‚³‚¢B
+    // Invalid params ã‚’è¿”ã™ã¹ãã ãŒã€ãƒã‚§ãƒƒã‚¯ãŒã‚ã‚“ã©ãã•ã„ã€‚
     json r = json::parse(api.call("{\"jsonrpc\":\"2.0\",\"id\": 1234,\"method\":\"bumpChannel\",\"params\":[null]}"));
     ASSERT_EQ(JrpcApi::kInternalError, r["error"]["code"].get<int>());
 }
@@ -85,7 +85,7 @@ TEST_F(JrpcApiFixture, bumpChannel_emptyString)
 
 TEST_F(JrpcApiFixture, bumpChannel_invalidString)
 {
-    // ƒ`ƒƒƒ“ƒlƒ‹ID‚Æ‚µ‚Ä‰ğß‚Å‚«‚È‚¢•¶š—ñB
+    // ãƒãƒ£ãƒ³ãƒãƒ«IDã¨ã—ã¦è§£é‡ˆã§ããªã„æ–‡å­—åˆ—ã€‚
     json r = json::parse(api.call("{\"jsonrpc\":\"2.0\",\"id\": 1234,\"method\":\"bumpChannel\",\"params\":[\"hoge\"]}"));
     ASSERT_EQ(JrpcApi::kInvalidParams, r["error"]["code"].get<int>());
 }

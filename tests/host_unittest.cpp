@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 #include "common.h"
 
 TEST(HostTest, initialState)
@@ -16,8 +16,8 @@ TEST(HostTest, loopbackIP)
     host.fromStrIP("127.0.0.1", 0);
     ASSERT_TRUE( host.loopbackIP() );
 
-    // 127 �Ŏn�܂�N���XA�̃l�b�g���[�N�S�������[�v�o�b�N�Ƃ��ċ@�\��
-    // �邪�AloopbackIP �� 127.0.0.1 �ȊO�ɂ� FALSE ��Ԃ��B
+    // 127 で始まるクラスAのネットワーク全部がループバックとして機能す
+    // るが、loopbackIP は 127.0.0.1 以外には FALSE を返す。
     host.fromStrIP("127.99.99.99", 0);
     ASSERT_FALSE( host.loopbackIP() );
 }
@@ -67,8 +67,8 @@ TEST(HostTest, strUlimit)
     ASSERT_STREQ("255.255.255.255", host.str(false).c_str());
 }
 
-// 128 �o�C�g�̃z�X�g���œ����o�b�t�@�[�� NUL�I�[����Ȃ��Ȃ�o�O��
-// ��������e�X�g�Bvalgrind �ȂǂŌ��m����B
+// 128 バイトのホスト名で内部バッファーが NUL終端されなくなるバグを発
+// 現させるテスト。valgrind などで検知せよ。
 TEST(HostTest, fromStrName_128bytes)
 {
     Host host;

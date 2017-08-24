@@ -1,10 +1,10 @@
-#ifndef _ENV_H
+ï»¿#ifndef _ENV_H
 #define _ENV_H
 
 #include <vector>
 #include <string>
 
-// ŠÂ‹«•Ï”‚Ìƒrƒ‹ƒ_[ƒNƒ‰ƒXB
+// ç’°å¢ƒå¤‰æ•°ã®ãƒ“ãƒ«ãƒ€ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
 class Environment
 {
 public:
@@ -23,8 +23,8 @@ public:
     std::vector<std::string> m_vars;
 
     char const ** m_env;
-    // ŠÂ‹«‚ÍƒIƒuƒWƒFƒNƒg“à•”‚Éì¬‚³‚êAƒ|ƒCƒ“ƒ^[‚ª•Ô‚³‚ê‚éBƒIƒuƒWƒF
-    // ƒNƒg‚É•ÏX‚ª‰Á‚¦‚ç‚ê‚é‚Æƒf[ƒ^‚Í–³Œø‰»‚³‚ê‚éB
+    // ç’°å¢ƒã¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…éƒ¨ã«ä½œæˆã•ã‚Œã€ãƒã‚¤ãƒ³ã‚¿ãƒ¼ãŒè¿”ã•ã‚Œã‚‹ã€‚ã‚ªãƒ–ã‚¸ã‚§
+    // ã‚¯ãƒˆã«å¤‰æ›´ãŒåŠ ãˆã‚‰ã‚Œã‚‹ã¨ãƒ‡ãƒ¼ã‚¿ã¯ç„¡åŠ¹åŒ–ã•ã‚Œã‚‹ã€‚
     char const ** env();
 
     std::string windowsEnvironmentBlock();

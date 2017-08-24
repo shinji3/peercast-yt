@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "str.h"
 using namespace str;
@@ -99,7 +99,7 @@ TEST_F(strFixture, capitalize)
     ASSERT_STREQ("Content-Type", str::capitalize("CONTENT-TYPE").c_str());
     ASSERT_STREQ("Content-Type", str::capitalize("content-type").c_str());
     ASSERT_STREQ("Content-Type", str::capitalize("Content-Type").c_str());
-    ASSERT_STREQ("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ", str::downcase("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ").c_str());
+    ASSERT_STREQ("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³", str::downcase("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³").c_str());
 }
 
 TEST_F(strFixture, upcase)
@@ -113,7 +113,7 @@ TEST_F(strFixture, upcase)
     ASSERT_STREQ("CONTENT-TYPE", str::upcase("CONTENT-TYPE").c_str());
     ASSERT_STREQ("CONTENT-TYPE", str::upcase("content-type").c_str());
     ASSERT_STREQ("CONTENT-TYPE", str::upcase("Content-Type").c_str());
-    ASSERT_STREQ("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ", str::downcase("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ").c_str());
+    ASSERT_STREQ("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³", str::downcase("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³").c_str());
 }
 
 TEST_F(strFixture, downcase)
@@ -127,7 +127,7 @@ TEST_F(strFixture, downcase)
     ASSERT_STREQ("content-type", str::downcase("CONTENT-TYPE").c_str());
     ASSERT_STREQ("content-type", str::downcase("content-type").c_str());
     ASSERT_STREQ("content-type", str::downcase("Content-Type").c_str());
-    ASSERT_STREQ("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ", str::downcase("‚ ‚¢‚¤‚¦‚¨Š¿šƒ¿ƒÀƒÁ").c_str());
+    ASSERT_STREQ("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³", str::downcase("ã‚ã„ã†ãˆãŠæ¼¢å­—Î±Î²Î³").c_str());
 }
 
 TEST_F(strFixture, is_prefix_of)
@@ -140,7 +140,7 @@ TEST_F(strFixture, is_prefix_of)
     ASSERT_FALSE(str::is_prefix_of("b", "a"));
     ASSERT_FALSE(str::is_prefix_of("b", "abc"));
     ASSERT_TRUE(str::is_prefix_of("abc", "abc"));
-    ASSERT_TRUE(str::is_prefix_of("‚ ", "‚ ‚¢‚¤‚¦‚¨"));
+    ASSERT_TRUE(str::is_prefix_of("ã‚", "ã‚ã„ã†ãˆãŠ"));
 }
 
 TEST_F(strFixture, has_suffix)
@@ -153,7 +153,7 @@ TEST_F(strFixture, has_suffix)
     ASSERT_FALSE(str::has_suffix("a", "b"));
     ASSERT_FALSE(str::has_suffix("abc", "b"));
     ASSERT_TRUE(str::has_suffix("abc", "abc"));
-    ASSERT_TRUE(str::has_suffix("‚ ‚¢‚¤‚¦‚¨", "‚¨"));
+    ASSERT_TRUE(str::has_suffix("ã‚ã„ã†ãˆãŠ", "ãŠ"));
 }
 
 TEST_F(strFixture, join)

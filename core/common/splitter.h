@@ -1,10 +1,10 @@
-#ifndef _SPLITTER_H
+ï»¿#ifndef _SPLITTER_H
 #define _SPLITTER_H
 
 #include "stream.h"
 
-// ƒf[ƒ^ƒXƒgƒŠ[ƒ€‚ğ•¡”‚ÌƒXƒgƒŠ[ƒ€‚É•ªŠò‚·‚éBclose A‚ ‚é‚¢‚Íƒf
-// ƒRƒ“ƒXƒgƒ‰ƒNƒg‚Éo—Íæ‚ÌƒXƒgƒŠ[ƒ€‚à close ‚³‚ê‚éB
+// ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’è¤‡æ•°ã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«åˆ†å²ã™ã‚‹ã€‚close æ™‚ã€ã‚ã‚‹ã„ã¯ãƒ‡
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ãƒˆæ™‚ã«å‡ºåŠ›å…ˆã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚‚ close ã•ã‚Œã‚‹ã€‚
 struct StreamSplitter : public Stream
 {
     StreamSplitter(const std::vector<Stream*>& streams = {})

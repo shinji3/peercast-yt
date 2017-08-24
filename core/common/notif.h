@@ -1,4 +1,4 @@
-#ifndef _NOTIF_H
+ï»¿#ifndef _NOTIF_H
 #define _NOTIF_H
 
 #include "common.h"
@@ -11,7 +11,7 @@ class NotificationBuffer;
 // global
 extern NotificationBuffer g_notificationBuffer;
 
-// ’Ê’m‚Æ’Ê’mƒoƒbƒtƒ@[B
+// é€šçŸ¥ã¨é€šçŸ¥ãƒãƒƒãƒ•ã‚¡ãƒ¼ã€‚
 
 class Notification
 {

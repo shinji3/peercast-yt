@@ -1,4 +1,4 @@
-#ifndef _REGEXP_H
+﻿#ifndef _REGEXP_H
 #define _REGEXP_H
 
 #include <vector>

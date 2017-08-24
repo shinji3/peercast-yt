@@ -1,4 +1,4 @@
-/**
+﻿/**
 * @file condition_variable.h
 * @brief std::condition_variable implementation for MinGW
 *

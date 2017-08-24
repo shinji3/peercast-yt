@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <assert.h>
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
     Session::test();
     rtmpserver::test();
 
-    // ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚ç -p PORT ‚ğó‚¯æ‚éB
+    // ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰ -p PORT ã‚’å—ã‘å–ã‚‹ã€‚
     std::map<std::string,std::string> opts = optparse(&argc, argv);
     unsigned int rtmp_port = opts.count("-p") ? std::stoi(opts["-p"]) : 1935;
 
@@ -147,11 +147,11 @@ int main(int argc, char* argv[])
     Host serverHost(0 /* IGNORED */, rtmp_port);
     ClientSocket* server = sys->createSocket();
     server->bind(serverHost);
-    server->setBlocking(true); // accept() ‚ªƒuƒƒbƒN‚·‚é‚æ‚¤‚ÉB
+    server->setBlocking(true); // accept() ãŒãƒ–ãƒ­ãƒƒã‚¯ã™ã‚‹ã‚ˆã†ã«ã€‚
 
     while (true)
     {
-        // ƒ‹[ƒvƒuƒƒbƒN‚ÌÅŒã‚ÅƒXƒgƒŠ[ƒ€‚ğ‰ğ•ú‚·‚éB
+        // ãƒ«ãƒ¼ãƒ—ãƒ–ãƒ­ãƒƒã‚¯ã®æœ€å¾Œã§ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’è§£æ”¾ã™ã‚‹ã€‚
         std::vector<Stream*> streams;
         Defer cb([&]() { for (auto s : streams) delete s; });
 

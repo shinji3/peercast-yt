@@ -1,10 +1,10 @@
-#ifndef _DECHUNKER_H
+ï»¿#ifndef _DECHUNKER_H
 #define _DECHUNKER_H
 
 #include <deque>
 #include "stream.h"
 
-// HTTP chunked encoding ‚ÌƒXƒgƒŠ[ƒ€‚ğƒfƒR[ƒh‚·‚éƒAƒ_ƒvƒ^ƒNƒ‰ƒXB
+// HTTP chunked encoding ã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰ã™ã‚‹ã‚¢ãƒ€ãƒ—ã‚¿ã‚¯ãƒ©ã‚¹ã€‚
 class Dechunker : public Stream
 {
 public:
@@ -34,7 +34,7 @@ public:
     void       getNextChunk();
 
     bool             m_eof;
-    std::deque<char> m_buffer; // Œã‚ë‚©‚ç“ü‚ê‚Ä‘O‚©‚ço‚·
+    std::deque<char> m_buffer; // å¾Œã‚ã‹ã‚‰å…¥ã‚Œã¦å‰ã‹ã‚‰å‡ºã™
     Stream&          m_stream;
 };
 

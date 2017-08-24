@@ -1,4 +1,4 @@
-#ifndef MOCKPEERCAST_H
+﻿#ifndef MOCKPEERCAST_H
 #define MOCKPEERCAST_H
 
 #include "peercast.h"

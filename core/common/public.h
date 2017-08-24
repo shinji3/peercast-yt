@@ -1,4 +1,4 @@
-#ifndef _PUBLIC_H
+﻿#ifndef _PUBLIC_H
 #define _PUBLIC_H
 
 #include "mapper.h"

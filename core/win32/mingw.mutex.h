@@ -1,4 +1,4 @@
-/**
+﻿/**
 * @file mingw.mutex.h
 * @brief std::mutex et al implementation for MinGW
 ** (c) 2013-2016 by Mega Limited, Auckland, New Zealand

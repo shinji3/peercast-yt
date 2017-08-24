@@ -1,4 +1,4 @@
-/**
+﻿/**
 * @file mingw.thread.h
 * @brief std::thread implementation for MinGW
 * (c) 2013-2016 by Mega Limited, Auckland, New Zealand

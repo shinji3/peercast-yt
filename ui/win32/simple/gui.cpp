@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : gui.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -419,13 +419,13 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT message,
             PostMessage(hwnd, WM_DESTROY, 0, 0);
         }
 
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 0, (LPARAM)"ƒgƒŒ[ƒX");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 1, (LPARAM)"ƒfƒoƒbƒO");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 2, (LPARAM)"î•ñ");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 3, (LPARAM)"Œx");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 4, (LPARAM)"ƒGƒ‰[");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 5, (LPARAM)"’v–½“I‚ÈƒGƒ‰[");
-        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 6, (LPARAM)"ƒIƒt");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 0, (LPARAM)"ãƒˆãƒ¬ãƒ¼ã‚¹");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 1, (LPARAM)"ãƒ‡ãƒãƒƒã‚°");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 2, (LPARAM)"æƒ…å ±");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 3, (LPARAM)"è­¦å‘Š");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 4, (LPARAM)"ã‚¨ãƒ©ãƒ¼");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 5, (LPARAM)"è‡´å‘½çš„ãªã‚¨ãƒ©ãƒ¼");
+        SendDlgItemMessage(hwnd, IDC_COMBO2, CB_INSERTSTRING, 6, (LPARAM)"ã‚ªãƒ•");
 
         SendDlgItemMessage(hwnd, IDC_COMBO2, CB_SETCURSEL, servMgr->logLevel() - 1, 0);
 

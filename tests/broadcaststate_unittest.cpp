@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+Ôªø#include <gtest/gtest.h>
 
 #include "pcp.h"
 
@@ -47,6 +47,6 @@ TEST_F(BroadcastStateFixture, initPacketSettings)
     ASSERT_FALSE(bcs.bcID.isSet());
     ASSERT_EQ(0, bcs.numHops);
     ASSERT_FALSE(bcs.forMe);
-    ASSERT_EQ(1234, bcs.streamPos); // Ç±ÇÍÇÕÉNÉäÉAÇ≥ÇÍÇ»Ç¢ÅB
+    ASSERT_EQ(1234, bcs.streamPos); // „Åì„Çå„ÅØ„ÇØ„É™„Ç¢„Åï„Çå„Å™„ÅÑ„ÄÇ
     ASSERT_EQ(0, bcs.group);
 }

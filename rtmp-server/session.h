@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <map>
 #include <tuple>
 #include "message.h"
@@ -29,7 +29,7 @@ namespace rtmpserver
             , flv_writer(aFlvWriter)
             , quitting(false) {}
 
-        // –ˆ‰ñ“¯‚¶—”—ñ‚ğ¶¬‚·‚éB
+        // æ¯å›åŒã˜ä¹±æ•°åˆ—ã‚’ç”Ÿæˆã™ã‚‹ã€‚
         static std::string generate_random_bytes(int size = 1528)
         {
             std::string res;
@@ -43,7 +43,7 @@ namespace rtmpserver
 
         std::tuple<int,int,int,int> read_type0_header(Stream* io)
         {
-            // int ‚Å‚¢‚¢‚ÌH wrap-round ‘åä•vH
+            // int ã§ã„ã„ã®ï¼Ÿ wrap-round å¤§ä¸ˆå¤«ï¼Ÿ
             int  timestamp         = to_integer_big_endian({ io->readChar(), io->readChar(), io->readChar() });
             int  message_length    = to_integer_big_endian({ io->readChar(), io->readChar(), io->readChar() });
             char message_type_id   = io->readChar();
@@ -68,7 +68,7 @@ namespace rtmpserver
         {
             handshake(client);
 
-            // Šeƒ`ƒƒƒ“ƒNƒXƒgƒŠ[ƒ€‚ÌÅŒã‚ÌƒƒbƒZ[ƒW‚ğ‹L˜^‚·‚é mapB
+            // å„ãƒãƒ£ãƒ³ã‚¯ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®æœ€å¾Œã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¨˜éŒ²ã™ã‚‹ mapã€‚
             std::map<int,Message> cstreams;
 
             while (!quitting)
@@ -241,7 +241,7 @@ namespace rtmpserver
 
         void on_command(Message& message)
         {
-            // ƒƒbƒZ[ƒW‚©‚ç command, transaction_id, params ‚ğ’ŠoB
+            // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‹ã‚‰ command, transaction_id, params ã‚’æŠ½å‡ºã€‚
             StringStream mem(message.data);
             amf0::Deserializer d;
             Value command = d.readValue(mem);
@@ -257,7 +257,7 @@ namespace rtmpserver
                 params.push_back(param);
             }
 
-            // ƒfƒBƒXƒpƒbƒ`B
+            // ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒã€‚
             auto c = command.string();
             if (c == "connect")
                 on_connect(transaction_id, params);
@@ -365,7 +365,7 @@ namespace rtmpserver
 
             // receive C2
             std::string c2 = client->Stream::read(1536);
-            // ‰ğÍ‚ÍÈ—ªB
+            // è§£æã¯çœç•¥ã€‚
         }
 
         static void test()

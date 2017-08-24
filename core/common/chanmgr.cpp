@@ -1,4 +1,4 @@
-#include "chanmgr.h"
+ï»¿#include "chanmgr.h"
 
 #include "playlist.h"
 #include "peercast.h"
@@ -233,7 +233,7 @@ std::shared_ptr<Channel> ChanMgr::findAndRelay(ChanInfo &info)
     char idStr[64];
     info.id.toStr(idStr);
     LOG_INFO("Searching for: %s (%s)", idStr, info.name.cstr());
-    //peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹‚ğŒŸõ’†...");
+    //peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ«ã‚’æ¤œç´¢ä¸­...");
 
     auto c = findChannelByNameID(info);
 
@@ -253,13 +253,13 @@ std::shared_ptr<Channel> ChanMgr::findAndRelay(ChanInfo &info)
 
         if (!c)
         {
-            peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(info)+" ‚ÍŒ©•t‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
+            peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ« "+chName(info)+" ã¯è¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
             return NULL;
         }
 
         // if (c->isPlaying() && (c->info.contentType != ChanInfo::T_UNKNOWN))
         //     break;
-        if (c->isPlaying()) // UNKNOWN ‚Å‚à‚©‚Ü‚í‚È‚¢‚±‚Æ‚É‚·‚éB
+        if (c->isPlaying()) // UNKNOWN ã§ã‚‚ã‹ã¾ã‚ãªã„ã“ã¨ã«ã™ã‚‹ã€‚
             break;
 
         sys->sleep(100);

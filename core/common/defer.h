@@ -1,4 +1,4 @@
-#ifndef _DEFER_H
+﻿#ifndef _DEFER_H
 #define _DEFER_H
 
 #include <functional>

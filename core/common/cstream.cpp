@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : cstream.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -110,7 +110,7 @@ void ChanPacket::readPeercast(Stream &in)
 }
 
 // -----------------------------------
-// (g‚í‚ê‚Ä‚¢‚È‚¢‚æ‚¤‚¾B)
+// (ä½¿ã‚ã‚Œã¦ã„ãªã„ã‚ˆã†ã ã€‚)
 int ChanPacketBuffer::copyFrom(ChanPacketBuffer &buf, unsigned int reqPos)
 {
     lock.on();
@@ -140,9 +140,9 @@ int ChanPacketBuffer::copyFrom(ChanPacketBuffer &buf, unsigned int reqPos)
 }
 
 // ------------------------------------------------------------------
-// ƒXƒgƒŠ[ƒ€ƒ|ƒWƒVƒ‡ƒ“‚ª spos ‚©A‚»‚ê‚æ‚è‚àV‚µ‚¢ƒpƒPƒbƒg‚ªŒ©•t‚©‚ê
-// ‚Î pack ‚É‘ã“ü‚·‚éBŒ©•t‚©‚Á‚½ê‡‚Í true, ‚»‚¤‚Å‚È‚¯‚ê‚Î false ‚ğ
-// •Ô‚·B
+// ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ãŒ spos ã‹ã€ãã‚Œã‚ˆã‚Šã‚‚æ–°ã—ã„ãƒ‘ã‚±ãƒƒãƒˆãŒè¦‹ä»˜ã‹ã‚Œ
+// ã° pack ã«ä»£å…¥ã™ã‚‹ã€‚è¦‹ä»˜ã‹ã£ãŸå ´åˆã¯ true, ãã†ã§ãªã‘ã‚Œã° false ã‚’
+// è¿”ã™ã€‚
 bool ChanPacketBuffer::findPacket(unsigned int spos, ChanPacket &pack)
 {
     if (writePos == 0)
@@ -154,8 +154,8 @@ bool ChanPacketBuffer::findPacket(unsigned int spos, ChanPacket &pack)
     if (spos < fpos)
         spos = fpos;
 
-    // ‚±‚Ìƒ‹[ƒvAlastPos == UINT_MAX ‚ÌI—¹‚µ‚È‚¢‚Ì‚Å‚ÍH c4G ƒp
-    // ƒPƒbƒg‚à‘—‚ç‚È‚¢‚©B
+    // ã“ã®ãƒ«ãƒ¼ãƒ—ã€lastPos == UINT_MAX ã®æ™‚çµ‚äº†ã—ãªã„ã®ã§ã¯ï¼Ÿ â€¦4G ãƒ‘
+    // ã‚±ãƒƒãƒˆã‚‚é€ã‚‰ãªã„ã‹ã€‚
     for (unsigned int i = firstPos; i <= lastPos; i++)
     {
         ChanPacketv &p = packets[i%MAX_PACKETS];
@@ -172,8 +172,8 @@ bool ChanPacketBuffer::findPacket(unsigned int spos, ChanPacket &pack)
 }
 
 // ------------------------------------------------------------------
-// ƒoƒbƒtƒ@[“à‚Ìˆê”ÔV‚µ‚¢ƒpƒPƒbƒg‚ÌƒXƒgƒŠ[ƒ€ƒ|ƒWƒVƒ‡ƒ“‚ğ•Ô‚·B‚Ü‚¾
-// ƒpƒPƒbƒg‚ª‚È‚¢ê‡‚Í 0 ‚ğ•Ô‚·B
+// ãƒãƒƒãƒ•ã‚¡ãƒ¼å†…ã®ä¸€ç•ªæ–°ã—ã„ãƒ‘ã‚±ãƒƒãƒˆã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’è¿”ã™ã€‚ã¾ã 
+// ãƒ‘ã‚±ãƒƒãƒˆãŒãªã„å ´åˆã¯ 0 ã‚’è¿”ã™ã€‚
 unsigned int    ChanPacketBuffer::getLatestPos()
 {
     if (!writePos)
@@ -219,8 +219,8 @@ unsigned int    ChanPacketBuffer::getOldestNonContinuationPos()
 }
 
 // ------------------------------------------------------------------
-// ƒoƒbƒtƒ@[“à‚Ìˆê”ÔŒÃ‚¢ƒpƒPƒbƒg‚ÌƒXƒgƒŠ[ƒ€ƒ|ƒWƒVƒ‡ƒ“‚ğ•Ô‚·B‚Ü‚¾ƒp
-// ƒPƒbƒg‚ª–³‚¢ê‡‚Í 0 ‚ğ•Ô‚·B
+// ãƒãƒƒãƒ•ã‚¡ãƒ¼å†…ã®ä¸€ç•ªå¤ã„ãƒ‘ã‚±ãƒƒãƒˆã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’è¿”ã™ã€‚ã¾ã ãƒ‘
+// ã‚±ãƒƒãƒˆãŒç„¡ã„å ´åˆã¯ 0 ã‚’è¿”ã™ã€‚
 unsigned int    ChanPacketBuffer::getOldestPos()
 {
     if (!writePos)
@@ -245,15 +245,15 @@ unsigned int    ChanPacketBuffer::findOldestPos(unsigned int spos)
 }
 
 // -------------------------------------------------------------------
-// ƒpƒPƒbƒgƒCƒ“ƒfƒbƒNƒX index ‚ÌƒpƒPƒbƒg‚ÌƒXƒgƒŠ[ƒ€ƒ|ƒWƒVƒ‡ƒ“‚ğ•Ô‚·B
+// ãƒ‘ã‚±ãƒƒãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ index ã®ãƒ‘ã‚±ãƒƒãƒˆã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’è¿”ã™ã€‚
 unsigned int    ChanPacketBuffer::getStreamPos(unsigned int index)
 {
     return packets[index%MAX_PACKETS].pos;
 }
 
 // -------------------------------------------------------------------
-// ƒpƒPƒbƒgƒCƒ“ƒfƒbƒNƒX index ‚ÌƒpƒPƒbƒg‚ÌŸ‚ÌƒpƒPƒbƒg‚ÌƒXƒgƒŠ[ƒ€ƒ|ƒW
-// ƒVƒ‡ƒ“‚ğŒvZ‚·‚éB
+// ãƒ‘ã‚±ãƒƒãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ index ã®ãƒ‘ã‚±ãƒƒãƒˆã®æ¬¡ã®ãƒ‘ã‚±ãƒƒãƒˆã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒã‚¸
+// ã‚·ãƒ§ãƒ³ã‚’è¨ˆç®—ã™ã‚‹ã€‚
 unsigned int    ChanPacketBuffer::getStreamPosEnd(unsigned int index)
 {
     return packets[index%MAX_PACKETS].pos + packets[index%MAX_PACKETS].len;
@@ -319,7 +319,7 @@ void    ChanPacketBuffer::readPacket(ChanPacket &pack)
 }
 
 // ------------------------------------------------------------
-// ƒoƒbƒtƒ@[‚ª‚¢‚Á‚Ï‚¢‚È‚ç true ‚ğ•Ô‚·B‚»‚¤‚Å‚È‚¯‚ê‚Î falseB
+// ãƒãƒƒãƒ•ã‚¡ãƒ¼ãŒã„ã£ã±ã„ãªã‚‰ true ã‚’è¿”ã™ã€‚ãã†ã§ãªã‘ã‚Œã° falseã€‚
 bool    ChanPacketBuffer::willSkip()
 {
     return ((writePos - readPos) >= MAX_PACKETS);

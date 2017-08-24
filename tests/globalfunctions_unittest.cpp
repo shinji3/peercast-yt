@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "sys.h"
 
@@ -26,8 +26,8 @@ TEST(GlobalFunctionsTest, trimstr_tab)
     ASSERT_STREQ("word", trimstr(str));
 }
 
-// ‹ó”’‚¾‚¯‚©‚ç‚È‚é•¶š—ñ‚ğ“n‚·‚ÆA•¶š—ñ‚Ìæ“ª‚æ‚èˆÈ‘O‚Ìƒƒ‚ƒŠ‚ÉƒAƒN
-// ƒZƒX‚·‚éƒoƒO‚ª‚ ‚Á‚½B
+// ç©ºç™½ã ã‘ã‹ã‚‰ãªã‚‹æ–‡å­—åˆ—ã‚’æ¸¡ã™ã¨ã€æ–‡å­—åˆ—ã®å…ˆé ­ã‚ˆã‚Šä»¥å‰ã®ãƒ¡ãƒ¢ãƒªã«ã‚¢ã‚¯
+// ã‚»ã‚¹ã™ã‚‹ãƒã‚°ãŒã‚ã£ãŸã€‚
 TEST(GlobalFunctionsTest, trimstr_letsTryToSmashStack)
 {
     char changeMe[2] = { 'A','\t' };

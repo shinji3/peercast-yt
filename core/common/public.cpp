@@ -1,4 +1,4 @@
-#include <algorithm>
+ï»¿#include <algorithm>
 #include <iterator>
 
 #include "public.h"
@@ -68,7 +68,7 @@ static string getDirectPermission()
 }
 
 // ------------------------------------------------------------
-// ‚±‚ÌƒT[ƒo[‚©‚ç”zM‚µ‚Ä‚¢‚éƒ`ƒƒƒ“ƒlƒ‹‚Ì index.txt ‚ğì‚é
+// ã“ã®ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰é…ä¿¡ã—ã¦ã„ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ã® index.txt ã‚’ä½œã‚‹
 string PublicController::createChannelIndex()
 {
     string res;

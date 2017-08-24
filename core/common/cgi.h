@@ -1,4 +1,4 @@
-#ifndef _CGI_H
+﻿#ifndef _CGI_H
 #define _CGI_H
 
 #include <string>

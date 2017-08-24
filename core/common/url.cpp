@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : url.h
 // Date: 20-feb-2004
 // Author: giles
@@ -317,7 +317,7 @@ ChanInfo::PROTOCOL URLSource::getSourceProtocol(char*& fileName)
 
             ch->setStatus(Channel::S_BROADCASTING);
 
-            inputStream->setReadTimeout(60);    // use longer read timeout // 60ƒ~ƒŠ•b!?
+            inputStream->setReadTimeout(60);    // use longer read timeout // 60ãƒŸãƒªç§’!?
 
             source = ch->createSource();
 

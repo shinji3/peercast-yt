@@ -1,4 +1,4 @@
-#include "iohelpers.h"
+ï»¿#include "iohelpers.h"
 #include <assert.h>
 
 namespace rtmpserver
@@ -13,7 +13,7 @@ namespace rtmpserver
         int stream_id;
         std::string data;
 
-        // ƒ}ƒbƒv‚Å’l‚Æ‚µ‚Äg‚¤‚½‚ß‚ÌƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+        // ãƒãƒƒãƒ—ã§å€¤ã¨ã—ã¦ä½¿ã†ãŸã‚ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
         Message()
             : timestamp ( 0 )
             , length ( 0 )
@@ -34,8 +34,8 @@ namespace rtmpserver
             data += chunk_data;
         }
 
-        // ‚ ‚Æ‰½ƒoƒCƒg’Ç‰Á‚µ‚½‚çƒƒbƒZ[ƒW‚ªŠ®¬‚·‚é‚©B–¼‘O‚ª‚Ü‚¬‚ç
-        // ‚í‚µ‚¢‚ÈB³‚Ì—Ê‚É’®‚±‚¦‚éB
+        // ã‚ã¨ä½•ãƒã‚¤ãƒˆè¿½åŠ ã—ãŸã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒå®Œæˆã™ã‚‹ã‹ã€‚åå‰ãŒã¾ãã‚‰
+        // ã‚ã—ã„ãªã€‚æ­£ã®é‡ã«è´ã“ãˆã‚‹ã€‚
         int
         remaining()
         {

@@ -1,4 +1,4 @@
-#include "rtmpmonit.h"
+ï»¿#include "rtmpmonit.h"
 #include "servmgr.h"
 
 RTMPServerMonitor::RTMPServerMonitor(const std::string& aPath)
@@ -28,7 +28,7 @@ void RTMPServerMonitor::update()
 
     if (!m_enabled) return;
 
-    // RTMP server ‚Ì€Šˆ‚ğŠÄ‹‚·‚éB
+    // RTMP server ã®æ­»æ´»ã‚’ç›£è¦–ã™ã‚‹ã€‚
     if (!m_rtmpServer.isAlive())
     {
         LOG_ERROR("RTMP server is down! Restarting... ");
@@ -67,7 +67,7 @@ bool RTMPServerMonitor::writeVariable(Stream &out, const String &var)
 
 void RTMPServerMonitor::start()
 {
-    // Environment env ‚ğŒ»İ‚ÌŠÂ‹«‚©‚ç‰Šú‰»‚·‚éB
+    // Environment env ã‚’ç¾åœ¨ã®ç’°å¢ƒã‹ã‚‰åˆæœŸåŒ–ã™ã‚‹ã€‚
     Environment env;
     env.copyFromCurrentProcess();
 

@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : channel.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -223,7 +223,7 @@ bool    Channel::checkIdle()
 }
 
 // -----------------------------------
-// ƒ`ƒƒƒ“ƒlƒ‹‚²‚Æ‚ÌƒŠƒŒ[”§ŒÀ‚É’B‚µ‚Ä‚¢‚é‚©B
+// ãƒãƒ£ãƒ³ãƒãƒ«ã”ã¨ã®ãƒªãƒ¬ãƒ¼æ•°åˆ¶é™ã«é”ã—ã¦ã„ã‚‹ã‹ã€‚
 bool    Channel::isFull()
 {
     return chanMgr->maxRelaysPerChannel ? localRelays() >= chanMgr->maxRelaysPerChannel : false;
@@ -587,7 +587,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
                 std::string trackerIP = servMgr->channelDirectory.findTracker(ch->info.id);
                 if (!trackerIP.empty())
                 {
-                    peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ƒtƒB[ƒh‚Å "+chName(ch->info)+" ‚Ìƒgƒ‰ƒbƒJ[‚ªŒ©•t‚©‚è‚Ü‚µ‚½B");
+                    peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ«ãƒ•ã‚£ãƒ¼ãƒ‰ã§ "+chName(ch->info)+" ã®ãƒˆãƒ©ãƒƒã‚«ãƒ¼ãŒè¦‹ä»˜ã‹ã‚Šã¾ã—ãŸã€‚");
 
                     ch->sourceHost.host.fromStrIP(trackerIP.c_str(), DEFAULT_PORT);
                     ch->sourceHost.rhost[0].fromStrIP(trackerIP.c_str(), DEFAULT_PORT);
@@ -631,7 +631,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
         {
             numYPTries++;
             LOG_INFO("Channel contacting YP, try %d", numYPTries);
-            peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(ch->info)+" ‚ğYP‚É–â‚¢‡‚í‚¹‚Ä‚¢‚Ü‚·...");
+            peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ« "+chName(ch->info)+" ã‚’YPã«å•ã„åˆã‚ã›ã¦ã„ã¾ã™...");
         }else
         {
             LOG_INFO("Channel found hit");
@@ -643,7 +643,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
             //bool isTrusted = ch->sourceHost.tracker | ch->sourceHost.yp;
 
             if (ch->sourceHost.tracker)
-                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(ch->info)+" ‚ğƒgƒ‰ƒbƒJ[‚É–â‚¢‡‚í‚¹‚Ä‚¢‚Ü‚·...");
+                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ« "+chName(ch->info)+" ã‚’ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã«å•ã„åˆã‚ã›ã¦ã„ã¾ã™...");
 
             char ipstr[64];
             ch->sourceHost.host.toStr(ipstr);
@@ -683,7 +683,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
             {
                 ch->setStatus(Channel::S_ERROR);
                 LOG_ERROR("Channel to %s %s : %s", ipstr, type, e.msg);
-                // FIXME: ƒgƒ‰ƒbƒJ[‚ÉØ’f‚³‚ê‚é‚ÆƒqƒbƒgƒŠƒXƒg‚©‚çÁ‚¦‚Ä‚µ‚Ü‚¤B
+                // FIXME: ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã«åˆ‡æ–­ã•ã‚Œã‚‹ã¨ãƒ’ãƒƒãƒˆãƒªã‚¹ãƒˆã‹ã‚‰æ¶ˆãˆã¦ã—ã¾ã†ã€‚
                 // if (!ch->sourceHost.tracker || ((error != 503) && ch->sourceHost.tracker))
                 if (!ch->sourceHost.tracker)
                     chanMgr->deadHit(ch->sourceHost);
@@ -1002,26 +1002,26 @@ void Channel::updateInfo(const ChanInfo &newInfo)
     String oldComment = info.comment;
 
     if (!info.update(newInfo))
-        return; // ƒ`ƒƒƒ“ƒlƒ‹î•ñ‚ÍXV‚³‚ê‚È‚©‚Á‚½B
+        return; // ãƒãƒ£ãƒ³ãƒãƒ«æƒ…å ±ã¯æ›´æ–°ã•ã‚Œãªã‹ã£ãŸã€‚
 
-    // ƒRƒƒ“ƒgXV‚Ì’Ê’mB
+    // ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°ã®é€šçŸ¥ã€‚
     if (!oldComment.isSame(info.comment))
     {
 #ifdef WIN32
-        // UTF8 ‚©‚à’m‚ê‚È‚¢•¶š—ñ‚ğ Shift_JIS ‚É•ÏŠ·‚µ‚½‚¢B
+        // UTF8 ã‹ã‚‚çŸ¥ã‚Œãªã„æ–‡å­—åˆ—ã‚’ Shift_JIS ã«å¤‰æ›ã—ãŸã„ã€‚
         String newName = info.name;
         newName.convertTo(String::T_SJIS);
 
         String newComment = info.comment;
         newComment.convertTo(String::T_SJIS);
 
-        peercast::notifyMessage(ServMgr::NT_PEERCAST, newName.str() + "u" + newComment.str() + "v");
+        peercast::notifyMessage(ServMgr::NT_PEERCAST, newName.str() + "ã€Œ" + newComment.str() + "ã€");
 #else
-        // Shift_JIS ‚©‚à’m‚ê‚È‚¢•¶š—ñ‚ğ UTF8 ‚É•ÏŠ·‚µ‚½‚¢B
+        // Shift_JIS ã‹ã‚‚çŸ¥ã‚Œãªã„æ–‡å­—åˆ—ã‚’ UTF8 ã«å¤‰æ›ã—ãŸã„ã€‚
         String newComment = info.comment;
         newComment.convertTo(String::T_UNICODE);
 
-        peercast::notifyMessage(ServMgr::NT_PEERCAST, info.name.str() + "u" + newComment.str() + "v");
+        peercast::notifyMessage(ServMgr::NT_PEERCAST, info.name.str() + "ã€Œ" + newComment.str() + "ã€");
 #endif
     }
 
@@ -1186,14 +1186,14 @@ int Channel::readStream(Stream &in, ChannelStream *source)
             if (checkIdle())
             {
                 LOG_DEBUG("Channel idle");
-                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(info)+" ‚ªƒAƒCƒhƒ‹ó‘Ô‚É‚È‚è‚Ü‚µ‚½B");
+                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ« "+chName(info)+" ãŒã‚¢ã‚¤ãƒ‰ãƒ«çŠ¶æ…‹ã«ãªã‚Šã¾ã—ãŸã€‚");
                 break;
             }
 
             if (checkBump())
             {
                 LOG_DEBUG("Channel bumped");
-                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ƒ`ƒƒƒ“ƒlƒ‹ "+chName(info)+" ‚ğƒoƒ“ƒv‚µ‚Ü‚µ‚½B");
+                peercast::notifyMessage(ServMgr::NT_PEERCAST, "ãƒãƒ£ãƒ³ãƒãƒ« "+chName(info)+" ã‚’ãƒãƒ³ãƒ—ã—ã¾ã—ãŸã€‚");
                 error = -1;
                 break;
             }
@@ -1228,9 +1228,9 @@ int Channel::readStream(Stream &in, ChannelStream *source)
 #ifdef WIN32
                             String newName = info.name;
                             newName.convertTo(String::T_SJIS);
-                            peercast::notifyMessage(ServMgr::NT_PEERCAST, newName.str() + "‚ğóM’†‚Å‚·B");
+                            peercast::notifyMessage(ServMgr::NT_PEERCAST, newName.str() + "ã‚’å—ä¿¡ä¸­ã§ã™ã€‚");
 #else
-                            peercast::notifyMessage(ServMgr::NT_PEERCAST, info.name.str() + "‚ğóM’†‚Å‚·B");
+                            peercast::notifyMessage(ServMgr::NT_PEERCAST, info.name.str() + "ã‚’å—ä¿¡ä¸­ã§ã™ã€‚");
 #endif
                         }
                         setStatus(Channel::S_RECEIVING);

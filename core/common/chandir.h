@@ -1,4 +1,4 @@
-#ifndef _CHANDIR_H
+ï»¿#ifndef _CHANDIR_H
 #define _CHANDIR_H
 
 #include <cstdlib>
@@ -46,7 +46,7 @@ public:
     std::string chatUrl();
     std::string statsUrl();
 
-    std::string name; // (Ä¶•s‰Â) ‚È‚Ç‚ª•t‚­‚±‚Æ‚ª‚ ‚éB
+    std::string name; // (å†ç”Ÿä¸å¯) ãªã©ãŒä»˜ãã“ã¨ãŒã‚ã‚‹ã€‚
     GnuID       id;
     std::string tip;
     std::string url;
@@ -60,14 +60,14 @@ public:
     std::string trackAlbum;
     std::string trackName;
     std::string trackContact;
-    std::string encodedName; // URLƒGƒ“ƒR[ƒh‚³‚ê‚½ƒ`ƒƒƒ“ƒlƒ‹–¼B
+    std::string encodedName; // URLã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒãƒ£ãƒ³ãƒãƒ«åã€‚
 
     std::string uptime;
     std::string status;
     std::string comment;
     int         direct;
 
-    std::string feedUrl; // ƒ`ƒƒƒbƒgURLA“ŒvURL‚ğì¬‚·‚é‚½‚ß‚É•K—vB
+    std::string feedUrl; // ãƒãƒ£ãƒƒãƒˆURLã€çµ±è¨ˆURLã‚’ä½œæˆã™ã‚‹ãŸã‚ã«å¿…è¦ã€‚
 };
 
 class ChannelFeed
@@ -100,7 +100,7 @@ public:
     bool isPublic;
 };
 
-// ŠO•”‚©‚çƒ`ƒƒƒ“ƒlƒ‹ƒŠƒXƒg‚ğæ“¾‚µ‚Ä•Û‚·‚éB
+// å¤–éƒ¨ã‹ã‚‰ãƒãƒ£ãƒ³ãƒãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã—ã¦ä¿æŒã™ã‚‹ã€‚
 class ChannelDirectory : public VariableWriter
 {
 public:

@@ -1,9 +1,9 @@
-#include "cgi.h"
+ï»¿#include "cgi.h"
 #include "str.h"
 
 namespace cgi {
 
-// URLƒGƒXƒP[ƒv‚·‚éB
+// URLã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹ã€‚
 std::string escape(const std::string& in)
 {
     std::string res;

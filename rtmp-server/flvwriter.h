@@ -1,4 +1,4 @@
-namespace rtmpserver
+﻿namespace rtmpserver
 {
     struct FLVWriter
     {

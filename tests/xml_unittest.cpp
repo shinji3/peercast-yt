@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 
 #include "sstream.h"
 #include "xml.h"
@@ -22,7 +22,7 @@ TEST_F(XMLFixture, read)
     ASSERT_STREQ("br", xml.root->getName());
 }
 
-// �^�O���̓t�H�[�}�b�g������Ƃ��ĉ��߂���Ă͂Ȃ�Ȃ��B
+// タグ名はフォーマット文字列として解釈されてはならない。
 TEST_F(XMLFixture, readCrash)
 {
     StringStream mem;

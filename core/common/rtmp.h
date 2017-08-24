@@ -1,4 +1,4 @@
-#ifndef _RTMP_H
+﻿#ifndef _RTMP_H
 #define _RTMP_H
 
 #include <deque>

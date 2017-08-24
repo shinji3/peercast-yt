@@ -1,4 +1,4 @@
-#ifndef _MATROSKA_H
+ï»¿#ifndef _MATROSKA_H
 #define _MATROSKA_H
 
 #include <stdint.h>
@@ -53,7 +53,7 @@ ID_TO_NAME = {
     { {0xBF}, "CRC-32" },
 };
 
-// UNKNOWN ’l‚Ì‘Î‰—v‚éH
+// UNKNOWN å€¤ã®å¯¾å¿œè¦ã‚‹ï¼Ÿ
 class VInt
 {
 public:

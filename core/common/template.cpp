@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : template.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -287,7 +287,7 @@ void Template::writeGlobalVariable(Stream &s, const String &varName, int loop)
         r = true;
     }
 
-    // •Ï”‚ªŒ©•t‚©‚ç‚È‚©‚Á‚½ê‡‚Í•Ï”–¼‚ğ‘‚«o‚·
+    // å¤‰æ•°ãŒè¦‹ä»˜ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã¯å¤‰æ•°åã‚’æ›¸ãå‡ºã™
 End:
     if (!r)
         s.writeString(varName);
@@ -371,8 +371,8 @@ string Template::evalStringLiteral(const string& input)
     {
         if (s[0] == '\\')
         {
-            // ƒoƒbƒNƒXƒ‰ƒbƒVƒ…‚ªÅŒã‚Ì•¶š‚Å‚Í‚È‚¢‚±‚Æ‚Í‚í‚©‚Á‚Ä‚¢‚é
-            // ‚Ì‚Å––’[ƒ`ƒFƒbƒN‚Í‚µ‚È‚¢B
+            // ãƒãƒƒã‚¯ã‚¹ãƒ©ãƒƒã‚·ãƒ¥ãŒæœ€å¾Œã®æ–‡å­—ã§ã¯ãªã„ã“ã¨ã¯ã‚ã‹ã£ã¦ã„ã‚‹
+            // ã®ã§æœ«ç«¯ãƒã‚§ãƒƒã‚¯ã¯ã—ãªã„ã€‚
             res += s[0];
             res += s[1];
             s.erase(0,2);
@@ -496,7 +496,7 @@ bool    Template::evalCondition(const string& cond, int loop)
     auto tokens = tokenize(cond);
     bool res = false;
 
-    if (tokens.size() == 3) // “ñ€‰‰Z
+    if (tokens.size() == 3) // äºŒé …æ¼”ç®—
     {
         auto op = tokens[1];
         if (op == "=~" || op == "!~")
@@ -647,14 +647,14 @@ json::array_t Template::evaluateCollectionVariable(String& varName)
         JrpcApi api;
         LOG_DEBUG("%s", api.getChannelsFound({}).dump().c_str());
         json::array_t cs = api.getChannelsFound({});
-        // ƒWƒƒƒ“ƒ‹Ú“ª«‚Ån‚Ü‚ç‚È‚¢ƒ`ƒƒƒ“ƒlƒ‹‚ÍŒfÚ‚µ‚È‚¢B
+        // ã‚¸ãƒ£ãƒ³ãƒ«æ¥é ­è¾ã§å§‹ã¾ã‚‰ãªã„ãƒãƒ£ãƒ³ãƒãƒ«ã¯æ²è¼‰ã—ãªã„ã€‚
         cs.erase(std::remove_if(cs.begin(), cs.end(),
                                 [] (json c) { return !str::is_prefix_of(servMgr->genrePrefix, c["genre"]); }),
                  cs.end());
         return cs;
     }else if (varName == "broadcastingChannels")
     {
-        // ‚±‚ÌƒT[ƒo[‚©‚ç”zM’†‚Ìƒ`ƒƒƒ“ƒlƒ‹‚ğƒŠƒXƒi[”~‡‚Åƒ\[ƒgB
+        // ã“ã®ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰é…ä¿¡ä¸­ã®ãƒãƒ£ãƒ³ãƒãƒ«ã‚’ãƒªã‚¹ãƒŠãƒ¼æ•°é™é †ã§ã‚½ãƒ¼ãƒˆã€‚
         JrpcApi api;
         json::array_t channels = api.getChannels({});
         auto newend = std::remove_if(channels.begin(), channels.end(),
@@ -844,11 +844,11 @@ void    Template::readVariableRaw(Stream &in, Stream *outp, int loop)
 }
 
 // --------------------------------------
-// ƒXƒgƒŠ[ƒ€ in ‚ÌŒ»İ‚ÌˆÊ’u‚©‚ç 1 ƒuƒƒbƒN•ª‚Ìƒeƒ“ƒvƒŒ[ƒg‚ğˆ—‚µA
-// outp ‚ªNULL ‚Å‚È‚¯‚ê‚Î *outp ‚Éo—Í‚·‚éBEOF ‚ ‚é‚¢‚Í{@end} ‚É“–‚½‚Á
-// ‚½ê‡‚Í TMPL_END ‚ğ•Ô‚µA{@else} ‚É“–‚½‚Á‚½ê‡‚Í TMPL_ELSEA
-// {@elsif ...} ‚É“–‚½‚Á‚½ê‡‚Í TMPL_ELSIF ‚ğ•Ô‚·(ğŒ®‚ğ“Ç‚İ‚Ş‘O
-// ‚É’â~‚·‚é)B
+// ã‚¹ãƒˆãƒªãƒ¼ãƒ  in ã®ç¾åœ¨ã®ä½ç½®ã‹ã‚‰ 1 ãƒ–ãƒ­ãƒƒã‚¯åˆ†ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’å‡¦ç†ã—ã€
+// outp ãŒNULL ã§ãªã‘ã‚Œã° *outp ã«å‡ºåŠ›ã™ã‚‹ã€‚EOF ã‚ã‚‹ã„ã¯{@end} ã«å½“ãŸã£
+// ãŸå ´åˆã¯ TMPL_END ã‚’è¿”ã—ã€{@else} ã«å½“ãŸã£ãŸå ´åˆã¯ TMPL_ELSEã€
+// {@elsif ...} ã«å½“ãŸã£ãŸå ´åˆã¯ TMPL_ELSIF ã‚’è¿”ã™(æ¡ä»¶å¼ã‚’èª­ã¿è¾¼ã‚€å‰
+// ã«åœæ­¢ã™ã‚‹)ã€‚
 int Template::readTemplate(Stream &in, Stream *outp, int loop)
 {
     Stream *p = inSelectedFragment() ? outp : NULL;
@@ -880,7 +880,7 @@ int Template::readTemplate(Stream &in, Stream *outp, int loop)
             }
             else
             {
-                // ƒeƒ“ƒvƒŒ[ƒg‚ÉŠÖŒW‚Ì‚È‚¢”gŠ‡ŒÊ‚Í‚»‚Ì‚Ü‚Ü•\¦‚·‚é
+                // ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã«é–¢ä¿‚ã®ãªã„æ³¢æ‹¬å¼§ã¯ãã®ã¾ã¾è¡¨ç¤ºã™ã‚‹
                 if (p)
                 {
                     p->writeChar('{');
@@ -912,7 +912,7 @@ bool HTTPRequestScope::writeVariable(Stream& s, const String& varName, int loop)
             s.writeString(m_request.headers.get("Host"));
         }
         return true;
-    }else if (varName == "request.path") // HTTPRequest ‚ÉˆÏ÷‚·‚×‚«‚©
+    }else if (varName == "request.path") // HTTPRequest ã«å§”è­²ã™ã¹ãã‹
     {
         s.writeString(m_request.path);
         return true;

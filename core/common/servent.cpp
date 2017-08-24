@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : servent.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -315,8 +315,8 @@ bool Servent::outputPacket(GnuPacket &p, bool pri)
 }
 
 // ------------------------------------------------------------------
-// ƒ\ƒPƒbƒg‚Å‚Ì‘Ò‚¿ó‚¯‚ğs‚¤ SERVER ƒT[ƒoƒ“ƒg‚ğŠJn‚·‚éB¬Œ÷‚·‚ê‚Î
-// true ‚ğ•Ô‚·B
+// ã‚½ã‚±ãƒƒãƒˆã§ã®å¾…ã¡å—ã‘ã‚’è¡Œã† SERVER ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’é–‹å§‹ã™ã‚‹ã€‚æˆåŠŸã™ã‚Œã°
+// true ã‚’è¿”ã™ã€‚
 bool Servent::initServer(Host &h)
 {
     try
@@ -356,7 +356,7 @@ void Servent::checkFree()
 }
 
 // -----------------------------------
-// ƒNƒ‰ƒCƒAƒ“ƒg‚Æ‚Ì‘Î˜b‚ğŠJn‚·‚éB
+// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨ã®å¯¾è©±ã‚’é–‹å§‹ã™ã‚‹ã€‚
 void Servent::initIncoming(ClientSocket *s, unsigned int a)
 {
     try{
@@ -1102,7 +1102,7 @@ bool Servent::handshakeStream(ChanInfo &chanInfo)
 }
 
 // -----------------------------------
-// GIV ‚µ‚É‚¢‚­
+// GIV ã—ã«ã„ã
 void Servent::handshakeGiv(GnuID &id)
 {
     if (id.isSet())
@@ -1373,9 +1373,9 @@ void Servent::processRoot()
 }
 
 // ------------------------------------------------------------------
-// PushƒŠƒŒ[ƒT[ƒoƒ“ƒg‚ÌƒƒCƒ“ƒvƒƒV[ƒWƒƒB‚±‚¿‚ç‚©‚çƒŠƒ‚[ƒgƒzƒXƒg
-// ‚ÖÚ‘±‚És‚­‚ªA‚»‚ÌŒã‚Í’…M‚µ‚½‚©‚Ì‚æ‚¤‚ÉU‚é•‘‚¢A—v‹‚ğó‚¯•t‚¯
-// ‚éB
+// Pushãƒªãƒ¬ãƒ¼ã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã€‚ã“ã¡ã‚‰ã‹ã‚‰ãƒªãƒ¢ãƒ¼ãƒˆãƒ›ã‚¹ãƒˆ
+// ã¸æ¥ç¶šã«è¡ŒããŒã€ãã®å¾Œã¯ç€ä¿¡ã—ãŸã‹ã®ã‚ˆã†ã«æŒ¯ã‚‹èˆã„ã€è¦æ±‚ã‚’å—ã‘ä»˜ã‘
+// ã‚‹ã€‚
 int Servent::givProc(ThreadInfo *thread)
 {
     sys->setThreadName("Servent GIV");
@@ -1474,7 +1474,7 @@ void Servent::handshakeOutgoingPCP(AtomStream &atom, Host &rhost, GnuID &rid, St
         {
             if ((servMgr->serverHost.ip != thisHost.ip) && (servMgr->forceIP.isEmpty()))
             {
-                // ƒOƒ[ƒoƒ‹‚ÌƒŠƒ‚[ƒg‚©‚çƒvƒ‰ƒCƒx[ƒgIP‚ğİ’è‚³‚ê‚È‚¢‚æ‚¤‚É‚·‚éB
+                // ã‚°ãƒ­ãƒ¼ãƒãƒ«ã®ãƒªãƒ¢ãƒ¼ãƒˆã‹ã‚‰ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆIPã‚’è¨­å®šã•ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
                 if (rhost.globalIP() == thisHost.globalIP())
                 {
                     char ipstr[64];
@@ -1513,8 +1513,8 @@ void Servent::handshakeOutgoingPCP(AtomStream &atom, Host &rhost, GnuID &rid, St
 }
 
 // -------------------------------------------------------------------
-// PCPƒnƒ“ƒhƒVƒFƒCƒNBHELO, OLEHBƒOƒ[ƒoƒ‹IPAƒtƒ@ƒCƒAƒEƒH[ƒ‹ƒ`ƒFƒb
-// ƒNB
+// PCPãƒãƒ³ãƒ‰ã‚·ã‚§ã‚¤ã‚¯ã€‚HELO, OLEHã€‚ã‚°ãƒ­ãƒ¼ãƒãƒ«IPã€ãƒ•ã‚¡ã‚¤ã‚¢ã‚¦ã‚©ãƒ¼ãƒ«ãƒã‚§ãƒƒ
+// ã‚¯ã€‚
 void Servent::handshakeIncomingPCP(AtomStream &atom, Host &rhost, GnuID &rid, String &agent)
 {
     int numc, numd;
@@ -1640,8 +1640,8 @@ void Servent::handshakeIncomingPCP(AtomStream &atom, Host &rhost, GnuID &rid, St
 }
 
 // ------------------------------------------------------------------
-// ƒRƒ“ƒgƒ[ƒ‹EƒCƒ“‚Ìˆ—B’ÊM‚Ìó‘Ô‚ÍA"pcp\n" ‚ğ“Ç‚İ‚ñ‚¾ŒãB
-// suggestOthers ‚Íí‚É true ‚ª“n‚³‚ê‚éB
+// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ»ã‚¤ãƒ³ã®å‡¦ç†ã€‚é€šä¿¡ã®çŠ¶æ…‹ã¯ã€"pcp\n" ã‚’èª­ã¿è¾¼ã‚“ã å¾Œã€‚
+// suggestOthers ã¯å¸¸ã« true ãŒæ¸¡ã•ã‚Œã‚‹ã€‚
 void Servent::processIncomingPCP(bool suggestOthers)
 {
     PCPStream::readVersion(*sock);
@@ -1659,9 +1659,9 @@ void Servent::processIncomingPCP(bool suggestOthers)
     char rstr[64];
     rhost.toStr(rstr);
 
-    // Ú‘±‚ğ’f‚í‚éê‡‚Ìˆ—BƒRƒ“ƒgƒ[ƒ‹Ú‘±”‚ªãŒÀ‚É’B‚µ‚Ä‚¢‚é‚©A
-    // ƒŠƒ‚[ƒgƒzƒXƒg‚Æ‚ÌƒRƒ“ƒgƒ[ƒ‹Ú‘±‚ªŠù‚É‚ ‚é‚©A©•ª‚Í•ú‘—’†‚Ì
-    // ƒgƒ‰ƒbƒJ[‚Å‚Í‚È‚¢B
+    // æ¥ç¶šã‚’æ–­ã‚ã‚‹å ´åˆã®å‡¦ç†ã€‚ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«æ¥ç¶šæ•°ãŒä¸Šé™ã«é”ã—ã¦ã„ã‚‹ã‹ã€
+    // ãƒªãƒ¢ãƒ¼ãƒˆãƒ›ã‚¹ãƒˆã¨ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«æ¥ç¶šãŒæ—¢ã«ã‚ã‚‹ã‹ã€è‡ªåˆ†ã¯æ”¾é€ä¸­ã®
+    // ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã§ã¯ãªã„ã€‚
     if (unavailable || alreadyConnected || offair)
     {
         int error;
@@ -1967,7 +1967,7 @@ int Servent::outgoingProc(ThreadInfo *thread)
 }
 
 // -------------------------------------------------------------
-// SERVER ƒT[ƒoƒ“ƒg‚©‚ç‹N“®‚³‚ê‚½ƒT[ƒoƒ“ƒg‚ÌƒƒCƒ“ƒvƒƒV[ƒWƒƒ
+// SERVER ã‚µãƒ¼ãƒãƒ³ãƒˆã‹ã‚‰èµ·å‹•ã•ã‚ŒãŸã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 int Servent::incomingProc(ThreadInfo *thread)
 {
     Servent *sv = (Servent*)thread->data;
@@ -2425,7 +2425,7 @@ void Servent::sendPCPChannel()
 
             ChanPacket rawPack;
 
-            // FIXME: ƒXƒgƒŠ[ƒ€ƒCƒ“ƒfƒbƒNƒX‚Ì•ÏX‚ğŠm‚©‚ß‚¸‚É‚Ç‚ñ‚Ç‚ñ“Ç‚İo‚µ‚Ä‘åä•vH
+            // FIXME: ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¤‰æ›´ã‚’ç¢ºã‹ã‚ãšã«ã©ã‚“ã©ã‚“èª­ã¿å‡ºã—ã¦å¤§ä¸ˆå¤«ï¼Ÿ
             while (ch->rawData.findPacket(streamPos, rawPack))
             {
                 if (rawPack.type == ChanPacket::T_HEAD)
@@ -2468,7 +2468,7 @@ void Servent::sendPCPChannel()
             bsock.flush();
 
             BroadcastState bcs;
-            // ‚Ç‚¤‚µ‚Ä‚±‚±‚Å bsock ‚ğg‚Á‚½‚ç“®‚©‚È‚¢‚Ì‚©—‰ğ‚µ‚Ä‚¢‚È‚¢B
+            // ã©ã†ã—ã¦ã“ã“ã§ bsock ã‚’ä½¿ã£ãŸã‚‰å‹•ã‹ãªã„ã®ã‹ç†è§£ã—ã¦ã„ãªã„ã€‚
             error = pcpStream->readPacket(*sock, bcs);
             if (error)
                 throw StreamException("PCP exception");
@@ -2490,7 +2490,7 @@ void Servent::sendPCPChannel()
 }
 
 // -----------------------------------------------------------------
-// ƒ\ƒPƒbƒg‚Å‚Ì‘Ò‚¿ó‚¯‚ğs‚¤ SERVER ƒT[ƒoƒ“ƒg‚ÌƒƒCƒ“ƒvƒƒV[ƒWƒƒB
+// ã‚½ã‚±ãƒƒãƒˆã§ã®å¾…ã¡å—ã‘ã‚’è¡Œã† SERVER ã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã€‚
 int Servent::serverProc(ThreadInfo *thread)
 {
     Servent *sv = (Servent*)thread->data;

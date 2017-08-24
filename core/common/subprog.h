@@ -1,4 +1,4 @@
-#ifndef _SUBPROG_H
+﻿#ifndef _SUBPROG_H
 #define _SUBPROG_H
 
 #include <initializer_list>

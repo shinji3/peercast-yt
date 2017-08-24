@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 
 #include "logbuf.h"
 #include "servmgr.h"
@@ -83,7 +83,7 @@ TEST_F(ServMgrFixture, initialState)
     // unsigned int        refreshHTML;
     ASSERT_EQ(5, m.refreshHTML);
     // unsigned int        relayBroadcast;
-    //ASSERT_EQ(0, m.relayBroadcast); // �s��
+    //ASSERT_EQ(0, m.relayBroadcast); // 不定
     // unsigned int        notifyMask;
     ASSERT_EQ(0xffff, m.notifyMask);
     // BCID                *validBCID;
@@ -359,7 +359,7 @@ TEST_F(ServMgrFixture, writeVariable)
 
     mem.str("");
     ASSERT_TRUE(m.writeVariable(mem, "test"));
-    ASSERT_STREQ("かきくけこABCDabcd", mem.str().c_str());
+    ASSERT_STREQ("縺九″縺上￠縺鄭BCDabcd", mem.str().c_str());
 }
 
 TEST_F(ServMgrFixture, isFiltered)

@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "env.h"
 
@@ -31,7 +31,7 @@ TEST_F(EnvironmentFixture, initialState)
 
 TEST_F(EnvironmentFixture, constructor)
 {
-    extern char** environ; // ‚±‚ÌƒvƒƒZƒX‚ÌŠÂ‹«
+    extern char** environ; // ã“ã®ãƒ—ãƒ­ã‚»ã‚¹ã®ç’°å¢ƒ
     Environment e(environ);
 
     EXPECT_NE(0, e.size());

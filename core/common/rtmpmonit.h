@@ -1,4 +1,4 @@
-#ifndef _RTMPMONIT_H
+﻿#ifndef _RTMPMONIT_H
 #define _RTMPMONIT_H
 
 #include "critsec.h"

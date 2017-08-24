@@ -1,4 +1,4 @@
-#ifndef _WMHTTP_H
+﻿#ifndef _WMHTTP_H
 #define _WMHTTP_H
 
 #include "asf.h"

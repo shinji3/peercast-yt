@@ -1,4 +1,4 @@
-#ifndef _MAPPER_H
+﻿#ifndef _MAPPER_H
 #define _MAPPER_H
 
 #include <string>

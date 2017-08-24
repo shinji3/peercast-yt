@@ -1,4 +1,4 @@
-#include "str.h"
+ï»¿#include "str.h"
 #include <string>
 #include <algorithm>
 #include <cstring>
@@ -29,7 +29,7 @@ static std::string inspect(char c)
 {
     int d = static_cast<unsigned char>(c);
 
-    // FIXME: UTF8 ‚ð’Ê‚·ˆ×‚É‚µ‚Ä‚¢‚éB
+    // FIXME: UTF8 ã‚’é€šã™ç‚ºã«ã—ã¦ã„ã‚‹ã€‚
     if (d >= 0x80)
         return string() + (char) d;
 

@@ -1,4 +1,4 @@
-#include "wmhttp.h"
+﻿#include "wmhttp.h"
 
 extern ASFInfo parseASFHeader(Stream &in); // from mms.cpp
 

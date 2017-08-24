@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : html.h
 // Date: 4-apr-2002
 // Author: giles
@@ -39,7 +39,7 @@ public:
 
     HTML(const char *, Stream &);
 
-    // HTML ƒwƒ‹ƒp[
+    // HTML ãƒ˜ãƒ«ãƒ‘ãƒ¼
     void    startNode(const char *, const char * = NULL);
     void    addLink(const char *, const char *, bool = false);
     void    startTag(const char *, const char * = NULL, ...) __attribute__ ((format (printf, 3, 4)));
@@ -53,7 +53,7 @@ public:
     void    startHTML();
     void    startBody();
 
-    // HTTP ƒŒƒXƒ|ƒ“ƒX
+    // HTTP ãƒ¬ã‚¹ãƒãƒ³ã‚¹
     void    writeOK(const char *content,
                     const std::map<std::string,std::string>& = {});
     void    locateTo(const char *);

@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : servhs.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -205,7 +205,7 @@ void Servent::invokeCGIScript(HTTP &http, const char* fn)
     free(env_val);
 
     _dupenv_s(&env_val, &env_len, "SYSTEMROOT");
-    // Windows ‚Å Ruby ‚ª–¼‘Oˆø‚«‚ğ‚·‚é‚Ì‚É•K—v‚È‚Ì‚Å SYSTEMROOT ‚ğ’Ê‚·B
+    // Windows ã§ Ruby ãŒåå‰å¼•ãã‚’ã™ã‚‹ã®ã«å¿…è¦ãªã®ã§ SYSTEMROOT ã‚’é€šã™ã€‚
     if (env_val)
         env.set("SYSTEMROOT", env_val);
     free(env_val);
@@ -281,7 +281,7 @@ void Servent::handshakeGET(HTTP &http)
 
     if (strncmp(fn, "/admin?", 7) == 0)
     {
-        // ƒtƒH[ƒ€“Še—pƒGƒ“ƒhƒ|ƒCƒ“ƒg
+        // ãƒ•ã‚©ãƒ¼ãƒ æŠ•ç¨¿ç”¨ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
 
         if (!isAllowed(ALLOW_HTML))
             throw HTTPException(HTTP_SC_UNAVAILABLE, 503);
@@ -290,7 +290,7 @@ void Servent::handshakeGET(HTTP &http)
         handshakeCMD(fn+7);
     }else if (strncmp(fn, "/admin/?", 8) == 0)
     {
-        // ã‚É“¯‚¶
+        // ä¸Šã«åŒã˜
 
         if (!isAllowed(ALLOW_HTML))
             throw HTTPException(HTTP_SC_UNAVAILABLE, 503);
@@ -299,7 +299,7 @@ void Servent::handshakeGET(HTTP &http)
         handshakeCMD(fn+8);
     }else if (strncmp(fn, "/http/", 6) == 0)
     {
-        // peercast.org ‚Ö‚ÌƒvƒƒLƒVÚ‘±
+        // peercast.org ã¸ã®ãƒ—ãƒ­ã‚­ã‚·æ¥ç¶š
 
         String dirName = fn+6;
 
@@ -312,9 +312,9 @@ void Servent::handshakeGET(HTTP &http)
         handshakeRemoteFile(dirName);
     }else if (strcmp(fn, "/html/index.html") == 0)
     {
-        // PeerCastStation ‚ª "/" ‚ğ "/html/index.html" ‚É 301 Moved
-        // ‚ÅƒŠƒ_ƒCƒŒƒNƒg‚·‚é‚Ì‚ÅAƒuƒ‰ƒEƒU‚É‚æ‚Á‚Ä‚Í–³ŠúŒÀ‚ÉƒLƒƒƒbƒVƒ…‚³‚ê‚éB
-        // "/" ‚ÉÄƒŠƒ_ƒCƒŒƒNƒg‚µ‚ÄƒLƒƒƒbƒVƒ…‚ğ–³Œø‰»‚·‚éB
+        // PeerCastStation ãŒ "/" ã‚’ "/html/index.html" ã« 301 Moved
+        // ã§ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã™ã‚‹ã®ã§ã€ãƒ–ãƒ©ã‚¦ã‚¶ã«ã‚ˆã£ã¦ã¯ç„¡æœŸé™ã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã•ã‚Œã‚‹ã€‚
+        // "/" ã«å†ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã—ã¦ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹ã€‚
 
         http.readHeaders();
         http.writeLine(HTTP_SC_FOUND);
@@ -333,7 +333,7 @@ void Servent::handshakeGET(HTTP &http)
             handshakeLocalFile(dirName);
     }else if (strncmp(fn, "/admin.cgi", 10) == 0)
     {
-        // ShoutCast ƒgƒ‰ƒbƒNî•ñXV—pƒGƒ“ƒhƒ|ƒCƒ“ƒg
+        // ShoutCast ãƒˆãƒ©ãƒƒã‚¯æƒ…å ±æ›´æ–°ç”¨ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆ
 
         if (!isAllowed(ALLOW_BROADCAST))
             throw HTTPException(HTTP_SC_UNAVAILABLE, 503);
@@ -380,7 +380,7 @@ void Servent::handshakeGET(HTTP &http)
         }
     }else if (strncmp(fn, "/pls/", 5) == 0)
     {
-        // ƒvƒŒƒCƒŠƒXƒg
+        // ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆ
 
         if (!sock->host.isLocalhost())
             if (!isAllowed(ALLOW_DIRECT) || !isFiltered(ServFilter::F_DIRECT))
@@ -399,7 +399,7 @@ void Servent::handshakeGET(HTTP &http)
         }
     }else if (strncmp(fn, "/stream/", 8) == 0)
     {
-        // ƒXƒgƒŠ[ƒ€
+        // ã‚¹ãƒˆãƒªãƒ¼ãƒ 
 
         if (!sock->host.isLocalhost())
             if (!isAllowed(ALLOW_DIRECT) || !isFiltered(ServFilter::F_DIRECT))
@@ -415,7 +415,7 @@ void Servent::handshakeGET(HTTP &http)
         triggerChannel(fn+9, ChanInfo::SP_PCP, false);
     }else if (strcmp(fn, "/api/1") == 0)
     {
-        // JSON RPC ƒo[ƒWƒ‡ƒ“î•ñæ“¾—p
+        // JSON RPC ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±å–å¾—ç”¨
 
         if (!isAllowed(ALLOW_HTML))
             throw HTTPException(HTTP_SC_UNAVAILABLE, 503);
@@ -433,7 +433,7 @@ void Servent::handshakeGET(HTTP &http)
     }else if (strcmp(fn, "/public")== 0 ||
               strncmp(fn, "/public/", strlen("/public/"))==0)
     {
-        // ŒöŠJƒfƒBƒŒƒNƒgƒŠ
+        // å…¬é–‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
         http.readHeaders();
 
@@ -453,7 +453,7 @@ void Servent::handshakeGET(HTTP &http)
         }
     }else if (str::is_prefix_of("/assets/", fn))
     {
-        // html ‚Æ public ‚Ì‹¤—LƒAƒZƒbƒgB
+        // html ã¨ public ã®å…±æœ‰ã‚¢ã‚»ãƒƒãƒˆã€‚
 
         http.readHeaders();
         try
@@ -467,7 +467,7 @@ void Servent::handshakeGET(HTTP &http)
         }
     }else if (str::is_prefix_of("/cgi-bin/", fn))
     {
-        // CGI ƒXƒNƒŠƒvƒg‚ÌÀs
+        // CGI ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å®Ÿè¡Œ
 
         if (!isAllowed(ALLOW_HTML))
             throw HTTPException(HTTP_SC_UNAVAILABLE, 503);
@@ -487,7 +487,7 @@ void Servent::handshakeGET(HTTP &http)
         }
     }else
     {
-        // GET ƒ}ƒbƒ`‚È‚µ
+        // GET ãƒãƒƒãƒãªã—
 
         http.readHeaders();
         http.writeLine(HTTP_SC_FOUND);
@@ -550,7 +550,7 @@ void Servent::handshakePOST(HTTP &http)
             handshakeWMHTTPPush(http, path);
         }else
         {
-            // POST ƒ}ƒbƒ`‚È‚µ
+            // POST ãƒãƒƒãƒãªã—
 
             throw HTTPException(HTTP_SC_BADREQUEST, 400);
         }
@@ -642,7 +642,7 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
         handshakePOST(http);
     }else if (http.isRequest("GIV"))
     {
-        // Push ƒŠƒŒ[
+        // Push ãƒªãƒ¬ãƒ¼
 
         handshakeGIV(http.cmdLine);
     }else if (http.isRequest(PCX_PCP_CONNECT)) // "pcp"
@@ -662,7 +662,7 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
         processServent();
     }else if (http.isRequest("SOURCE"))
     {
-        // Icecast •ú‘—
+        // Icecast æ”¾é€
 
         handshakeSOURCE(http.cmdLine, isHTTP);
     }else if (http.isRequest(servMgr->password)) // FIXME: check for empty password!
@@ -683,7 +683,7 @@ void Servent::handshakeHTTP(HTTP &http, bool isHTTP)
         sock = NULL;    // socket is taken over by channel, so don`t close it
     }else
     {
-        // ƒŠƒNƒGƒXƒg‰ğß¸”s
+        // ãƒªã‚¯ã‚¨ã‚¹ãƒˆè§£é‡ˆå¤±æ•—
 
         throw HTTPException(HTTP_SC_BADREQUEST, 400);
     }
@@ -714,9 +714,9 @@ void Servent::handshakeIncoming()
 }
 
 // -----------------------------------
-// ƒŠƒŒ[Ú‘±A‚ ‚é‚¢‚Íƒ_ƒCƒŒƒNƒgÚ‘±‚É str ‚Åw’è‚³‚ê‚½ƒ`ƒƒƒ“ƒlƒ‹‚ÌƒX
-// ƒgƒŠ[ƒ€‚ğ—¬‚·Brelay ‚ª true ‚È‚ç‚ÎAƒ`ƒƒƒ“ƒlƒ‹‚ª–³‚©‚Á‚½‚èóM’†
-// ‚Å‚È‚­‚Ä‚àAƒ`ƒƒƒ“ƒlƒ‹‚ğóM’†‚Ìó‘Ô‚É‚µ‚æ‚¤‚Æ‚·‚éB
+// ãƒªãƒ¬ãƒ¼æ¥ç¶šã€ã‚ã‚‹ã„ã¯ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆæ¥ç¶šã« str ã§æŒ‡å®šã•ã‚ŒãŸãƒãƒ£ãƒ³ãƒãƒ«ã®ã‚¹
+// ãƒˆãƒªãƒ¼ãƒ ã‚’æµã™ã€‚relay ãŒ true ãªã‚‰ã°ã€ãƒãƒ£ãƒ³ãƒãƒ«ãŒç„¡ã‹ã£ãŸã‚Šå—ä¿¡ä¸­
+// ã§ãªãã¦ã‚‚ã€ãƒãƒ£ãƒ³ãƒãƒ«ã‚’å—ä¿¡ä¸­ã®çŠ¶æ…‹ã«ã—ã‚ˆã†ã¨ã™ã‚‹ã€‚
 void Servent::triggerChannel(char *str, ChanInfo::PROTOCOL proto, bool relay)
 {
     ChanInfo info;
@@ -1246,7 +1246,7 @@ void Servent::CMD_apply(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     }
 
     peercastInst->saveSettings();
-    peercast::notifyMessage(ServMgr::NT_PEERCAST, "İ’è‚ğ•Û‘¶‚µ‚Ü‚µ‚½B");
+    peercast::notifyMessage(ServMgr::NT_PEERCAST, "è¨­å®šã‚’ä¿å­˜ã—ã¾ã—ãŸã€‚");
     peercastApp->updateSettings();
 
     if ((servMgr->isRoot) && (brRoot))
@@ -1298,8 +1298,8 @@ void Servent::CMD_fetch(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     }
 
     info.bcID = chanMgr->broadcastID;
-    // id ‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¢ƒ`ƒƒƒ“ƒlƒ‹‚ª‚ ‚é‚Æ‚¢‚ë‚¢‚ë‚Ü‚¸‚¢‚Ì‚ÅA–
-    // ‘O‚Éİ’è‚µ‚Ä‚©‚ç“o˜^‚·‚éB
+    // id ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ãªã„ãƒãƒ£ãƒ³ãƒãƒ«ãŒã‚ã‚‹ã¨ã„ã‚ã„ã‚ã¾ãšã„ã®ã§ã€äº‹
+    // å‰ã«è¨­å®šã—ã¦ã‹ã‚‰ç™»éŒ²ã™ã‚‹ã€‚
     info.id = chanMgr->broadcastID;
     info.id.encode(NULL, info.name, info.genre, info.bitrate);
 
@@ -1310,7 +1310,7 @@ void Servent::CMD_fetch(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
 }
 
-// ƒT[ƒoƒ“ƒg‚ğ’â~‚·‚é‹@”\‚ğ’Ç‰Á‚µ‚½‚¢‚É–ğ‚É—§‚Â‚©‚àB
+// ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’åœæ­¢ã™ã‚‹æ©Ÿèƒ½ã‚’è¿½åŠ ã—ãŸã„æ™‚ã«å½¹ã«ç«‹ã¤ã‹ã‚‚ã€‚
 #if 0
 void Servent::CMD_stopserv(char *cmd, HTTP& http, HTML& html, String& jumpStr)
 {
@@ -1418,7 +1418,7 @@ void Servent::CMD_bump(char *cmd, HTTP& http, HTML& html, String& jumpStr)
                 c->designatedHost = theHit;
             } else
             {
-                // ChanHit‚ğ‚Å‚Á‚¿‚ ‚°‚é
+                // ChanHitã‚’ã§ã£ã¡ã‚ã’ã‚‹
                 c->designatedHost.init();
                 c->designatedHost.host = c->designatedHost.rhost[0] = designation;
             }
@@ -1834,14 +1834,14 @@ void Servent::handshakeWMHTTPPush(HTTP& http, const std::string& path)
 
     int size = std::atoi(http.headers.get("Content-Length").c_str());
 
-    // ƒGƒ“ƒR[ƒ_[‚Ìİ’è—v‹‚ğ“Ç‚ŞB0 ƒoƒCƒg‚Ì‹ó‚Ìİ’è—v‹‚à‡–@B
+    // ã‚¨ãƒ³ã‚³ãƒ¼ãƒ€ãƒ¼ã®è¨­å®šè¦æ±‚ã‚’èª­ã‚€ã€‚0 ãƒã‚¤ãƒˆã®ç©ºã®è¨­å®šè¦æ±‚ã‚‚åˆæ³•ã€‚
     unique_ptr<char> buffer(new char[size + 1]);
     http.read(buffer.get(), size);
     buffer.get()[size] = '\0';
     LOG_DEBUG("setup: %s", str::inspect(buffer.get()).c_str());
 
-    // ‚í‚©‚Á‚½‚Ó‚è‚ğ‚·‚é
-    http.writeLine("HTTP/1.1 204 No Content"); // ‚±‚ê‚Á‚Ä‚¿‚á‚ñ‚Æ CRLF o‚éH
+    // ã‚ã‹ã£ãŸãµã‚Šã‚’ã™ã‚‹
+    http.writeLine("HTTP/1.1 204 No Content"); // ã“ã‚Œã£ã¦ã¡ã‚ƒã‚“ã¨ CRLF å‡ºã‚‹ï¼Ÿ
     std::vector< std::pair<const char*,const char*> > headers =
         {
             { "Server"         , "Cougar/9.01.01.3814" },
@@ -1872,7 +1872,7 @@ void Servent::handshakeWMHTTPPush(HTTP& http, const std::string& path)
 
     // -----------------------------------------
 
-    // User-Agent ƒwƒbƒ_[‚ª‚ ‚ê‚Î agent ‚ğƒZƒbƒg
+    // User-Agent ãƒ˜ãƒƒãƒ€ãƒ¼ãŒã‚ã‚Œã° agent ã‚’ã‚»ãƒƒãƒˆ
     if (http.headers.get("User-Agent") != "")
         this->agent = http.headers.get("User-Agent");
 
@@ -1914,7 +1914,7 @@ ChanInfo Servent::createChannelInfo(GnuID broadcastID, const String& broadcastMs
     ChanInfo info;
 
     auto type = ChanInfo::getTypeFromStr(query.get("type").c_str());
-    // type ‚ª‹óA‚ ‚é‚¢‚Í”F¯‚Å‚«‚È‚¢ê‡‚ÍƒŠƒNƒGƒXƒg‚Ì Content-Type ‚©‚ç©“®”»•Ê‚·‚é
+    // type ãŒç©ºã€ã‚ã‚‹ã„ã¯èªè­˜ã§ããªã„å ´åˆã¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆã® Content-Type ã‹ã‚‰è‡ªå‹•åˆ¤åˆ¥ã™ã‚‹
     if (type == ChanInfo::T_UNKNOWN)
         type = ChanInfo::getTypeFromMIME(contentType);
 
@@ -1934,14 +1934,14 @@ ChanInfo Servent::createChannelInfo(GnuID broadcastID, const String& broadcastMs
 }
 
 // -----------------------------------
-// HTTP Push •ú‘—
+// HTTP Push æ”¾é€
 void Servent::handshakeHTTPPush(const std::string& args)
 {
     using namespace cgi;
 
     Query query(args);
 
-    // HTTP ƒwƒbƒ_[‚ğ‘S‚Ä“Ç‚İ‚Ş
+    // HTTP ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’å…¨ã¦èª­ã¿è¾¼ã‚€
     HTTP http(*sock);
     http.readHeaders();
 
@@ -1959,7 +1959,7 @@ void Servent::handshakeHTTPPush(const std::string& args)
         LOG_INFO("HTTP Push channel already active, closing old one");
         c->thread.shutdown();
     }
-    // ‚±‚±‚ÅƒVƒƒƒbƒgƒ_ƒEƒ“‘Ò‚½‚È‚­‚Ä‚¢‚¢‚ÌH
+    // ã“ã“ã§ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³å¾…ãŸãªãã¦ã„ã„ã®ï¼Ÿ
 
     c = chanMgr->createChannel(info, NULL);
     if (!c)

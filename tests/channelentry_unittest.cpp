@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "chandir.h"
 
@@ -13,18 +13,18 @@ TEST_F(ChannelEntryFixture, constructor)
 
 TEST_F(ChannelEntryFixture, textToChannelEntries)
 {
-    auto vec = ChannelEntry::textToChannelEntries("—\’è’n<>97968780D09CC97BB98D4A2BF221EDE7<>127.0.0.1:7144<>http://www.example.com/<>ƒvƒƒOƒ‰ƒ~ƒ“ƒO<>peercast‚ğ‚¢‚¶‚é - &lt;Free&gt;<>-1<>-1<>428<>FLV<><><><><>%E4%BA%88%E5%AE%9A%E5%9C%B0<>1:14<>click<><>1\n", "");
+    auto vec = ChannelEntry::textToChannelEntries("äºˆå®šåœ°<>97968780D09CC97BB98D4A2BF221EDE7<>127.0.0.1:7144<>http://www.example.com/<>ãƒ—ãƒ­ã‚°ãƒ©ãƒŸãƒ³ã‚°<>peercastã‚’ã„ã˜ã‚‹ - &lt;Free&gt;<>-1<>-1<>428<>FLV<><><><><>%E4%BA%88%E5%AE%9A%E5%9C%B0<>1:14<>click<><>1\n", "");
 
     ASSERT_EQ(1, vec.size());
 
     auto& entry = vec[0];
 
-    ASSERT_STREQ("—\’è’n", entry.name.c_str());
+    ASSERT_STREQ("äºˆå®šåœ°", entry.name.c_str());
     ASSERT_STREQ("97968780D09CC97BB98D4A2BF221EDE7", ((std::string) entry.id).c_str());
     ASSERT_EQ(428, entry.bitrate);
     ASSERT_STREQ("FLV", entry.contentTypeStr.c_str());
-    ASSERT_STREQ("peercast‚ğ‚¢‚¶‚é - &lt;Free&gt;", entry.desc.c_str());
-    ASSERT_STREQ("ƒvƒƒOƒ‰ƒ~ƒ“ƒO", entry.genre.c_str());
+    ASSERT_STREQ("peercastã‚’ã„ã˜ã‚‹ - &lt;Free&gt;", entry.desc.c_str());
+    ASSERT_STREQ("ãƒ—ãƒ­ã‚°ãƒ©ãƒŸãƒ³ã‚°", entry.genre.c_str());
     ASSERT_STREQ("http://www.example.com/", entry.url.c_str());
     ASSERT_STREQ("127.0.0.1:7144", entry.tip.c_str());
     ASSERT_STREQ("1:14", entry.uptime.c_str());

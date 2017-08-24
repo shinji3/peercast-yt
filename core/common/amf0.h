@@ -1,4 +1,4 @@
-// ------------------------------------------------
+﻿// ------------------------------------------------
 // File: amf0.h
 // Desc:
 //      AMF0 serialization and deserialization.  This file is based on

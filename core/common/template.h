@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : template.h
 // Date: 4-apr-2002
 // Author: giles
@@ -27,7 +27,7 @@
 
 using json = nlohmann::json;
 
-// HTML ƒeƒ“ƒvƒŒ[ƒgƒVƒXƒeƒ€
+// HTML ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚·ã‚¹ãƒ†ãƒ 
 class Template
 {
 public:
@@ -70,7 +70,7 @@ public:
             return selectedFragment == currentFragment;
     }
 
-    // •Ï”
+    // å¤‰æ•°
     void    writeVariable(Stream &, const String &, int);
     void    writeGlobalVariable(Stream &, const String &, int);
     bool    writeLoopVariable(Stream &s, const String &varName, int loop);
@@ -78,7 +78,7 @@ public:
     int     getIntVariable(const String &, int);
     bool    getBoolVariable(const String &, int);
 
-    // ƒfƒBƒŒƒNƒeƒBƒu‚ÌÀs
+    // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒ†ã‚£ãƒ–ã®å®Ÿè¡Œ
     int     readCmd(Stream &, Stream *, int);
     void    readIf(Stream &, Stream *, int);
     void    readLoop(Stream &, Stream *, int);
@@ -109,7 +109,7 @@ public:
 
 #include "http.h"
 
-// HTTP ƒŠƒNƒGƒXƒg‚ğ•Ï”‚Æ‚µ‚ÄƒGƒNƒXƒ|[ƒg‚·‚éƒXƒR[ƒv
+// HTTP ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å¤‰æ•°ã¨ã—ã¦ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹ã‚¹ã‚³ãƒ¼ãƒ—
 class HTTPRequestScope : public Template::Scope
 {
 public:

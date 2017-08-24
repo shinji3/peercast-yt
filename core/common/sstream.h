@@ -1,4 +1,4 @@
-#ifndef _DMSTREAM_H
+﻿#ifndef _DMSTREAM_H
 #define _DMSTREAM_H
 
 #include <vector>

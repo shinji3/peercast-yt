@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : wsys.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -75,7 +75,7 @@ void WSys::callLocalURL(const char *str,int port)
 void WSys::getURL(const char *url)
 {
     if (mainWindow)
-        if (Sys::strnicmp(url,"http://",7) || Sys::strnicmp(url,"mailto:",7)) // XXX: ==0 ‚ª”²‚¯‚Ä‚éH
+        if (Sys::strnicmp(url,"http://",7) || Sys::strnicmp(url,"mailto:",7)) // XXX: ==0 ãŒæŠœã‘ã¦ã‚‹ï¼Ÿ
             ShellExecute(mainWindow, NULL, url, NULL, NULL, SW_SHOWNORMAL);
 }
 
@@ -100,7 +100,7 @@ unsigned int WSys::SetUPnP()
 {
     CoInitialize(NULL);
 
-    //ControlURL–¢æ“¾‚Ìê‡‚Íæ“¾‚ğ‚·
+    //ControlURLæœªå–å¾—ã®å ´åˆã¯å–å¾—ã‚’è©¦ã™
     if(strcmp(mControlURL.c_str(),"") == 0){
         if(!YMSSDPDiscover::Initialize() || !mSSDP.Open())
         {
@@ -114,7 +114,7 @@ unsigned int WSys::SetUPnP()
         mSSDP.Send("urn:schemas-upnp-org:service:WANPPPConnection:1");
         mSSDP.Send("urn:schemas-upnp-org:service:WANIPConnection:1");
 
-        //óM‚ğ‚İ‚é
+        //å—ä¿¡ã‚’è©¦ã¿ã‚‹
         YMSSDPDiscover::LocationInfo info;
 
         int cnt = 0;
@@ -143,21 +143,21 @@ unsigned int WSys::SetUPnP()
             }
             else
             {
-                //¬Œ÷
+                //æˆåŠŸ
                 LOG_DEBUG("IGD Location:%s",info.mLocation.c_str());
 
-                //controlURLæ“¾
+                //controlURLå–å¾—
                 mControlURL = YMSSDPDiscover::GetControlURL(info.mLocation.c_str(),info.mST.c_str());
                 if(mControlURL.empty())
                 {
-                    //¸”s
+                    //å¤±æ•—
                     LOG_ERROR("UPnP ControlURL Scan Failed.");
                     CoUninitialize();
                     return 0;
                 }
                 mST = info.mST;
 
-                //æ“¾OK
+                //å–å¾—OK
                 LOG_INFO("UPnP ControlURL:%s",mControlURL.c_str());
                 break;
             }
@@ -167,10 +167,10 @@ unsigned int WSys::SetUPnP()
         }
     }
 
-    //ƒ|[ƒg‰ğ•ú
+    //ãƒãƒ¼ãƒˆè§£æ”¾
     char sPort[10] = "",sLanIP[64] = "";
 
-    //ƒ[ƒJƒ‹IPæ“¾
+    //ãƒ­ãƒ¼ã‚«ãƒ«IPå–å¾—
     Host lh(ClientSocket::getIP(NULL),0);
     lh.IPtoStr(sLanIP);
 
@@ -195,7 +195,7 @@ unsigned int WSys::SetUPnP()
 
     if(soap.Invoke(mControlURL.c_str()) != 200)
     {
-        //¸”s
+        //å¤±æ•—
         LOG_ERROR("UPnP AddPortMapping Error.");
         CoUninitialize();
         return 0;

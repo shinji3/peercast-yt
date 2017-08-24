@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "critsec.h"
 
@@ -20,7 +20,7 @@ TEST_F(CriticalSectionFixture, recursive)
 {
     WLock lock;
 
-    // ƒfƒbƒhƒƒbƒN‚µ‚È‚¢B
+    // ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯ã—ãªã„ã€‚
     ASSERT_NO_THROW(
         {
             CriticalSection cs(lock);

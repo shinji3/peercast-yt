@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : chaninfo.cpp
 // Date: 4-apr-2002
 // Author: giles
@@ -52,7 +52,7 @@ std::string ChanInfo::getTypeStringLong()
         " (" + getMIMEType() + "; " + getTypeExt() + ")";
 
     if (contentTypeStr == "")
-        buf += " [contentTypeStr empty]"; // ‚±‚ê‚ª‹N‚±‚é‚Ì‚Í‰½‚©‚ª‚¨‚©‚µ‚¢
+        buf += " [contentTypeStr empty]"; // ã“ã‚ŒãŒèµ·ã“ã‚‹ã®ã¯ä½•ã‹ãŒãŠã‹ã—ã„
     if (MIMEType == "")
         buf += " [no styp]";
     if (streamExt == "")

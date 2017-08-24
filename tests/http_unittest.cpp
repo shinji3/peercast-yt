@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "sstream.h"
 #include "http.h"
@@ -19,7 +19,7 @@ TEST_F(HTTPFixture, readResponse)
     int statusCode = http.readResponse();
 
     ASSERT_EQ(200, statusCode);
-    // •›ì—p‚Æ‚µ‚Ä cmdLine ‚ª‚¿‚å‚ñ‚¬‚ê‚éB
+    // å‰¯ä½œç”¨ã¨ã—ã¦ cmdLine ãŒã¡ã‚‡ã‚“ãã‚Œã‚‹ã€‚
     ASSERT_STREQ("HTTP/1.0 200", http.cmdLine);
     ASSERT_TRUE(mem.eof());
 }
@@ -88,9 +88,9 @@ TEST_F(HTTPFixture, isHeader)
     ASSERT_TRUE(http.nextHeader());
     ASSERT_TRUE(http.isHeader("Host"));
     ASSERT_TRUE(http.isHeader("host")); // case-insensitive
-    ASSERT_TRUE(http.isHeader("localhost")); // ’l‚Ì•”•ª‚É‚àƒ}ƒbƒ`‚µ‚¿‚á‚¤
-    ASSERT_TRUE(http.isHeader("h")); // À‚Í‘O•ûˆê’v
-    ASSERT_FALSE(http.isHeader("")); // ‚Å‚à‹ó•¶š—ñ‚Íƒ_ƒ
+    ASSERT_TRUE(http.isHeader("localhost")); // å€¤ã®éƒ¨åˆ†ã«ã‚‚ãƒãƒƒãƒã—ã¡ã‚ƒã†
+    ASSERT_TRUE(http.isHeader("h")); // å®Ÿã¯å‰æ–¹ä¸€è‡´
+    ASSERT_FALSE(http.isHeader("")); // ã§ã‚‚ç©ºæ–‡å­—åˆ—ã¯ãƒ€ãƒ¡
 
     ASSERT_TRUE(http.nextHeader());
     ASSERT_TRUE(http.isHeader("Connection"));
@@ -167,7 +167,7 @@ TEST_F(HTTPFixture, getAuthUserPass2)
 TEST_F(HTTPFixture, initRequest)
 {
     http.initRequest("GET /index.html HTTP/1.0\r\n");
-    // readRequest ‚Æˆá‚Á‚ÄA‰üsƒR[ƒh‚Ííœ‚³‚ê‚È‚¢B
+    // readRequest ã¨é•ã£ã¦ã€æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã¯å‰Šé™¤ã•ã‚Œãªã„ã€‚
     ASSERT_STREQ("GET /index.html HTTP/1.0\r\n", http.cmdLine);
 }
 

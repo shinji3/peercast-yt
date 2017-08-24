@@ -1,4 +1,4 @@
-#include "notif.h"
+﻿#include "notif.h"
 #include "critsec.h"
 
 // global

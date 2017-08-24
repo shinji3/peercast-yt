@@ -1,4 +1,4 @@
-#ifndef _VARWRITER_H
+﻿#ifndef _VARWRITER_H
 #define _VARWRITER_H
 
 #include <string>

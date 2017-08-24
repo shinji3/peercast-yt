@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 
 #include "html.h"
 #include "sstream.h"
@@ -57,7 +57,7 @@ TEST_F(HTMLFixture, addHead)
 }
 
 
-// ƒ^ƒCƒgƒ‹‚ÍƒtƒH[ƒ}ƒbƒg•¶š—ñ‚Æ‚µ‚Ä‰ğß‚³‚ê‚Ä‚Í‚¢‚¯‚È‚¢B
+// ã‚¿ã‚¤ãƒˆãƒ«ã¯ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ–‡å­—åˆ—ã¨ã—ã¦è§£é‡ˆã•ã‚Œã¦ã¯ã„ã‘ãªã„ã€‚
 TEST_F(HTMLFixture, addHead2)
 {
     StringStream mem2;

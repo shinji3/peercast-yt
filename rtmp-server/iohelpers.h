@@ -1,4 +1,4 @@
-#ifndef _IO_HELPERS_H
+ï»¿#ifndef _IO_HELPERS_H
 #define _IO_HELPERS_H
 
 #include <stdlib.h>
@@ -46,7 +46,7 @@ namespace iohelpers
         return integer;
     }
 
-    // ®”‚ğƒrƒbƒg•‚ğw’è‚µ‚½”z—ñ‚É‚µ‚½‚ª‚Á‚Ä•ª‰ğ‚·‚éB
+    // æ•´æ•°ã‚’ãƒ“ãƒƒãƒˆå¹…ã‚’æŒ‡å®šã—ãŸé…åˆ—ã«ã—ãŸãŒã£ã¦åˆ†è§£ã™ã‚‹ã€‚
     std::vector<int> unpack_bits(int integer, std::vector<int> sizes)
     {
         std::vector<int> res;

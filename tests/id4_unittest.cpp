@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ï»¿#include <gtest/gtest.h>
 #include "id.h"
 
 class ID4Fixture : public ::testing::Test {
@@ -33,21 +33,21 @@ TEST_F(ID4Fixture, equalsAndNotEqual)
     ASSERT_NE(id, abcd);
 }
 
-// •¡”•¶Žš‚Ì•¶Žš’è”‚ÍƒŠƒgƒ‹EƒGƒ“ƒfƒBƒAƒ“‚ÌŠÂ‹«‚Å•¶Žš‚Ì‡”Ô‚ª”½“]‚·
-// ‚é‚±‚Æ‚ªŠú‘Ò‚³‚ê‚éB
+// è¤‡æ•°æ–‡å­—ã®æ–‡å­—å®šæ•°ã¯ãƒªãƒˆãƒ«ãƒ»ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã®ç’°å¢ƒã§æ–‡å­—ã®é †ç•ªãŒåè»¢ã™
+// ã‚‹ã“ã¨ãŒæœŸå¾…ã•ã‚Œã‚‹ã€‚
 TEST_F(ID4Fixture, getValue)
 {
     uint16_t n = 0xabcd;
     uint8_t *p = (uint8_t*) &n;
 
     if (*p == 0xab) {
-        // ƒrƒbƒO
+        // ãƒ“ãƒƒã‚°
         ASSERT_EQ(ID4('abcd'), ID4("abcd"));
     } else if (*p == 0xcd) {
-        // ƒŠƒgƒ‹
+        // ãƒªãƒˆãƒ«
         ASSERT_NE(ID4('abcd'), ID4("abcd"));
     } else {
-        // ‰½‚àM‚¶‚ç‚ê‚È‚¢B
+        // ä½•ã‚‚ä¿¡ã˜ã‚‰ã‚Œãªã„ã€‚
         ASSERT_TRUE(false);
     }
 }

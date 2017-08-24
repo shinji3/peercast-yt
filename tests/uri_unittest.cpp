@@ -1,4 +1,4 @@
-// URI ƒNƒ‰ƒX‚ÌƒeƒXƒgB
+ï»¿// URI ã‚¯ãƒ©ã‚¹ã®ãƒ†ã‚¹ãƒˆã€‚
 
 #include <gtest/gtest.h>
 #include "uri.h"
@@ -15,8 +15,8 @@ TEST_F(URIFixture, httpScheme)
     ASSERT_TRUE(u.isValid());
     ASSERT_STREQ("http", u.scheme().c_str());
     ASSERT_STREQ("www.example.com", u.host().c_str());
-    ASSERT_EQ(80, u.port()); // ƒ|[ƒgw’è‚ª‚È‚¢ê‡‚ÍƒXƒL[ƒ€‚ÌƒfƒtƒHƒ‹ƒgƒ|[ƒgB
-    ASSERT_STREQ("/", u.path().c_str()); // ƒpƒX‚ªÈ—ª‚³‚ê‚Ä‚¢‚éê‡‚Í "/" ‚É‚È‚éB
+    ASSERT_EQ(80, u.port()); // ãƒãƒ¼ãƒˆæŒ‡å®šãŒãªã„å ´åˆã¯ã‚¹ã‚­ãƒ¼ãƒ ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒãƒ¼ãƒˆã€‚
+    ASSERT_STREQ("/", u.path().c_str()); // ãƒ‘ã‚¹ãŒçœç•¥ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ "/" ã«ãªã‚‹ã€‚
 }
 
 TEST_F(URIFixture, httpSchemeWithPortQueryAndFragment)
@@ -28,7 +28,7 @@ TEST_F(URIFixture, httpSchemeWithPortQueryAndFragment)
     ASSERT_STREQ("localhost", u.host().c_str());
     ASSERT_EQ(7144, u.port());
     ASSERT_STREQ("/html/ja/index.html", u.path().c_str());
-    ASSERT_STREQ("name=%E4%BA%88%E5%AE%9A%E5%9C%B0", u.query().c_str()); // ©“®“I‚É unescape ‚Í‚³‚ê‚È‚¢B
+    ASSERT_STREQ("name=%E4%BA%88%E5%AE%9A%E5%9C%B0", u.query().c_str()); // è‡ªå‹•çš„ã« unescape ã¯ã•ã‚Œãªã„ã€‚
     ASSERT_STREQ("top", u.fragment().c_str());
 }
 
@@ -67,14 +67,14 @@ TEST_F(URIFixture, emptyURI)
 //     ASSERT_STREQ("", u.host().c_str());
 // }
 
-// mailtoƒXƒL[ƒ€‚É‚Í‘Î‰‚µ‚È‚¢B
+// mailtoã‚¹ã‚­ãƒ¼ãƒ ã«ã¯å¯¾å¿œã—ãªã„ã€‚
 TEST_F(URIFixture, mailtoScheme)
 {
     URI u("mailto:webmaster@example.com");
     ASSERT_FALSE(u.isValid());
 }
 
-// ‘Š‘ÎURL‚Íg‚¦‚È‚¢B
+// ç›¸å¯¾URLã¯ä½¿ãˆãªã„ã€‚
 TEST_F(URIFixture, relativeURI)
 {
     ASSERT_NO_THROW(URI("/index.html"));

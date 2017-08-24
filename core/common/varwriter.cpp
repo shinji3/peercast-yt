@@ -1,4 +1,4 @@
-#include "varwriter.h"
+﻿#include "varwriter.h"
 #include "sstream.h"
 
 std::string VariableWriter::getVariable(const std::string& name)

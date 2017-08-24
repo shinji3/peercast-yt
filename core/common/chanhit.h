@@ -1,4 +1,4 @@
-// ------------------------------------------------
+ï»¿// ------------------------------------------------
 // File : chanhit.h
 // Date: 4-apr-2002
 // Author: giles
@@ -60,7 +60,7 @@ public:
     bool            relay;
     bool            cin;
 
-    // ã—¬ƒzƒXƒg‚Ìî•ñB
+    // ä¸Šæµãƒ›ã‚¹ãƒˆã®æƒ…å ±ã€‚
     Host            uphost;
     unsigned int    uphostHops;
 

@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+Ôªø#include <gtest/gtest.h>
 #include "logbuf.h"
 #include "sstream.h"
 #include "str.h"
@@ -47,11 +47,11 @@ TEST_F(LogBufferFixture, dumpHTML_simple)
 {
     StringStream mem;
 
-    lb.write("<>&ÇŸÇ∞", LogBuffer::T_ERROR);
+    lb.write("<>&„Åª„Åí", LogBuffer::T_ERROR);
     lb.dumpHTML(mem);
 
-    ASSERT_TRUE(str::has_suffix(mem.str(), " <b>[EROR]</b> &lt;&gt;&amp;ÇŸÇ∞<br>"));
-    ASSERT_NE(" <b>[EROR]</b> &lt;&gt;&amp;ÇŸÇ∞<br>", mem.str());
+    ASSERT_TRUE(str::has_suffix(mem.str(), " <b>[EROR]</b> &lt;&gt;&amp;„Åª„Åí<br>"));
+    ASSERT_NE(" <b>[EROR]</b> &lt;&gt;&amp;„Åª„Åí<br>", mem.str());
 }
 
 TEST_F(LogBufferFixture, write)
