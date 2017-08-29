@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+#ifndef __GNUC__
+#define __attribute__(x)
+#endif
+
 namespace str
 {
     std::string ascii_dump(const std::string& in, const std::string& replacement = ".");
@@ -11,7 +15,7 @@ namespace str
     std::string codepoint_to_utf8(uint32_t);
     bool        contains(const std::string& haystack, const std::string& needle);
     std::string downcase(const std::string& input);
-    std::string format(const char* fmt, ...);
+    std::string format(const char* fmt, ...) __attribute__ ((format (printf, 1, 2)));
     std::string group_digits(const std::string& in, const std::string& separator = ",");
     std::string hexdump(const std::string& in);
     std::string inspect(const std::string str);
@@ -31,6 +35,7 @@ namespace str
     int         count(const std::string& haystack, const std::string& needle);
 
     std::string rstrip(const std::string& str);
+    std::string escapeshellarg_unix(const std::string& str);
 }
 
 #endif

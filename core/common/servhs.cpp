@@ -787,8 +787,6 @@ bool Servent::getLocalURL(char *str)
     if (!sock)
         throw StreamException("Not connected");
 
-    char ipStr[64];
-
     Host h;
 
     if (sock->host.localIP())
@@ -798,9 +796,7 @@ bool Servent::getLocalURL(char *str)
 
     h.port = servMgr->serverHost.port;
 
-    h.toStr(ipStr);
-
-    snprintf(str, 29, "http://%s", ipStr);
+    snprintf(str, 29, "http://%s", h.str().c_str());
     return true;
 }
 
@@ -933,8 +929,9 @@ bool Servent::handshakeAuth(HTTP &http, const char *args, bool local)
 }
 
 // -----------------------------------
-void Servent::CMD_redirect(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_redirect(char *cmd, HTTP& http, String& jumpStr)
 {
+    HTML html("", *sock);
     const char *j = getCGIarg(cmd, "url=");
 
     if (j)
@@ -964,18 +961,18 @@ void Servent::CMD_redirect(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     }
 }
 
-void Servent::CMD_viewxml(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_viewxml(char *cmd, HTTP& http, String& jumpStr)
 {
     handshakeXML();
 }
 
-void Servent::CMD_clearlog(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_clearlog(char *cmd, HTTP& http, String& jumpStr)
 {
     sys->logBuf->clear();
     jumpStr.sprintf("/%s/viewlog.html", servMgr->htmlPath);
 }
 
-void Servent::CMD_edit_bcid(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_edit_bcid(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1002,7 +999,7 @@ void Servent::CMD_edit_bcid(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     jumpStr.sprintf("/%s/bcid.html", servMgr->htmlPath);
 }
 
-void Servent::CMD_add_bcid(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_add_bcid(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1041,7 +1038,7 @@ void Servent::CMD_add_bcid(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     }
 }
 
-void Servent::CMD_apply(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_apply(char *cmd, HTTP& http, String& jumpStr)
 {
     servMgr->numFilters = 0;
     ServFilter *currFilter = servMgr->filters;
@@ -1253,7 +1250,7 @@ void Servent::CMD_apply(char *cmd, HTTP& http, HTML& html, String& jumpStr)
         servMgr->broadcastRootSettings(getUpd);
 }
 
-void Servent::CMD_fetch(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_fetch(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1310,9 +1307,19 @@ void Servent::CMD_fetch(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
 }
 
+void Servent::CMD_fetch_feeds(char *cmd, HTTP& http, String& jumpStr)
+{
+    servMgr->channelDirectory.update(ChannelDirectory::kUpdateManual);
+
+    if (!http.headers.get("Referer").empty())
+        jumpStr.sprintf("%s", http.headers.get("Referer").c_str());
+    else
+        jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
+}
+
 // サーバントを停止する機能を追加したい時に役に立つかも。
 #if 0
-void Servent::CMD_stopserv(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_stopserv(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1331,7 +1338,7 @@ void Servent::CMD_stopserv(char *cmd, HTTP& http, HTML& html, String& jumpStr)
 }
 #endif
 
-void Servent::CMD_clear(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_clear(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1355,13 +1362,13 @@ void Servent::CMD_clear(char *cmd, HTTP& http, HTML& html, String& jumpStr)
         jumpStr.sprintf("/%s/index.html", servMgr->htmlPath);
 }
 
-void Servent::CMD_shutdown(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_shutdown(char *cmd, HTTP& http, String& jumpStr)
 {
     http.send(HTTPResponse::ok({}, "Server is shutting down..."));
     servMgr->shutdownTimer = 1;
 }
 
-void Servent::CMD_stop(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_stop(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1382,7 +1389,7 @@ void Servent::CMD_stop(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
 }
 
-void Servent::CMD_bump(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_bump(char *cmd, HTTP& http, String& jumpStr)
 {
     cgi::Query query(cmd);
     GnuID id;
@@ -1435,7 +1442,7 @@ void Servent::CMD_bump(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     }
 }
 
-void Servent::CMD_keep(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_keep(char *cmd, HTTP& http, String& jumpStr)
 {
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
@@ -1455,13 +1462,13 @@ void Servent::CMD_keep(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     jumpStr.sprintf("/%s/channels.html", servMgr->htmlPath);
 }
 
-void Servent::CMD_logout(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_logout(char *cmd, HTTP& http, String& jumpStr)
 {
     jumpStr.sprintf("%s", "/");
     servMgr->cookieList.remove(cookie);
 }
 
-void Servent::CMD_login(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_login(char *cmd, HTTP& http, String& jumpStr)
 {
     GnuID id;
     char idstr[64];
@@ -1483,7 +1490,7 @@ void Servent::CMD_login(char *cmd, HTTP& http, HTML& html, String& jumpStr)
     http.writeLine("");
 }
 
-void Servent::CMD_control_rtmp(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_control_rtmp(char *cmd, HTTP& http, String& jumpStr)
 {
     cgi::Query query(cmd);
     auto action = query.get("action");
@@ -1495,7 +1502,7 @@ void Servent::CMD_control_rtmp(char *cmd, HTTP& http, HTML& html, String& jumpSt
 
         uint16_t port = std::atoi(query.get("port").c_str());
         {
-            CriticalSection cs(servMgr->lock);
+            std::lock_guard<std::recursive_mutex> cs(servMgr->lock);
             ChanInfo& info = servMgr->defaultChannelInfo;
 
             servMgr->rtmpPort = port;
@@ -1521,7 +1528,7 @@ void Servent::CMD_control_rtmp(char *cmd, HTTP& http, HTML& html, String& jumpSt
     }
 }
 
-void Servent::CMD_update_channel_info(char *cmd, HTTP& http, HTML& html, String& jumpStr)
+void Servent::CMD_update_channel_info(char *cmd, HTTP& http, String& jumpStr)
 {
     cgi::Query query(cmd);
 
@@ -1556,7 +1563,6 @@ void Servent::handshakeCMD(char *query)
     String jumpStr;
 
     HTTP http(*sock);
-    HTML html("", *sock);
 
     if (!handshakeAuth(http, query, true))
         return;
@@ -1567,52 +1573,55 @@ void Servent::handshakeCMD(char *query)
     {
         if (cmd == "add_bcid")
         {
-            CMD_add_bcid(query, http, html, jumpStr);
+            CMD_add_bcid(query, http, jumpStr);
         }else if (cmd == "apply")
         {
-            CMD_apply(query, http, html, jumpStr);
+            CMD_apply(query, http, jumpStr);
         }else if (cmd == "bump")
         {
-            CMD_bump(query, http, html, jumpStr);
+            CMD_bump(query, http, jumpStr);
         }else if (cmd == "clear")
         {
-            CMD_clear(query, http, html, jumpStr);
+            CMD_clear(query, http, jumpStr);
         }else if (cmd == "clearlog")
         {
-            CMD_clearlog(query, http, html, jumpStr);
+            CMD_clearlog(query, http, jumpStr);
         }else if (cmd == "control_rtmp")
         {
-            CMD_control_rtmp(query, http, html, jumpStr);
+            CMD_control_rtmp(query, http, jumpStr);
         }else if (cmd == "edit_bcid")
         {
-            CMD_edit_bcid(query, http, html, jumpStr);
+            CMD_edit_bcid(query, http, jumpStr);
         }else if (cmd == "fetch")
         {
-            CMD_fetch(query, http, html, jumpStr);
+            CMD_fetch(query, http, jumpStr);
+        }else if (cmd == "fetch_feeds")
+        {
+            CMD_fetch_feeds(query, http, jumpStr);
         }else if (cmd == "keep")
         {
-            CMD_keep(query, http, html, jumpStr);
+            CMD_keep(query, http, jumpStr);
         }else if (cmd == "login")
         {
-            CMD_login(query, http, html, jumpStr);
+            CMD_login(query, http, jumpStr);
         }else if (cmd == "logout")
         {
-            CMD_logout(query, http, html, jumpStr);
+            CMD_logout(query, http, jumpStr);
         }else if (cmd == "shutdown")
         {
-            CMD_shutdown(query, http, html, jumpStr);
+            CMD_shutdown(query, http, jumpStr);
         }else if (cmd == "stop")
         {
-            CMD_stop(query, http, html, jumpStr);
+            CMD_stop(query, http, jumpStr);
         }else if (cmd == "redirect")
         {
-            CMD_redirect(query, http, html, jumpStr);
+            CMD_redirect(query, http, jumpStr);
         }else if (cmd == "update_channel_info")
         {
-            CMD_update_channel_info(query, http, html, jumpStr);
+            CMD_update_channel_info(query, http, jumpStr);
         }else if (cmd == "viewxml")
         {
-            CMD_viewxml(query, http, html, jumpStr);
+            CMD_viewxml(query, http, jumpStr);
         }else{
             throw HTTPException(HTTP_SC_BADREQUEST, 400);
         }
@@ -1623,7 +1632,7 @@ void Servent::handshakeCMD(char *query)
         http.writeLineF("%s %s", HTTP_HS_CONTENT, "text/html");
         http.writeLine("");
 
-        html.startTagEnd("h1", "ERROR - %s", e.msg);
+        http.writeStringF("<h1>ERROR - %s</h1>\n", cgi::escape_html(e.msg).c_str());
 
         LOG_ERROR("html: %s", e.msg);
     }
@@ -1632,7 +1641,10 @@ void Servent::handshakeCMD(char *query)
     {
         String jmp(jumpStr, String::T_HTML);
         jmp.convertTo(String::T_ASCII);
-        html.locateTo(jmp.cstr());
+
+        http.writeLine(HTTP_SC_FOUND);
+        http.writeLineF("Location: %s", jmp.c_str());
+        http.writeLine("");
     }
 }
 

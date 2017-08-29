@@ -28,12 +28,12 @@
 #include "version2.h"
 #include "template.h"
 #include "sstream.h"
+#include "defer.h"
 
 // --------------------------------------
 HTML::HTML(const char *t, Stream &o)
 {
     out = &o;
-    out->writeCRLF = false;
 
     title.set(t);
     tagLevel = 0;
@@ -44,6 +44,7 @@ HTML::HTML(const char *t, Stream &o)
 void HTML::writeOK(const char *content, const std::map<std::string,std::string>& additionalHeaders)
 {
     bool crlf = out->writeCRLF;
+    Defer cb([=] { out->writeCRLF = crlf; });
 
     out->writeCRLF = true;
     out->writeLine(HTTP_SC_OK);
@@ -57,7 +58,6 @@ void HTML::writeOK(const char *content, const std::map<std::string,std::string>&
         out->writeLineF("%s: %s", pair.first.c_str(), pair.second.c_str());
 
     out->writeLine("");
-    out->writeCRLF = crlf;
 }
 
 // --------------------------------------
@@ -128,11 +128,11 @@ void HTML::writeRawFile(const char *fileName, const char *mimeType)
 void HTML::locateTo(const char *url)
 {
     bool prev = out->writeCRLF;
+    Defer cb([=] { out->writeCRLF = prev; });
     out->writeCRLF = true;
     out->writeLine(HTTP_SC_FOUND);
     out->writeLineF("Location: %s", url);
     out->writeLine("");
-    out->writeCRLF = prev;
 }
 
 // --------------------------------------

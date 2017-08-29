@@ -37,7 +37,6 @@
     <ClCompile Include="chanpacket_unittest.cpp" />
     <ClCompile Include="clientsocket_unittest.cpp" />
     <ClCompile Include="cookie_unittest.cpp" />
-    <ClCompile Include="criticalsection_unittest.cpp" />
     <ClCompile Include="dechunker_unittest.cpp" />
     <ClCompile Include="defer_unittest.cpp" />
     <ClCompile Include="environment_unittest.cpp" />

@@ -6,10 +6,10 @@
 #include <stdexcept> // runtime_error
 
 #include "cgi.h"
-#include "threading.h" // WLock
 #include "gnuid.h"
 
 #include "varwriter.h"
+#include "threading.h"
 
 class ChannelEntry
 {
@@ -104,6 +104,11 @@ public:
 class ChannelDirectory : public VariableWriter
 {
 public:
+    enum UpdateMode {
+        kUpdateAuto,
+        kUpdateManual,
+    };
+
     ChannelDirectory();
 
     int numChannels();
@@ -116,7 +121,7 @@ public:
     int totalListeners();
     int totalRelays();
 
-    bool update();
+    bool update(UpdateMode mode = kUpdateAuto);
 
     bool writeChannelVariable(Stream& out, const String& varName, int index);
     bool writeFeedVariable(Stream& out, const String& varName, int index);
@@ -131,7 +136,7 @@ public:
     std::vector<ChannelFeed> m_feeds;
 
     unsigned int m_lastUpdate;
-    WLock m_lock;
+    std::recursive_mutex m_lock;
 };
 
 #endif

@@ -600,8 +600,6 @@ void ChanInfo::writeTrackAtoms(AtomStream &atom)
 // -----------------------------------
 XML::Node *ChanInfo::createChannelXML()
 {
-    char idStr[64];
-
     String nameUNI = name;
     nameUNI.convertTo(String::T_UNICODESAFE);
 
@@ -618,11 +616,9 @@ XML::Node *ChanInfo::createChannelXML()
     commentUNI = comment;
     commentUNI.convertTo(String::T_UNICODESAFE);
 
-    id.toStr(idStr);
-
     return new XML::Node("channel name=\"%s\" id=\"%s\" bitrate=\"%d\" type=\"%s\" genre=\"%s\" desc=\"%s\" url=\"%s\" uptime=\"%d\" comment=\"%s\" skips=\"%d\" age=\"%d\" bcflags=\"%d\"",
         nameUNI.cstr(),
-        idStr,
+        id.str().c_str(),
         bitrate,
         getTypeStr(),
         genreUNI.cstr(),
@@ -640,7 +636,6 @@ XML::Node *ChanInfo::createChannelXML()
 XML::Node *ChanInfo::createQueryXML()
 {
     char buf[512];
-    char idStr[64];
 
     String nameHTML = name;
     nameHTML.convertTo(String::T_HTML);
@@ -664,9 +659,8 @@ XML::Node *ChanInfo::createQueryXML()
 
     if (id.isSet())
     {
-        id.toStr(idStr);
         strcat_s(buf, _countof(buf), " id=\"");
-        strcat_s(buf, _countof(buf), idStr);
+        strcat_s(buf, _countof(buf), id.str().c_str());
         strcat_s(buf, _countof(buf), "\"");
     }
 
@@ -676,12 +670,8 @@ XML::Node *ChanInfo::createQueryXML()
 // -----------------------------------
 XML::Node *ChanInfo::createRelayChannelXML()
 {
-    char idStr[64];
-
-    id.toStr(idStr);
-
     return new XML::Node("channel id=\"%s\" uptime=\"%d\" skips=\"%d\" age=\"%d\"",
-        idStr,
+        id.str().c_str(),
         getUptime(),
         numSkips,
         getAge()

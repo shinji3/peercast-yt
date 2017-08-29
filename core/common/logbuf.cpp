@@ -19,7 +19,6 @@
 
 #include "logbuf.h"
 #include "stream.h"
-#include "critsec.h"
 #include "cgi.h"
 
 // -----------------------------------
@@ -38,7 +37,7 @@ const char *LogBuffer::logTypes[]=
 // -----------------------------------
 void LogBuffer::write(const char *str, TYPE t)
 {
-    CriticalSection cs(lock);
+    std::lock_guard<std::recursive_mutex> cs(lock);
 
     size_t len = strlen(str);
     int cnt=0;
@@ -93,7 +92,7 @@ std::string LogBuffer::lineRendererHTML(unsigned int time, TYPE type, const char
 // ---------------------------
 void LogBuffer::eachLine(std::function<void(unsigned int, TYPE, const char*)> block)
 {
-    CriticalSection cs(lock);
+    std::lock_guard<std::recursive_mutex> cs(lock);
 
     unsigned int nlines;
     unsigned int sp;
@@ -140,6 +139,6 @@ std::vector<std::string> LogBuffer::toLines(std::function<std::string(unsigned i
 // ---------------------------
 void    LogBuffer::clear()
 {
-    CriticalSection cs(lock);
+    std::lock_guard<std::recursive_mutex> cs(lock);
     currLine = 0;
 }

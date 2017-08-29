@@ -25,14 +25,17 @@
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
-#include <sys/time.h>
 #include <pthread.h>
 #include <signal.h>
 #include <stdlib.h>
-#include "usys.h"
-#include "usocket.h"
-#include "stats.h"
+#include <sys/time.h>
+#include <sys/wait.h> // WIFEXITED, WEXITSTATUS
 #include <thread>
+
+#include "stats.h"
+#include "str.h"
+#include "usocket.h"
+#include "usys.h"
 
 // ---------------------------------
 USys::USys()
@@ -72,9 +75,9 @@ void    USys::setThreadName(const char* name)
 }
 
 // ---------------------------------
-void USys::appMsg(long msg, long arg)
+bool USys::hasGUI()
 {
-    //SendMessage(mainWindow, WM_USER, (WPARAM)msg, (LPARAM)arg);
+    return false;
 }
 
 #ifndef __APPLE__
@@ -87,6 +90,31 @@ void USys::getURL(const char *url)
 // ---------------------------------
 void USys::callLocalURL(const char *str, int port)
 {
+    char* disp = getenv("DISPLAY");
+
+    auto localURL = str::format("http://localhost:%d/%s", port, str);
+
+    if (disp == nullptr || disp[0] == '\0')
+    {
+        LOG_WARN("Ignoring openLocalURL request (no DISPLAY environment variable): %s", localURL.c_str());
+        return;
+    }
+
+    int retval;
+    std::string cmdLine = str::format("xdg-open %s", str::escapeshellarg_unix(localURL).c_str());
+    LOG_DEBUG("Calling system(%s)", str::inspect(cmdLine).c_str());
+    retval = system(cmdLine.c_str());
+    if (retval == -1)
+    {
+        LOG_ERROR("USys::callLocalURL: system(3) returned -1");;
+    }else if (WIFEXITED(retval))
+    {
+        LOG_ERROR("Usys::callLocalURL: Shell terminated abnormally");
+    }else if (WEXITSTATUS(retval) != 0)
+    {
+        LOG_ERROR("Usys::callLocalURL: Shell exited with error status (%d)", WEXITSTATUS(retval));
+    }else
+        ; // Shell exited normally.
 }
 
 // ---------------------------------
