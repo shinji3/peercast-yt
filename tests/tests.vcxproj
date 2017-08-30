@@ -41,6 +41,7 @@
     <ClCompile Include="defer_unittest.cpp" />
     <ClCompile Include="environment_unittest.cpp" />
     <ClCompile Include="filesystemmapper_unittest.cpp" />
+    <ClCompile Include="flvstream_unittest.cpp" />
     <ClCompile Include="flvtag_unittest.cpp" />
     <ClCompile Include="globalfunctions_unittest.cpp" />
     <ClCompile Include="gnuid_unittest.cpp" />
