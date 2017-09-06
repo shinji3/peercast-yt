@@ -402,12 +402,10 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
 YMSoapAction::YMSoapAction(const char* serviceType, const char* actionName)
     :mServiceType(serviceType), mActionName(actionName)
 {
-    CoInitialize(NULL);
 }
 
 YMSoapAction::~YMSoapAction()
 {
-    CoUninitialize();
 }
 
 void YMSoapAction::SetParameter(const char* field, const char* value)
