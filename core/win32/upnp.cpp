@@ -404,10 +404,6 @@ YMSoapAction::YMSoapAction(const char* serviceType, const char* actionName)
 {
 }
 
-YMSoapAction::~YMSoapAction()
-{
-}
-
 void YMSoapAction::SetParameter(const char* field, const char* value)
 {
     //パラメーターをセット

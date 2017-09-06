@@ -79,7 +79,6 @@ class YMSoapAction
 public:
 
     YMSoapAction(const char* serviceType, const char* actionName);
-    virtual ~YMSoapAction();
 
     //パラメータをセットする
     void SetParameter(const char* filed, const char* value);
