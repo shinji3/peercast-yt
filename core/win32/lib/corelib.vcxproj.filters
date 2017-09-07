@@ -397,5 +397,8 @@
     <ClCompile Include="..\..\common\logbuf.cpp">
       <Filter>Core Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\varwriter.cpp">
+      <Filter>Core Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

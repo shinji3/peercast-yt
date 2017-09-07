@@ -254,6 +254,7 @@
     <ClCompile Include="..\..\common\template.cpp" />
     <ClCompile Include="..\..\common\uri.cpp" />
     <ClCompile Include="..\..\common\url.cpp" />
+    <ClCompile Include="..\..\common\varwriter.cpp" />
     <ClCompile Include="..\..\common\wmhttp.cpp" />
     <ClCompile Include="..\..\common\xml.cpp" />
     <ClCompile Include="..\..\common\_string.cpp" />

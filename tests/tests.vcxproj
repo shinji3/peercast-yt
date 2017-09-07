@@ -74,10 +74,12 @@
     <ClCompile Include="stringstream_unittest.cpp" />
     <ClCompile Include="string_unittest.cpp" />
     <ClCompile Include="str_unittest.cpp" />
+    <ClCompile Include="subprogram_unittest.cpp" />
     <ClCompile Include="sys_unittest.cpp" />
     <ClCompile Include="template_unittest.cpp" />
     <ClCompile Include="uri_unittest.cpp" />
     <ClCompile Include="urlsource_unittest.cpp" />
+    <ClCompile Include="variablewriter_unittest.cpp" />
     <ClCompile Include="vint_unittest.cpp" />
     <ClCompile Include="xml_unittest.cpp" />
   </ItemGroup>

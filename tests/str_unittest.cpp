@@ -253,8 +253,8 @@ TEST_F(strFixture, inspect)
     ASSERT_EQ("\"a\"", inspect("a"));
     ASSERT_EQ("\"\\n\"", inspect("\n"));
     ASSERT_EQ("\"\\x00\"", inspect(std::string({'\0'})));
-    ASSERT_EQ("\"表\"", inspect("表")); // 表
-    ASSERT_EQ("\"漢\"", inspect("漢")); // 漢
+    ASSERT_EQ("\"\xe8\xa1\xa8\"", inspect("\xe8\xa1\xa8")); // 表
+    ASSERT_EQ("\"\xe6\xbc\xa2\"", inspect("\xe6\xbc\xa2")); // 漢
     ASSERT_EQ("\"\\x95\\\\\"", inspect("\x95\\")); // 表 in Shift_JIS
     ASSERT_EQ("\"\\x8a\\xbf\"", inspect("\x8A\xBF")); // 漢 in Shift_JIS
 }
@@ -265,9 +265,9 @@ TEST_F(strFixture, validate_utf8)
     ASSERT_TRUE(validate_utf8(std::string({'\0'}))); // "\0"
     ASSERT_TRUE(validate_utf8(std::string({(char)0xef, (char)0xbb, (char)0xbf}))); // BOM
     ASSERT_TRUE(validate_utf8("a"));
-    ASSERT_TRUE(validate_utf8("あ"));
-    ASSERT_TRUE(validate_utf8("💩")); // PILE OF POO
-    ASSERT_TRUE(validate_utf8("aあ💩"));
+    ASSERT_TRUE(validate_utf8("\xE3\x81\x82"));
+    ASSERT_TRUE(validate_utf8("\xf0\x9f\x92\xa9")); // PILE OF POO
+    ASSERT_TRUE(validate_utf8("a\xE3\x81\x82\xf0\x9f\x92\xa9"));
 
     ASSERT_FALSE(validate_utf8("\xff"));
 
