@@ -116,8 +116,8 @@ TEST_F(SysFixture, sleep)
     auto t0 = m_sys->getDTime();
     m_sys->sleep(1);
     auto t1 = m_sys->getDTime();
-    //ASSERT_TRUE(t1 - t0 < 1.000);
-    ASSERT_TRUE(t1 - t0 >= 0.001);
+    ASSERT_TRUE(t1 - t0 < 1.000);
+    //ASSERT_TRUE(t1 - t0 >= 0.001);
 }
 
 TEST_F(SysFixture, getTime)
