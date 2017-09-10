@@ -1322,6 +1322,8 @@ int PeercastStream::readPacket(Stream &in, std::shared_ptr<Channel> ch)
             }
             break;
 #endif
+        default:
+            throw StreamException("unknown packet type");
     }
 
     return 0;

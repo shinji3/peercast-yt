@@ -30,7 +30,7 @@ Regexp::~Regexp()
     onig_free(m_reg);
 }
 
-std::vector<std::string> Regexp::exec(const std::string str)
+std::vector<std::string> Regexp::exec(const std::string& str)
 {
     int r;
     unsigned char *start, *range, *end;
@@ -67,4 +67,9 @@ std::vector<std::string> Regexp::exec(const std::string str)
         onig_error_code_to_str((OnigUChar*) message, r);
         throw std::runtime_error(message);
     }
+}
+
+bool Regexp::matches(const std::string& str)
+{
+    return exec(str).size() > 0;
 }

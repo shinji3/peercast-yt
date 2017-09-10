@@ -22,6 +22,7 @@
     <ClCompile Include="..\core\common\identify_encoding.c" />
     <ClCompile Include="..\core\common\utf8.c" />
     <ClCompile Include="amf0_unittest.cpp" />
+    <ClCompile Include="asfstream_unittest.cpp" />
     <ClCompile Include="bcid_unittest.cpp" />
     <ClCompile Include="broadcaststate_unittest.cpp" />
     <ClCompile Include="cgi_unittest.cpp" />

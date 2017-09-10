@@ -1604,7 +1604,7 @@ void ServMgr::procConnectArgs(char *str, ChanInfo &info)
 
     if (args)
     {
-        while (args=nextCGIarg(args, curr, arg))
+        while ((args = nextCGIarg(args, curr, arg)) != nullptr)
         {
             LOG_DEBUG("cmd: %s, arg: %s", curr, arg);
 

@@ -140,7 +140,7 @@ static int flags1(ChanHit* hit)
 }
 
 // -----------------------------------
-void ChanHit::writeAtoms(AtomStream &atom, GnuID &chanID)
+void ChanHit::writeAtoms(AtomStream &atom, const GnuID &chanID)
 {
     bool addChan = chanID.isSet();
 
@@ -609,8 +609,8 @@ int ChanHitList::pickHits(ChanHitSearch &chs)
         if (c->host.ip && !c->dead)
         {
             if (!chs.excludeID.isSame(c->sessionID))
-            if ((chs.waitDelay == 0) || ((ctime-c->lastContact) >= chs.waitDelay))
-            if ((c->numHops < best.numHops))  // (c->time >= best.time))
+            if ((chs.waitDelay == 0) || ((ctime - c->lastContact) >= chs.waitDelay))
+            if (c->numHops < best.numHops)
             if (c->relay || (!c->relay && chs.useBusyRelays))
             if (c->cin || (!c->cin && chs.useBusyControls))
             {
