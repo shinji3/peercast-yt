@@ -96,10 +96,9 @@ unsigned int WSys::SetUPnP()
 
     //ControlURL未取得の場合は取得を試す
     if(strcmp(mControlURL.c_str(),"") == 0){
-        if(!YMSSDPDiscover::Initialize() || !mSSDP.Open())
+        if(!mSSDP.Open())
         {
             LOG_ERROR("UPnP Initialize Failed.");
-            CoUninitialize();
             return 0;
         }
 
@@ -117,7 +116,6 @@ unsigned int WSys::SetUPnP()
             if (cnt > 30)
             {
                 LOG_ERROR("UPnP Time Out.");
-                CoUninitialize();
                 return 0;
             }
 
@@ -127,7 +125,6 @@ unsigned int WSys::SetUPnP()
             {
                 //error
                 LOG_ERROR("UPnP Error.");
-                CoUninitialize();
                 return 0;
             }
             else if(ret != YMSSDPDiscover::OK)
@@ -146,7 +143,6 @@ unsigned int WSys::SetUPnP()
                 {
                     //失敗
                     LOG_ERROR("UPnP ControlURL Scan Failed.");
-                    CoUninitialize();
                     return 0;
                 }
                 mST = info.mST;
@@ -170,7 +166,6 @@ unsigned int WSys::SetUPnP()
 
     if(strcmp(sLanIP, "127.0.0.1") == 0)
     {
-        CoUninitialize();
         return 0;
     }
 
@@ -191,13 +186,11 @@ unsigned int WSys::SetUPnP()
     {
         //失敗
         LOG_ERROR("UPnP AddPortMapping Error.");
-        CoUninitialize();
         return 0;
     }
 
     //OK
     LOG_INFO("UPnP AddPortMapping OK.(%d Port)",servMgr->serverHost.port,sPort);
-    CoUninitialize();
 
     return servMgr->serverHost.port;
 }

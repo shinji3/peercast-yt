@@ -26,36 +26,6 @@ namespace
 //winsock初期化
 //////////////////////////////////////////////////
 
-bool YMSSDPDiscover::mInitialized = false;
-
-bool YMSSDPDiscover::Initialize()
-{
-    if (!mInitialized)
-    {
-        WSADATA data;
-        if (WSAStartup(MAKEWORD(2, 0), &data) != 0)
-        {
-            return false;
-        }
-        if (LOBYTE(data.wVersion) != 2 || HIBYTE(data.wVersion) != 0)
-        {
-            WSACleanup();
-            return false;
-        }
-        mInitialized = true;
-    }
-    return true;
-}
-
-void YMSSDPDiscover::Uninitialize()
-{
-    if (mInitialized)
-    {
-        WSACleanup();
-        mInitialized = false;
-    }
-}
-
 YMSSDPDiscover::YMSSDPDiscover()
     :mSocket(INVALID_SOCKET), mLastError(0)
 {

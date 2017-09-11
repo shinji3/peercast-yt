@@ -24,9 +24,6 @@ class YMSSDPDiscover
 {
 public:
 
-    static bool Initialize();
-    static void Uninitialize();
-
     YMSSDPDiscover();
     virtual ~YMSSDPDiscover();
 
@@ -69,8 +66,6 @@ protected:
     SOCKET mSocket;
     int mLastError;
     HANDLE mEvent;
-
-    static bool mInitialized;
 };
 
 
