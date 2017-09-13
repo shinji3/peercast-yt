@@ -7,6 +7,10 @@
 // ------------------------------------------------------------------------------
 #include "upnp.h"
 #include "sys.h"
+#include "xml.h"
+#include "http.h"
+#include "socket.h"
+#include "uri.h"
 #include <malloc.h>
 #include <ws2tcpip.h>
 #include <algorithm>
@@ -308,51 +312,93 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
     std::string baseURL;
     std::string relativeURL;
 
-    //XMLを取得
-    try
-    {
-        MSXML2::IXMLHTTPRequestPtr http;
-        if (FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
-        {
-            return result;
-        }
-        http->open("GET", location, VARIANT_FALSE);
-        http->send();
-        if (http->status != 200)
-        {
-            return result;
-        }
-        MSXML2::IXMLDOMDocument3Ptr doc = http->responseXML;
-        doc->setProperty("SelectionNamespaces", "xmlns:urn='urn:schemas-upnp-org:device-1-0'");
-
-        //controlURL取得
-        std::string xPath = "//urn:service[urn:serviceType=\"";
-        xPath += st;
-        xPath += "\"]/urn:controlURL";
-        MSXML2::IXMLDOMNodePtr controlURLNode = doc->selectSingleNode(xPath.c_str());
-        if (controlURLNode)
-        {
-            relativeURL = controlURLNode->text;
-        }
-        else
-        {
-            return result;
-        }
-
-
-        //BASEURL取得
-        MSXML2::IXMLDOMNodePtr baseURLNode = doc->selectSingleNode("//urn:URLBase");
-        if (baseURLNode)
-        {
-            baseURL = baseURLNode->text;
-        }
-        else
-        {
-            baseURL = location;
-        }
+    URI feed(location);
+    if (!feed.isValid()) {
+        LOG_ERROR("invalid URL (%s)", location);
+        return result;
     }
-    catch (_com_error&)
-    {
+    if (feed.scheme() != "http") {
+        LOG_ERROR("unsupported protocol (%s)", location);
+        return result;
+    }
+
+    Host host;
+    host.fromStrName(feed.host().c_str(), feed.port());
+    if (host.ip == 0) {
+        LOG_ERROR("Could not resolve %s", feed.host().c_str());
+        return result;
+    }
+
+    std::unique_ptr<ClientSocket> rsock(sys->createSocket());
+    WriteBufferedStream brsock(&*rsock);
+
+    try {
+        LOG_TRACE("Connecting to %s ...", feed.host().c_str());
+        rsock->open(host);
+        rsock->connect();
+
+        HTTP rhttp(brsock);
+
+        auto request_line = "GET " + feed.path() + " HTTP/1.0";
+        LOG_TRACE("Request line to %s: %s", feed.host().c_str(), request_line.c_str());
+
+        rhttp.writeLineF("%s", request_line.c_str());
+        rhttp.writeLineF("%s %s", HTTP_HS_HOST, feed.host().c_str());
+        rhttp.writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
+        rhttp.writeLine("");
+
+        auto code = rhttp.readResponse();
+        if (code != 200) {
+            LOG_ERROR("%s: status code %d", feed.host().c_str(), code);
+            return result;
+        }
+
+        while (rhttp.nextHeader())
+            ;
+
+        std::string text;
+        char line[1024];
+
+        try {
+            while (rhttp.readLine(line, 1024)) {
+                text += line;
+                text += '\n';
+            }
+        }
+        catch (EOFException&) {
+            // end of body reached.
+        }
+
+        MemoryStream xm((void*)text.c_str(), static_cast<int>(text.size()));
+        XML xml;
+        xml.read(xm);
+        
+        XML::Node *controlURLNode = xml.findNode("serviceType", st);
+
+        if (controlURLNode)
+            controlURLNode = controlURLNode->parent;
+        else
+            return result;
+
+        if (controlURLNode)
+            controlURLNode = controlURLNode->findNode("controlURL");
+        else
+            return result;
+
+        if (controlURLNode)
+            relativeURL = controlURLNode->getContent();
+        else
+            return result;
+
+        XML::Node *baseURLNode = xml.findNode("URLBase");
+
+        if (baseURLNode)
+            baseURL = baseURLNode->getContent();
+        else
+            baseURL = location;
+    }
+    catch (StreamException& e) {
+        LOG_ERROR("%s", e.msg);
         return result;
     }
 

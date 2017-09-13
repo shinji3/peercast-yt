@@ -60,6 +60,7 @@ public:
         void    setBinaryContent(void *, int);
 
         Node    *findNode(const char *);
+        Node    *findNode(const char *, const char *);
         char    *findAttr(const char *);
         int     findAttrInt(const char *);
         int     findAttrID(const char *);
@@ -86,6 +87,7 @@ public:
     void    writeHTML(Stream &);
     void    read(Stream &);
     Node    *findNode(const char *n);
+    Node    *findNode(const char *n, const char *c);
 
     Node    *root;
 };

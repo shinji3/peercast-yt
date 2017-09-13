@@ -394,6 +394,15 @@ XML::Node *XML::findNode(const char *n)
 }
 
 // ----------------------------------
+XML::Node *XML::findNode(const char *n, const char *c)
+{
+    if (root)
+        return root->findNode(n, c);
+    else
+        return NULL;
+}
+
+// ----------------------------------
 XML::Node *XML::Node::findNode(const char *name)
 {
     if (Sys::stricmp(getName(), name)==0)
@@ -404,6 +413,25 @@ XML::Node *XML::Node::findNode(const char *name)
     while (c)
     {
         XML::Node *fn = c->findNode(name);
+        if (fn)
+            return fn;
+        c=c->sibling;
+    }
+
+    return NULL;
+}
+
+// ----------------------------------
+XML::Node *XML::Node::findNode(const char *name, const char *content)
+{
+    if (Sys::stricmp(getName(), name)==0 && Sys::stricmp(getContent(), content)==0)
+        return this;
+
+    XML::Node *c = child;
+
+    while (c)
+    {
+        XML::Node *fn = c->findNode(name, content);
         if (fn)
             return fn;
         c=c->sibling;
