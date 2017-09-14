@@ -15,8 +15,6 @@
 #include <winsock2.h>
 #endif
 
-#import <msxml6.dll> no_auto_exclude
-#include <string>
 #include <vector>
 #include <map>
 
