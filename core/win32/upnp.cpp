@@ -1,9 +1,5 @@
 ﻿// ------------------------------------------------------------------------------
 // UPnPクラス
-//
-// 下記ホームページで公開されているソースを利用させていただきました。
-// βえんどるふぃん -平穏で不穏な日々-様 URL:http://www.bosuke.mine.nu/blog/ 
-//
 // ------------------------------------------------------------------------------
 #include "upnp.h"
 #include "sys.h"
@@ -402,12 +398,8 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         return result;
     }
 
-    //URLを結合
-    DWORD size = 0;
-    InternetCombineUrl(baseURL.c_str(), relativeURL.c_str(), NULL, &size, 0);
-    char* buf = (char*)_alloca(size);
-    InternetCombineUrl(baseURL.c_str(), relativeURL.c_str(), buf, &size, 0);
-    result = buf;
+    URI buf(baseURL);
+    result = "http://" + buf.host() + ":" + std::to_string(buf.port()) + relativeURL;
 
     return result;
 }
