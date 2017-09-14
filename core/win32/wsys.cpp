@@ -92,8 +92,6 @@ void WSys::executeFile(const char *file)
 //UPnP
 unsigned int WSys::SetUPnP()
 {
-    CoInitialize(NULL);
-
     //ControlURL未取得の場合は取得を試す
     if(strcmp(mControlURL.c_str(),"") == 0){
         if(!mSSDP.Open())

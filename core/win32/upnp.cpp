@@ -434,58 +434,67 @@ void YMSoapAction::ResetParameter()
 
 int YMSoapAction::Invoke(const char* url)
 {
-    //送信データ作成
-
-    try
-    {
-        MSXML2::IXMLDOMDocument3Ptr sendXML;
-        if (FAILED(sendXML.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
-        {
-            return -1;
-        }
-        sendXML->async = VARIANT_FALSE;
-        sendXML->preserveWhiteSpace = VARIANT_FALSE;
-        sendXML->resolveExternals = VARIANT_FALSE;
-        sendXML->setProperty("SelectionNamespaces", "xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/'");
-        sendXML->loadXML("<?xml version=\"1.0\"?>"
-            "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
-            "<SOAP-ENV:Body>"
-            "</SOAP-ENV:Body>"
-            "</SOAP-ENV:Envelope>");
-        MSXML2::IXMLDOMElementPtr body = sendXML->selectSingleNode("/SOAP-ENV:Envelope/SOAP-ENV:Body");
-
-        std::string name = "m:" + mActionName;
-        _variant_t varNodeType((short)MSXML2::NODE_ELEMENT);
-        MSXML2::IXMLDOMNodePtr node = NULL;
-        node = sendXML->createNode(varNodeType, name.c_str(), mServiceType.c_str());
-        Parameters::const_iterator p;
-        for (p = mParameter.begin(); p != mParameter.end(); ++p)
-        {
-            MSXML2::IXMLDOMElementPtr param = sendXML->createElement(p->first.c_str());
-            param->text = p->second.c_str();
-            node->appendChild(param);
-        }
-        body->appendChild(node);
-
-        //送信する
-        MSXML2::IXMLHTTPRequestPtr http;
-        if (FAILED(http.CreateInstance(__uuidof(MSXML2::XMLHTTP60))))
-        {
-            return -1;
-        }
-        if (FAILED(http->open("POST", url, VARIANT_FALSE)))
-        {
-            return -1;
-        }
-        std::string action = mServiceType + "#" + mActionName;
-        http->setRequestHeader("SOAPAction", action.c_str());
-        http->send(sendXML->xml);
-
-        return http->status;
-    }
-    catch (_com_error&/* ex */)
-    {
-        //ATLTRACE((const char*)ex.Description());
+    URI feed(url);
+    if (!feed.isValid()) {
+        LOG_ERROR("invalid URL (%s)", url);
         return -1;
     }
+    if (feed.scheme() != "http") {
+        LOG_ERROR("unsupported protocol (%s)", url);
+        return -1;
+    }
+
+    Host host;
+    host.fromStrName(feed.host().c_str(), feed.port());
+    if (host.ip == 0) {
+        LOG_ERROR("Could not resolve %s", feed.host().c_str());
+        return -1;
+    }
+
+    std::unique_ptr<ClientSocket> rsock(sys->createSocket());
+    WriteBufferedStream brsock(&*rsock);
+
+    try {
+        LOG_TRACE("Connecting to %s ...", feed.host().c_str());
+        rsock->open(host);
+        rsock->connect();
+
+        HTTP rhttp(brsock);
+
+        auto request_line = "POST " + feed.path() + " HTTP/1.0";
+        LOG_TRACE("Request line to %s: %s", feed.host().c_str(), request_line.c_str());
+
+        rhttp.writeLineF("%s", request_line.c_str());
+        rhttp.writeLineF("%s %s", HTTP_HS_HOST, feed.host().c_str());
+        rhttp.writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
+        rhttp.writeLineF("SOAPAction: %s#%s", mServiceType.c_str(), mActionName.c_str());
+        rhttp.writeLine("");
+
+        rhttp.writeString("<?xml version=\"1.0\"?>");
+        rhttp.writeString("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
+        rhttp.writeString("<SOAP-ENV:Body>");
+        rhttp.writeStringF("<m:%s xmlns:m=\"%s\">", mActionName.c_str(), mServiceType.c_str());
+
+        for (Parameters::const_iterator p = mParameter.begin(); p != mParameter.end(); ++p)
+        {
+            rhttp.writeStringF("<%s>%s</%s>", p->first.c_str(), p->second.c_str(), p->first.c_str());
+        }
+
+        rhttp.writeStringF("</m:%s>", mActionName.c_str());
+        rhttp.writeString("</SOAP-ENV:Body>");
+        rhttp.writeString("</SOAP-ENV:Envelope>");
+
+        auto code = rhttp.readResponse();
+        if (code != 200) {
+            LOG_ERROR("%s: status code %d", feed.host().c_str(), code);
+            return -1;
+        }
+
+        return code;
+    }
+    catch (StreamException& e) {
+        LOG_ERROR("%s", e.msg);
+        return -1;
+    }
+
 }
