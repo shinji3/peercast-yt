@@ -58,7 +58,7 @@ bool YMSSDPDiscover::Open()
 
     //空いているポートにbind
     sockaddr_in addr;
-    ZeroMemory(&addr, sizeof(addr));
+    memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     unsigned short port = 20000;
@@ -145,13 +145,13 @@ bool YMSSDPDiscover::Send(const char* st)
 
     //データをぎゃんぎゃんマルチキャストしていく
     sockaddr_in dest_addr;
-    ZeroMemory(&dest_addr, sizeof(dest_addr));
+    memset(&dest_addr, 0, sizeof(dest_addr));
     dest_addr.sin_family = AF_INET;
     dest_addr.sin_port = htons(UPNP_PORT);
     inet_pton(AF_INET, UPNP_GROUP, &dest_addr.sin_addr);
 
     in_addr interface_addr;
-    ZeroMemory(&interface_addr, sizeof(interface_addr));
+    memset(&interface_addr, 0, sizeof(interface_addr));
 
     bool ok = false;
     for (int i = 0; i < list->iAddressCount; ++i)
