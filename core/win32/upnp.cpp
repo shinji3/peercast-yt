@@ -334,38 +334,15 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         rsock->connect();
 
         HTTP rhttp(brsock);
+        HTTPRequest req("GET", feed.path(), "HTTP/1.0", { { "Host", feed.host() } });
+        HTTPResponse res = rhttp.send(req);
 
-        auto request_line = "GET " + feed.path() + " HTTP/1.0";
-        LOG_TRACE("Request line to %s: %s", feed.host().c_str(), request_line.c_str());
-
-        rhttp.writeLineF("%s", request_line.c_str());
-        rhttp.writeLineF("%s %s", HTTP_HS_HOST, feed.host().c_str());
-        rhttp.writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
-        rhttp.writeLine("");
-
-        auto code = rhttp.readResponse();
-        if (code != 200) {
-            LOG_ERROR("%s: status code %d", feed.host().c_str(), code);
+        if (res.statusCode != 200) {
+            LOG_ERROR("%s: status code %d", feed.host().c_str(), res.statusCode);
             return result;
         }
 
-        while (rhttp.nextHeader())
-            ;
-
-        std::string text;
-        char line[1024];
-
-        try {
-            while (rhttp.readLine(line, 1024)) {
-                text += line;
-                text += '\n';
-            }
-        }
-        catch (EOFException&) {
-            // end of body reached.
-        }
-
-        MemoryStream xm((void*)text.c_str(), static_cast<int>(text.size()));
+        MemoryStream xm((void*)res.body.c_str(), static_cast<int>(res.body.size()));
         XML xml;
         xml.read(xm);
         
@@ -452,37 +429,30 @@ int YMSoapAction::Invoke(const char* url)
         rsock->connect();
 
         HTTP rhttp(brsock);
+        HTTPRequest req("POST", feed.path(), "HTTP/1.0", { { "Host", feed.host() }, { "SOAPAction", mServiceType + "#" + mActionName } });
 
-        auto request_line = "POST " + feed.path() + " HTTP/1.0";
-        LOG_TRACE("Request line to %s: %s", feed.host().c_str(), request_line.c_str());
-
-        rhttp.writeLineF("%s", request_line.c_str());
-        rhttp.writeLineF("%s %s", HTTP_HS_HOST, feed.host().c_str());
-        rhttp.writeLineF("%s %s", HTTP_HS_CONNECTION, "close");
-        rhttp.writeLineF("SOAPAction: %s#%s", mServiceType.c_str(), mActionName.c_str());
-        rhttp.writeLine("");
-
-        rhttp.writeString("<?xml version=\"1.0\"?>");
-        rhttp.writeString("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">");
-        rhttp.writeString("<SOAP-ENV:Body>");
-        rhttp.writeStringF("<m:%s xmlns:m=\"%s\">", mActionName.c_str(), mServiceType.c_str());
+        req.body = "<?xml version=\"1.0\"?>"
+            "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
+            "<SOAP-ENV:Body>"
+            "<m:" + mActionName + " xmlns:m=\"" + mServiceType + "\">";
 
         for (Parameters::const_iterator p = mParameter.begin(); p != mParameter.end(); ++p)
         {
-            rhttp.writeStringF("<%s>%s</%s>", p->first.c_str(), p->second.c_str(), p->first.c_str());
+            req.body += "<" + p->first + ">" + p->second + "</" + p->first + ">";
         }
 
-        rhttp.writeStringF("</m:%s>", mActionName.c_str());
-        rhttp.writeString("</SOAP-ENV:Body>");
-        rhttp.writeString("</SOAP-ENV:Envelope>");
+        req.body += "</m:" + mActionName + ">"
+            "</SOAP-ENV:Body>"
+            "</SOAP-ENV:Envelope>";
 
-        auto code = rhttp.readResponse();
-        if (code != 200) {
-            LOG_ERROR("%s: status code %d", feed.host().c_str(), code);
+        HTTPResponse res = rhttp.send(req);
+
+        if (res.statusCode != 200) {
+            LOG_ERROR("%s: status code %d", feed.host().c_str(), res.statusCode);
             return -1;
         }
 
-        return code;
+        return res.statusCode;
     }
     catch (StreamException& e) {
         LOG_ERROR("%s", e.msg);
