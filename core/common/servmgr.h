@@ -21,9 +21,9 @@
 #define _SERVMGR_H
 
 #include "servent.h"
-#include "chandir.h"
 #include "varwriter.h"
 #include "rtmpmonit.h"
+#include "inifile.h"
 
 // ----------------------------------
 
@@ -220,6 +220,7 @@ public:
     bool            checkForceIP();
     FW_STATE        getFirewall() { return firewalled; }
     void            saveSettings(const char *);
+    void            doSaveSettings(IniFileBase& iniFile);
     void            loadSettings(const char *);
     void            setPassiveSearch(unsigned int);
     int             findChannel(ChanInfo &);
@@ -385,7 +386,8 @@ public:
 
     String              chanLog;
 
-    ChannelDirectory    channelDirectory;
+    const std::unique_ptr<class ChannelDirectory>
+                        channelDirectory;
     bool                publicDirectoryEnabled;
     FW_STATE            firewalled;
 
