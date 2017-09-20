@@ -308,6 +308,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
     std::string baseURL;
     std::string relativeURL;
 
+    //XMLを取得
     URI feed(location);
     if (!feed.isValid()) {
         LOG_ERROR("invalid URL (%s)", location);
@@ -345,7 +346,8 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         MemoryStream xm((void*)res.body.c_str(), static_cast<int>(res.body.size()));
         XML xml;
         xml.read(xm);
-        
+
+        //controlURL取得
         XML::Node *controlURLNode = xml.findNode("serviceType", st);
 
         if (controlURLNode)
@@ -363,6 +365,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         else
             return result;
 
+        //BASEURL取得
         XML::Node *baseURLNode = xml.findNode("URLBase");
 
         if (baseURLNode)
@@ -375,6 +378,7 @@ std::string YMSSDPDiscover::GetControlURL(const char* location, const char* st)
         return result;
     }
 
+    //URLを結合
     URI buf(baseURL);
     result = "http://" + buf.host() + ":" + std::to_string(buf.port()) + relativeURL;
 
@@ -431,6 +435,7 @@ int YMSoapAction::Invoke(const char* url)
         HTTP rhttp(brsock);
         HTTPRequest req("POST", feed.path(), "HTTP/1.0", { { "Host", feed.host() }, { "SOAPAction", mServiceType + "#" + mActionName } });
 
+        //送信データ作成
         req.body = "<?xml version=\"1.0\"?>"
             "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
             "<SOAP-ENV:Body>"
@@ -445,6 +450,7 @@ int YMSoapAction::Invoke(const char* url)
             "</SOAP-ENV:Body>"
             "</SOAP-ENV:Envelope>";
 
+        //送信する
         HTTPResponse res = rhttp.send(req);
 
         if (res.statusCode != 200) {
