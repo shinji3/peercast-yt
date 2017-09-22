@@ -1,4 +1,4 @@
-#include "_string.h"
+﻿#include "_string.h"
 #include "stream.h"
 #include "uptest.h"
 #include "threading.h"
@@ -29,7 +29,7 @@ std::pair<bool,std::string> UptestServiceRegistry::addURL(const std::string& url
 
 bool UptestServiceRegistry::isIndexValid(int index) const
 {
-    return index >= 0 && index < m_providers.size();
+    return index >= 0 && index < static_cast<int>(m_providers.size());
 }
 
 std::pair<bool,std::string> UptestServiceRegistry::deleteByIndex(int index)
@@ -85,7 +85,7 @@ bool UptestServiceRegistry::writeVariable(Stream& s, const String& v, int i)
 {
     std::lock_guard<std::recursive_mutex> cs(m_lock);
 
-    if (i < 0 || i >= m_providers.size())
+    if (i < 0 || i >= static_cast<int>(m_providers.size()))
     {
         LOG_ERROR("UptestServiceRegistry: Index out of range");
         return false;

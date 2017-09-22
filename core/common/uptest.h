@@ -1,4 +1,4 @@
-#ifndef _UPTEST_H
+﻿#ifndef _UPTEST_H
 #define _UPTEST_H
 
 #include "varwriter.h"

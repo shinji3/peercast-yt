@@ -227,6 +227,9 @@
     <ClInclude Include="..\..\common\logbuf.h">
       <Filter>Core Includes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\uptest.h">
+      <Filter>Core Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cgi.cpp">
@@ -398,6 +401,9 @@
       <Filter>Core Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\varwriter.cpp">
+      <Filter>Core Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\uptest.cpp">
       <Filter>Core Source</Filter>
     </ClCompile>
   </ItemGroup>

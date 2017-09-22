@@ -78,6 +78,9 @@
     <ClCompile Include="subprogram_unittest.cpp" />
     <ClCompile Include="sys_unittest.cpp" />
     <ClCompile Include="template_unittest.cpp" />
+    <ClCompile Include="uptestendpoint_unittest.cpp" />
+    <ClCompile Include="uptestinfo_unittest.cpp" />
+    <ClCompile Include="uptestserviceregistry_unittest.cpp" />
     <ClCompile Include="uri_unittest.cpp" />
     <ClCompile Include="urlsource_unittest.cpp" />
     <ClCompile Include="variablewriter_unittest.cpp" />

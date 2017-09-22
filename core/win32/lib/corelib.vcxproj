@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\common\sys.h" />
     <ClInclude Include="..\..\common\template.h" />
     <ClInclude Include="..\..\common\threading.h" />
+    <ClInclude Include="..\..\common\uptest.h" />
     <ClInclude Include="..\..\common\uri.h" />
     <ClInclude Include="..\..\common\url.h" />
     <ClInclude Include="..\..\common\varwriter.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="..\..\common\subprog.cpp" />
     <ClCompile Include="..\..\common\sys.cpp" />
     <ClCompile Include="..\..\common\template.cpp" />
+    <ClCompile Include="..\..\common\uptest.cpp" />
     <ClCompile Include="..\..\common\uri.cpp" />
     <ClCompile Include="..\..\common\url.cpp" />
     <ClCompile Include="..\..\common\varwriter.cpp" />
