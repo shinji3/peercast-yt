@@ -2536,7 +2536,9 @@ bool    Servent::writeVariable(Stream &s, const String &var)
 
     std::string buf;
 
-    if (var == "type")
+    if (var == "id")
+        buf = std::to_string(serventIndex);
+    else if (var == "type")
         buf = getTypeStr();
     else if (var == "status")
         buf = getStatusStr();
@@ -2564,6 +2566,12 @@ bool    Servent::writeVariable(Stream &s, const String &var)
         else
             uptime.set("-");
         buf = uptime.c_str();
+    }else if (var == "chanID")
+    {
+        buf = chanID.str();
+    }else if (var == "isPrivate")
+    {
+        buf = std::to_string(isPrivate());
     }else if (var.startsWith("gnet."))
     {
         float ctime = (float)(sys->getTime() - lastConnect);

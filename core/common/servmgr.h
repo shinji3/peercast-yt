@@ -163,6 +163,7 @@ public:
     Servent             *findServent(Servent::TYPE, Host &, GnuID &);
     Servent             *findOldestServent(Servent::TYPE, bool);
     Servent             *findServentByIndex(int);
+    Servent             *findServentByID(int id);
 
     bool                writeVariable(Stream &, const String &) override;
     Servent             *allocServent();
@@ -183,7 +184,6 @@ public:
         //return numConnected(Servent::T_OUTGOING) + numConnected(Servent::T_INCOMING);
         return numConnected();
     }
-    unsigned int        numOutgoing();
     bool                isFiltered(int, Host &h);
     bool                addOutgoing(Host, GnuID &, bool);
     Servent             *findConnection(Servent::TYPE, GnuID &);
@@ -382,7 +382,7 @@ public:
 
     char                htmlPath[128];
 
-    int                 serventNum;
+    std::atomic_int     serventNum;
 
     String              chanLog;
 
