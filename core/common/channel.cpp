@@ -127,6 +127,8 @@ void Channel::resetPlayTime()
 // -----------------------------------------------------------------------------
 void Channel::setStatus(STATUS s)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     if (s != status)
     {
         bool wasPlaying = isPlaying();
@@ -429,7 +431,11 @@ int Channel::handshakeFetch()
         if (http.isHeader(PCX_HS_POS))
             streamPos = atoi(arg);
         else
+        {
+            // info の為。ロックする範囲が狭すぎるか。
+            std::lock_guard<std::recursive_mutex> cs(lock);
             Servent::readICYHeader(http, info, NULL, 0);
+        }
 
         LOG_INFO("Channel fetch: %s", http.cmdLine);
     }

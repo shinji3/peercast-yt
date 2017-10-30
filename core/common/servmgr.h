@@ -185,6 +185,7 @@ public:
         return numConnected();
     }
     bool                isFiltered(int, Host &h);
+    bool                hasUnsafeFilterSettings();
     bool                addOutgoing(Host, GnuID &, bool);
     Servent             *findConnection(Servent::TYPE, GnuID &);
 
@@ -218,7 +219,7 @@ public:
     void            setMaxRelays(int);
     void            setFirewall(FW_STATE);
     bool            checkForceIP();
-    FW_STATE        getFirewall() { return firewalled; }
+    FW_STATE        getFirewall();
     void            saveSettings(const char *);
     void            doSaveSettings(IniFileBase& iniFile);
     void            loadSettings(const char *);
@@ -339,7 +340,7 @@ public:
     unsigned int        maxServIn;
 
     bool                isDisabled;
-    bool                isRoot;
+    std::atomic_bool    isRoot;
     int                 totalStreams;
 
     Host                serverHost;

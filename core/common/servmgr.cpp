@@ -38,6 +38,7 @@ ServMgr::ServMgr()
     , rtmpServerMonitor(std::string(peercastApp->getPath()) + "rtmp-server")
     , channelDirectory(new ChannelDirectory())
     , uptestServiceRegistry(new UptestServiceRegistry())
+    , relayBroadcast(30) // オリジナルでは未初期化。
 {
     validBCID = NULL;
 
@@ -639,6 +640,7 @@ unsigned int ServMgr::numUsed(int type)
     Servent *s = servents;
     while (s)
     {
+        std::lock_guard<std::recursive_mutex> cs(s->lock);
         if (s->type == type)
             cnt++;
         s = s->next;
@@ -656,6 +658,7 @@ unsigned int ServMgr::numActiveOnPort(int port)
     Servent *s = servents;
     while (s)
     {
+        std::lock_guard<std::recursive_mutex> cs(s->lock);
         if (s->thread.active() && s->sock && (s->servPort == port))
             cnt++;
         s = s->next;
@@ -847,8 +850,17 @@ void ServMgr::checkFirewall()
 }
 
 // -----------------------------------
+ServMgr::FW_STATE ServMgr::getFirewall()
+{
+    std::lock_guard<std::recursive_mutex> cs(lock);
+    return firewalled;
+}
+
+// -----------------------------------
 void ServMgr::setFirewall(FW_STATE state)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     if (firewalled != state)
     {
         const char *str;
@@ -990,27 +1002,27 @@ void ServMgr::saveSettings(const char *fn)
 void ServMgr::doSaveSettings(IniFileBase& iniFile)
 {
     iniFile.writeSection("Server");
-    iniFile.writeStrValue("serverName", servMgr->serverName);
-    iniFile.writeIntValue("serverPort", servMgr->serverHost.port);
-    iniFile.writeBoolValue("autoServe", servMgr->autoServe);
-    iniFile.writeStrValue("forceIP", servMgr->forceIP);
-    iniFile.writeBoolValue("isRoot", servMgr->isRoot);
-    iniFile.writeIntValue("maxBitrateOut", servMgr->maxBitrateOut);
-    iniFile.writeIntValue("maxRelays", servMgr->maxRelays);
-    iniFile.writeIntValue("maxDirect", servMgr->maxDirect);
+    iniFile.writeStrValue("serverName", this->serverName);
+    iniFile.writeIntValue("serverPort", this->serverHost.port);
+    iniFile.writeBoolValue("autoServe", this->autoServe);
+    iniFile.writeStrValue("forceIP", this->forceIP);
+    iniFile.writeBoolValue("isRoot", this->isRoot);
+    iniFile.writeIntValue("maxBitrateOut", this->maxBitrateOut);
+    iniFile.writeIntValue("maxRelays", this->maxRelays);
+    iniFile.writeIntValue("maxDirect", this->maxDirect);
     iniFile.writeIntValue("maxRelaysPerChannel", chanMgr->maxRelaysPerChannel);
     iniFile.writeIntValue("firewallTimeout", firewallTimeout);
     iniFile.writeBoolValue("forceNormal", forceNormal);
     iniFile.writeStrValue("rootMsg", rootMsg);
-    iniFile.writeStrValue("authType", (servMgr->authType == ServMgr::AUTH_COOKIE) ? "cookie" : "http-basic");
-    iniFile.writeStrValue("cookiesExpire", (servMgr->cookieList.neverExpire == true) ? "never": "session");
-    iniFile.writeStrValue("htmlPath", servMgr->htmlPath);
-    iniFile.writeIntValue("minPGNUIncoming", servMgr->minGnuIncoming);
-    iniFile.writeIntValue("maxPGNUIncoming", servMgr->maxGnuIncoming);
-    iniFile.writeIntValue("maxServIn", servMgr->maxServIn);
-    iniFile.writeStrValue("chanLog", servMgr->chanLog);
-    iniFile.writeBoolValue("publicDirectory", servMgr->publicDirectoryEnabled);
-    iniFile.writeStrValue("genrePrefix", servMgr->genrePrefix);
+    iniFile.writeStrValue("authType", (this->authType == ServMgr::AUTH_COOKIE) ? "cookie" : "http-basic");
+    iniFile.writeStrValue("cookiesExpire", (this->cookieList.neverExpire == true) ? "never": "session");
+    iniFile.writeStrValue("htmlPath", this->htmlPath);
+    iniFile.writeIntValue("minPGNUIncoming", this->minGnuIncoming);
+    iniFile.writeIntValue("maxPGNUIncoming", this->maxGnuIncoming);
+    iniFile.writeIntValue("maxServIn", this->maxServIn);
+    iniFile.writeStrValue("chanLog", this->chanLog);
+    iniFile.writeBoolValue("publicDirectory", this->publicDirectoryEnabled);
+    iniFile.writeStrValue("genrePrefix", this->genrePrefix);
 
     iniFile.writeStrValue("networkID", networkID.str());
 
@@ -1023,37 +1035,37 @@ void ServMgr::doSaveSettings(IniFileBase& iniFile)
     iniFile.writeIntValue("icyMetaInterval", chanMgr->icyMetaInterval);
     iniFile.writeStrValue("broadcastID", chanMgr->broadcastID.str());
     iniFile.writeIntValue("hostUpdateInterval", chanMgr->hostUpdateInterval);
-    iniFile.writeIntValue("maxControlConnections", servMgr->maxControl);
-    iniFile.writeStrValue("rootHost", servMgr->rootHost);
+    iniFile.writeIntValue("maxControlConnections", this->maxControl);
+    iniFile.writeStrValue("rootHost", this->rootHost);
 
     iniFile.writeSection("Client");
     iniFile.writeIntValue("refreshHTML", refreshHTML);
-    iniFile.writeIntValue("relayBroadcast", servMgr->relayBroadcast);
+    iniFile.writeIntValue("relayBroadcast", this->relayBroadcast);
     iniFile.writeIntValue("minBroadcastTTL", chanMgr->minBroadcastTTL);
     iniFile.writeIntValue("maxBroadcastTTL", chanMgr->maxBroadcastTTL);
     iniFile.writeIntValue("pushTries", chanMgr->pushTries);
     iniFile.writeIntValue("pushTimeout", chanMgr->pushTimeout);
     iniFile.writeIntValue("maxPushHops", chanMgr->maxPushHops);
     iniFile.writeIntValue("autoQuery", chanMgr->autoQuery);
-    iniFile.writeIntValue("queryTTL", servMgr->queryTTL);
-    iniFile.writeBoolValue("transcodingEnabled", servMgr->transcodingEnabled);
-    iniFile.writeStrValue("preset", servMgr->preset);
-    iniFile.writeStrValue("audioCodec", servMgr->audioCodec);
-    iniFile.writeStrValue("wmvProtocol", servMgr->wmvProtocol);
+    iniFile.writeIntValue("queryTTL", this->queryTTL);
+    iniFile.writeBoolValue("transcodingEnabled", this->transcodingEnabled);
+    iniFile.writeStrValue("preset", this->preset);
+    iniFile.writeStrValue("audioCodec", this->audioCodec);
+    iniFile.writeStrValue("wmvProtocol", this->wmvProtocol);
 
     iniFile.writeSection("Privacy");
-    iniFile.writeStrValue("password", servMgr->password);
+    iniFile.writeStrValue("password", this->password);
     iniFile.writeIntValue("maxUptime", chanMgr->maxUptime);
 
-    for (int i = 0; i < servMgr->numFilters; i++)
+    for (int i = 0; i < this->numFilters; i++)
     {
         iniFile.writeSection("Filter");
-            writeFilterSettings(iniFile, servMgr->filters[i]);
+            writeFilterSettings(iniFile, this->filters[i]);
         iniFile.writeLine("[End]");
     }
 
     // チャンネルフィード
-    for (auto feed : servMgr->channelDirectory->feeds())
+    for (auto feed : this->channelDirectory->feeds())
     {
         iniFile.writeSection("Feed");
         iniFile.writeStrValue("url", feed.url);
@@ -1062,7 +1074,7 @@ void ServMgr::doSaveSettings(IniFileBase& iniFile)
     }
 
     // 帯域チェック
-    for (auto url : servMgr->uptestServiceRegistry->getURLs())
+    for (auto url : this->uptestServiceRegistry->getURLs())
     {
         iniFile.writeSection("Uptest");
         iniFile.writeStrValue("url", url);
@@ -1088,9 +1100,9 @@ void ServMgr::doSaveSettings(IniFileBase& iniFile)
     iniFile.writeBoolValue("pauseLog", pauseLog);
     iniFile.writeIntValue("idleSleepTime", sys->idleSleepTime);
 
-    if (servMgr->validBCID)
+    if (this->validBCID)
     {
-        BCID *bcid = servMgr->validBCID;
+        BCID *bcid = this->validBCID;
         while (bcid)
         {
             iniFile.writeSection("ValidBCID");
@@ -1116,7 +1128,7 @@ void ServMgr::doSaveSettings(IniFileBase& iniFile)
 
     for (int i = 0; i < ServMgr::MAX_HOSTCACHE; i++)
     {
-        ServHost *sh = &servMgr->hostCache[i];
+        ServHost *sh = &this->hostCache[i];
         if (sh->type != ServHost::T_NONE)
             writeServHost(iniFile, *sh);
     }
@@ -1507,6 +1519,7 @@ unsigned int ServMgr::numStreams(GnuID &cid, Servent::TYPE tp, bool all)
     Servent *sv = servents;
     while (sv)
     {
+        std::lock_guard<std::recursive_mutex> cs(sv->lock);
         if (sv->isConnected())
             if (sv->type == tp)
                 if (sv->chanID.isSame(cid))
@@ -1662,9 +1675,12 @@ void ServMgr::procConnectArgs(char *str, ChanInfo &info)
     char arg[MAX_CGI_LEN];
     char curr[MAX_CGI_LEN];
 
-    char *args = strstr(str, "?");
+    const char *args = strstr(str, "?");
     if (args)
-        *args++=0;
+    {
+        *strstr(str, "?") = '\0';
+        args++;
+    }
 
     info.initNameID(str);
 
@@ -2028,8 +2044,10 @@ int ServMgr::serverProc(ThreadInfo *thread)
 
     //unsigned int lastLookupTime=0;
 
+    std::unique_lock<std::recursive_mutex> cs(servMgr->lock, std::defer_lock);
     while (thread->active())
     {
+        cs.lock();
         if (servMgr->restartServer)
         {
             serv->abort();      // force close
@@ -2040,6 +2058,10 @@ int ServMgr::serverProc(ThreadInfo *thread)
 
         if (servMgr->autoServe)
         {
+            std::lock_guard<std::recursive_mutex> cs1(serv->lock), cs2(serv2->lock);
+
+            // サーバーが既に起動している最中に allow を書き換え続ける
+            // の気持ち悪いな。
             serv->allow = servMgr->allowServer1;
             serv2->allow = servMgr->allowServer2;
 
@@ -2088,6 +2110,7 @@ int ServMgr::serverProc(ThreadInfo *thread)
             servMgr->setFirewall(ServMgr::FW_ON);
         }
 
+        cs.unlock();
         sys->sleepIdle();
     }
 
@@ -2366,6 +2389,9 @@ bool ServMgr::writeVariable(Stream &out, const String &var)
     }else if (var == "rtmpPort")
     {
         buf = std::to_string(servMgr->rtmpPort);
+    }else if (var == "hasUnsafeFilterSettings")
+    {
+        buf = std::to_string(servMgr->hasUnsafeFilterSettings());
     }else if (var == "test")
     {
         out.writeUTF8(0x304b);
@@ -2399,6 +2425,20 @@ void ServMgr::logLevel(int newLevel)
         m_logLevel = newLevel;
     }else
         LOG_ERROR("Trying to set log level outside valid range. Ignored");
+}
+
+// --------------------------------------------------
+bool ServMgr::hasUnsafeFilterSettings()
+{
+    const std::string global = "255.255.255.255";
+
+    for (int i = 0; i < this->numFilters; ++i)
+    {
+        if (filters[i].host.IPtoStr().c_str() == global &&
+            (filters[i].flags & ServFilter::F_PRIVATE) != 0)
+            return true;
+    }
+    return false;
 }
 
 // --------------------------------------------------

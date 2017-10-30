@@ -158,6 +158,8 @@ Servent::~Servent()
 // -----------------------------------
 void    Servent::kill()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     thread.shutdown();
 
     setStatus(S_CLOSING);
@@ -194,6 +196,7 @@ void    Servent::kill()
 // -----------------------------------
 void    Servent::abort()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
     thread.shutdown();
     if (sock)
     {
@@ -204,6 +207,8 @@ void    Servent::abort()
 // -----------------------------------
 void Servent::reset()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     remoteID.clear();
 
     servPort = 0;
@@ -247,6 +252,8 @@ void Servent::reset()
 // -----------------------------------
 bool Servent::sendPacket(ChanPacket &pack, GnuID &cid, GnuID &sid, GnuID &did, Servent::TYPE t)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     if  (      (type == t)
             && (isConnected())
             && (!cid.isSet() || chanID.isSame(cid))
@@ -387,6 +394,7 @@ void Servent::initIncoming(ClientSocket *s, unsigned int a)
 // -----------------------------------
 void Servent::initOutgoing(TYPE ty)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
     try
     {
         checkFree();
@@ -479,6 +487,8 @@ void Servent::createSocket()
 // -----------------------------------
 void Servent::setStatus(STATUS s)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     if (s != status)
     {
         status = s;
@@ -1477,6 +1487,7 @@ void Servent::handshakeOutgoingPCP(AtomStream &atom, Host &rhost, GnuID &rid, St
                 // グローバルのリモートからプライベートIPを設定されないようにする。
                 if (rhost.globalIP() == thisHost.globalIP())
                 {
+                    std::lock_guard<std::recursive_mutex> cs(servMgr->lock);
                     char ipstr[64];
                     thisHost.toStr(ipstr);
                     LOG_DEBUG("Got new ip: %s", ipstr);
@@ -2532,6 +2543,8 @@ int Servent::serverProc(ThreadInfo *thread)
 // -----------------------------------
 bool    Servent::writeVariable(Stream &s, const String &var)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     using namespace std;
 
     std::string buf;

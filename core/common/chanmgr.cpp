@@ -25,6 +25,8 @@ void ChanMgr::quit()
 // -----------------------------------
 int ChanMgr::numIdleChannels()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     int cnt = 0;
     auto ch = channel;
     while (ch)
@@ -86,9 +88,11 @@ void ChanMgr::closeAll()
 // -----------------------------------
 std::shared_ptr<Channel>ChanMgr::findChannelByNameID(ChanInfo &info)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
     auto ch = channel;
     while (ch)
     {
+        std::lock_guard<std::recursive_mutex> cs1(ch->lock);
         if (ch->isActive())
             if (ch->info.matchNameID(info))
                 return ch;
@@ -485,7 +489,7 @@ void ChanMgr::deleteChannel(std::shared_ptr<Channel> delchan)
 // -----------------------------------
 std::shared_ptr<Channel> ChanMgr::createChannel(ChanInfo &info, const char *mount)
 {
-    lock.lock();
+    std::lock_guard<std::recursive_mutex> cs(lock);
 
     auto nc = std::make_shared<Channel>();
 
@@ -504,7 +508,6 @@ std::shared_ptr<Channel> ChanMgr::createChannel(ChanInfo &info, const char *moun
 
     LOG_INFO("New channel created");
 
-    lock.unlock();
     return nc;
 }
 
@@ -586,6 +589,7 @@ ChanHitList *ChanMgr::addHitList(ChanInfo &info)
 // -----------------------------------
 void ChanMgr::clearDeadHits(bool clearTrackers)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
     unsigned int interval;
 
     if (servMgr->isRoot)
@@ -637,6 +641,8 @@ bool    ChanMgr::isBroadcasting(GnuID &id)
 // -----------------------------------
 bool    ChanMgr::isBroadcasting()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     auto ch = channel;
     while (ch)
     {
@@ -652,6 +658,8 @@ bool    ChanMgr::isBroadcasting()
 // -----------------------------------
 int ChanMgr::numChannels()
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     int tot = 0;
     auto ch = channel;
     while (ch)
@@ -696,6 +704,8 @@ void ChanMgr::addHit(Host &h, GnuID &id, bool tracker)
 // -----------------------------------
 ChanHit *ChanMgr::addHit(ChanHit &h)
 {
+    std::lock_guard<std::recursive_mutex> cs(lock);
+
     if (searchActive)
         lastHit = sys->getTime();
 

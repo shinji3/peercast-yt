@@ -249,11 +249,10 @@ namespace rtmpserver
             Value transaction_id = d.readValue(mem);
             printf("transaction_id = %s\n", transaction_id.inspect().c_str());
             std::vector<Value> params;
-            int i = 1;
-            while (!mem.eof())
+            for (int i = 0; i < 2 && !mem.eof(); i++)
             {
                 Value param = d.readValue(mem);
-                printf("param%d = %s\n", i++, param.inspect().c_str());
+                printf("param%d = %s\n", (i+1), param.inspect().c_str());
                 params.push_back(param);
             }
 
@@ -305,6 +304,11 @@ namespace rtmpserver
             flv_writer.writeVideoTag(message.timestamp, message.data);
         }
 
+        void on_window_ack_size(Message& message)
+        {
+            printf("Window Acknowledgement Size: %d\n", to_integer_big_endian(message.data));
+        }
+
         void on_message(Message& message)
         {
             assert(message.remaining() == 0);
@@ -326,8 +330,11 @@ namespace rtmpserver
             case 0x09:
                 on_video_packet(message);
                 break;
+            case 0x05:
+                on_window_ack_size(message);
+                break;
             default:
-                printf("unknown message type id %d", message.type_id);
+                printf("unknown message type id %d\n", message.type_id);
             }
         }
 

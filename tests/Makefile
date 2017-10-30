@@ -25,7 +25,7 @@ CPPFLAGS += -D_UNIX -I$(GTEST_DIR)/include -I../core/common -I../core/unix -I../
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wno-multichar -Wno-unused-variable -std=c++11 -D_UNIX -D_REENTRANT
 
-LDFLAGS = -pthread
+LDFLAGS = -fuse-ld=gold -pthread
 LIBS = -L../Onigmo/.libs -Wl,-Bstatic -lonigmo -Wl,-Bdynamic
 #LIBS += -lrtmp
 

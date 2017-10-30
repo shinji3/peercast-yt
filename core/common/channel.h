@@ -179,6 +179,7 @@ public:
 
     bool    isPlaying()
     {
+        std::lock_guard<std::recursive_mutex> cs(lock);
         return (status == S_RECEIVING) || (status == S_BROADCASTING);
     }
 
@@ -189,6 +190,7 @@ public:
 
     bool    isBroadcasting()
     {
+        std::lock_guard<std::recursive_mutex> cs(lock);
         return (status == S_BROADCASTING);
     }
 
@@ -288,6 +290,8 @@ public:
     double              startTime, syncTime;
 
     WEvent              syncEvent;
+
+    mutable std::recursive_mutex lock;
 
     std::shared_ptr<Channel> next;
 };
