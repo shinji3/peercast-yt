@@ -557,6 +557,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
     m_channel = ch;
 
     int numYPTries=0;
+    int numCDTries = 0;
     while (ch->thread.active())
     {
         ch->sourceHost.init();
@@ -588,6 +589,9 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
                 std::string trackerIP = servMgr->channelDirectory->findTracker(ch->info.id);
                 if (!trackerIP.empty())
                 {
+                    if (numCDTries >= 1)
+                        break;
+                    numCDTries++;
                     peercast::notifyMessage(ServMgr::NT_PEERCAST, "チャンネルフィードで "+chName(ch->info)+" のトラッカーが見付かりました。");
 
                     ch->sourceHost.host.fromStrIP(trackerIP.c_str(), DEFAULT_PORT);
@@ -684,9 +688,7 @@ void PeercastSource::stream(std::shared_ptr<Channel> ch)
             {
                 ch->setStatus(Channel::S_ERROR);
                 LOG_ERROR("Channel to %s %s : %s", ipstr, type, e.msg);
-                // FIXME: トラッカーに切断されるとヒットリストから消えてしまう。
-                // if (!ch->sourceHost.tracker || ((error != 503) && ch->sourceHost.tracker))
-                if (!ch->sourceHost.tracker)
+                if (!ch->sourceHost.tracker || ((error != 503) && ch->sourceHost.tracker))
                     chanMgr->deadHit(ch->sourceHost);
             }
 
